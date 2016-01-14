@@ -1,0 +1,51 @@
+.custom-options-header {
+	width: 100%;
+}
+.custom-options-frame {
+	float: left;
+	width: 50%;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+
+.wrap.lr-wrap input[type="checkbox"]:checked ~ span.custom_option {
+	display: block;
+}
+
+.wrap.lr-wrap input[type="checkbox"] ~ span.custom_option {
+	display: none;
+}
+
+.dropdown_msg {
+	display:none;
+	font-size: 12.5px;
+	color: #2299DD;
+}
+
+.custom_option select[value="dropdown"] ~ span.dropdown_msg {
+	display: block;
+}
+
+.dropdown_msg b {
+	word-break: break-all;
+	background: #E0F2FC;
+}
+
+.custom_option {
+	font-size: 15px;
+}
+
+.custom_option input[type="text"], .custom_option select {
+	width: 45%;
+	margin-left: 55%;
+	margin-top: -35px;
+	line-height: 20px;
+}
+
+@media only screen and ( max-width: 1270px ) {
+	.custom_option input[type="text"], .custom_option select {
+		width: 100%;
+		margin-left: 0;
+		margin-top: 0;
+	}
+}

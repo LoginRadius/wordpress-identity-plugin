@@ -1,0 +1,29 @@
+.lr_disqus_sso_popup {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+
+.lr_disqus_sso_title {
+	text-align: center;
+}
+
+.lr_disqus_sso {
+	margin: 15px auto;
+	text-align: center;
+	display: inline-block;
+}
+
+#login {
+	padding: 15px;
+}
+
+#login #lr_disqus_popup_error {
+	display: block;
+	color: red;
+}
+
+#login .lr-input-style button {
+	float: right;
+}
+

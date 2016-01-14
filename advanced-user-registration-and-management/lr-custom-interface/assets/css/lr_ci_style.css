@@ -1,0 +1,65 @@
+.lr-ci-preview-container {
+    overflow: auto;
+}
+
+.lr-ci-upload {
+    float: left;
+    /*padding-top: 30%;*/
+    width: 50%;
+}
+
+.lr-ci-preview {
+    float: left;
+}
+
+.overlay {
+    z-index: 10;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+#lr-ci-upload-container {
+    padding: 45px 60px;
+}
+
+/** By Darryl*/
+.lr-cf:before,.lr-cf:after {
+    content: " ";
+    display: table;
+}
+
+.lr-cf:after {
+    clear: both;
+}
+
+.lr-cf {
+    *zoom: 1;
+}
+
+.interface_container {
+    border: 1px solid #eee;
+    padding: 20px 15px;
+    border-radius: 10px;
+    text-align: center;
+    letter-spacing: -4px;
+}
+
+.interface_container .lr-block-frame {
+    display: inline-block;
+    letter-spacing: normal;
+    padding: 2px 2px;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.interface_container .lr-block-frame:hover {
+    opacity: .90;
+}
+.interface_container li {
+  float: left;
+  margin: 4px;
+  padding: 0;
+}

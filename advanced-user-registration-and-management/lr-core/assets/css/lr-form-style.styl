@@ -1,0 +1,155 @@
+input =
+	width 100%
+	font-size 100%
+	padding 10px
+	border-radius 3px
+	background #fcfcfc
+	border 1px solid #ddd
+	-moz-box-sizing border-box
+	-ms-box-sizing border-box
+	-webkit-box-sizing border-box
+	box-sizing border-box
+	margin-bottom 5px
+input_focus =
+	border 1px solid #00b0f0
+.lr-input-style
+	.lr-input-frame
+		width 100%
+		display inline-block
+		margin-bottom 15px
+		-moz-box-sizing border-box
+		-ms-box-sizing border-box
+		-webkit-box-sizing border-box
+		box-sizing border-box
+	input
+		-webkit-font-smoothing antialiased
+		-webkit-transition all 0.3s ease-in-out
+		-ms-transition all 0.3s ease-in-out
+		transition all 0.3s ease-in-out
+		&:focus
+			outline none
+		&[type="text"]
+		&[type="email"]
+		&[type="password"]
+		&[type="date"]
+			{input}
+			&:focus
+				{input_focus}
+		&[type="submit"]
+			font-size 90%
+			padding 5px 10px
+			background #FF5030
+			color #fff
+			border-radius 2px
+			cursor pointer
+			border none
+			border 1px solid #C06600
+			margin 15px 0
+			float right
+			&:hover
+				background #00b0f0
+	select
+		{input}
+		-webkit-appearance none
+		-moz-appearance none
+		appearance none
+		background url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVQYV2NkIBIwEqmOgfHMmTP/iVFMvEKQaYRMNTExYYS7EZdikCKQYSieQVcMU4ShENkZyIqwKsQVAkSHIwCrtBbRk+bFjAAAAABJRU5ErkJggg==') no-repeat right #fcfcfc
+		background-position 98%
+		-webkit-font-smoothing antialiased
+		-webkit-transition all 0.3s ease-in-out
+		-ms-transition all 0.3s ease-in-out
+		transition all 0.3s ease-in-out
+		&:focus
+			border 1px solid #00b0f0
+			outline none
+			{input_focus}
+		&.lr-input-style-box
+			input
+				border-radius 0 10px
+	li
+		list-style-type none
+		.lr-submit-frame
+		.lr-link
+			margin-top 5px
+	label
+		font-size 18px
+		line-height 33.75px
+		font-size 1.125rem
+		line-height 2.109375rem
+	.lr-inline
+		position relative
+		padding-left 100px
+		-moz-box-sizing border-box
+		-ms-box-sizing border-box
+		-webkit-box-sizing border-box
+		box-sizing border-box
+	.lr-input-label
+		@extend .lr-input-style label
+		left 0
+		top 5px
+	.recaptcha_widget
+		margin 10px 0
+.lr_fade
+	background rgba(132, 132, 132, 0.52)
+	height 100%
+	position fixed
+	width 100%
+	top 0
+	z-index 99999
+	opacity 1
+	display none
+.lr-link
+	display inline-block
+	margin-right 10px
+	cursor pointer
+	padding 20px 0
+/*Spinner*/
+.lr-ur-spinner
+	position fixed
+	top 50%
+	left 0
+	right 0
+	bottom 0
+	text-align center
+		&:before
+			content ""
+			height 100%
+			display inline-block
+			vertical-align middle
+	.spinner-frame
+		display inline-block
+		vertical-align middle
+		width 100px
+		height 100px
+		border-radius 50%
+		position relative
+		overflow hidden
+		border 5px solid #fff
+		padding 10px
+		.spinner-bar
+			background #29d
+			width 50%
+			height 50%
+			position absolute
+			top 0
+			left 0
+			border-radius 100% 0 0 0
+			-webkit-animation spinny 2s linear infinite
+			transform-origin 100% 100%
+		.spinner-cover
+			background #fff
+			width 100%
+			height 100%
+			border-radius 50%
+			position relative
+			z-index 2
+@-webkit-keyframes spinny
+	0%
+		transform rotate(0deg)
+		background #29d
+	50%
+		transform rotate(180deg)
+		background #00427c
+	100%
+		transform rotate(360deg)
+		background #29d
