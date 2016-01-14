@@ -68,15 +68,11 @@ if ( ! class_exists( 'LR_Core' ) ) {
          * Define constants needed across the plug-in.
          */
         public function define_constants() {
-            define('LR_MIN_WP_VERSION', '3.5');
-            define('LR_PLUGIN_VERSION', '2.3');
-            // Type of Plugin ADV, SL, SS
-            define('LR_PLUGIN_PKG', 'ADV');
 
-            define('LR_CORE_DIR', plugin_dir_path(__FILE__));
-            define('LR_CORE_URL', plugin_dir_url(__FILE__));
+            define( 'LR_CORE_DIR', plugin_dir_path(__FILE__) );
+            define( 'LR_CORE_URL', plugin_dir_url(__FILE__) );
 
-            define('LR_VALIDATION_API_URL', 'https://api.loginradius.com/api/v2/app/validate');
+            define( 'LR_VALIDATION_API_URL', 'https://api.loginradius.com/api/v2/app/validate' );
         }
 
         /**
@@ -87,8 +83,8 @@ if ( ! class_exists( 'LR_Core' ) ) {
         private function load_dependencies() {
             global $loginRadiusObject;
             
-            update_option('LR_PLUGIN_VERSION', LR_PLUGIN_VERSION);
-            update_option('LR_PLUGIN_PKG', LR_PLUGIN_PKG);
+            update_option( 'LR_PLUGIN_VERSION', LR_PLUGIN_VERSION );
+            update_option( 'LR_PLUGIN_PKG', LR_PLUGIN_PKG );
             
             //Load required files.
             require_once ( LR_CORE_DIR . 'lib/LoginRadiusSDK.php' );
@@ -99,7 +95,7 @@ if ( ! class_exists( 'LR_Core' ) ) {
              * Advanced Functions
              *
              */
-            require_once( LR_CORE_DIR . "includes/helpers/class-advanced-functions.php");
+            require_once( LR_CORE_DIR . "includes/helpers/class-advanced-functions.php" );
 
             // Activation settings class.
             require_once( LR_CORE_DIR . 'includes/helpers/class-activation-helper.php' );
