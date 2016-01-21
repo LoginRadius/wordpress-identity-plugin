@@ -52,8 +52,8 @@ if (!class_exists('LR_Salesforce_Admin_Settings')) {
                                 jQuery('#login_radius_api_response_salesforce').css("color", "green");
                                 jQuery('#login_radius_api_response_salesforce').html("Verified Salesforce credentials, your settings have been saved.");
                                 salesforceObjectHtmlImplementation();
-                                <?php $salesforce_object_type = isset($lr_salesforce_settings['salesforce_object_type']) && $lr_salesforce_settings['salesforce_object_type'] != 'Lead';?>
-                                loginRadiusSalesforceAuthentication('<?php echo $salesforce_object_type; ?>');
+                                <?php $salesforce_object_type = (isset($lr_salesforce_settings['salesforce_object_type']) && $lr_salesforce_settings['salesforce_object_type'] != '') ? trim($lr_salesforce_settings['salesforce_object_type']) : 'Lead';?>
+                                loginRadiusSalesforceAuthentication('<?php echo $salesforce_object_type; ?>', true);
                             } else {
                                 jQuery('#login_radius_api_response_salesforce').css("color", "red");
                                 if (validationResponse.isEmpty) {
@@ -72,16 +72,15 @@ if (!class_exists('LR_Salesforce_Admin_Settings')) {
                     var salesforceobjectHtml = '<div><label for="salesforce_object_label">';
                     salesforceobjectHtml += '<span class="lr_property_title">Salesforce object <span class="lr-tooltip" data-title="Select Salesforce object to store the data">';
                     salesforceobjectHtml += '<span class="dashicons dashicons-editor-help"></span></span></span>';
-                    salesforceobjectHtml += '<select class="lr-row-field" onchange="loginRadiusSalesforceAuthentication( this.value.trim())" name="LR_Salesforce_Settings[salesforce_object_type]" id="salesforce_object_label">';
+                    salesforceobjectHtml += '<select class="lr-row-field" onchange="loginRadiusSalesforceAuthentication( this.value.trim(), false)" name="LR_Salesforce_Settings[salesforce_object_type]" id="salesforce_object_label">';
                     salesforceobjectHtml += '<option value="">--- Select Object ---</option>';
                     salesforceobjectHtml += '<option value="Lead" <?php if (isset($lr_salesforce_settings['salesforce_object_type']) && $lr_salesforce_settings['salesforce_object_type'] == 'Lead') {echo 'selected="selected"';} ?>>Lead</option>';
-                    salesforceobjectHtml += '<option value="Account" <?php if (isset($lr_salesforce_settings['salesforce_object_type']) && $lr_salesforce_settings['salesforce_object_type'] == 'Account') {echo 'selected="selected"';} ?>>Account</option>';
                     salesforceobjectHtml += '<option value="Contact" <?php if (isset($lr_salesforce_settings['salesforce_object_type']) && $lr_salesforce_settings['salesforce_object_type'] == 'Contact') {echo 'selected="selected"';} ?>>Contact</option></select><div id="salesforce_object_loading_image" style="padding-top: 13px;"></div></label></div>';
                     jQuery('#login_radius_object_salesforce').html(salesforceobjectHtml);
                     jQuery('.login_radius_salesforce_object_div').show();
                 }
             // get salesforce object fields lists according to the keys saved
-                function loginRadiusSalesforceAuthentication(sObjectType) {
+                function loginRadiusSalesforceAuthentication(sObjectType, selectedField) {
                     <?php 
                     $mappingFields = LR_Advanced_Functions::login_radius_get_mapping_fields();
                     $sortedArray = array();
@@ -125,7 +124,7 @@ if (!class_exists('LR_Salesforce_Admin_Settings')) {
                                     for (var j in salesforceMappingFields) {
                                         var tempParts = salesforceMappingFields[j].split("-");
                                         mappingHtml += '<option value="' + salesforceMappingFields[j] + '"';
-                                        if (lr_salesforce_settings[key] && lr_salesforce_settings[key] == salesforceMappingFields[j]) {
+                                        if (selectedField && lr_salesforce_settings[key] && lr_salesforce_settings[key] == salesforceMappingFields[j]) {
                                             mappingHtml += ' Selected';
                                         }
                                         mappingHtml += '>' + loginRadiusucfirst(tempParts[0].replace(/\_{1,}/g, " ")) + '</option>';

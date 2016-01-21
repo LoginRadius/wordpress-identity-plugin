@@ -71,6 +71,7 @@ if (!class_exists('LR_Salesforce')) {
             // Load LoginRadius files.
             require_once( 'admin/loginradius_salesforce_admin_options.php' );
             require_once( 'includes/salesforce-functions.php' );
+            require_once( 'lib/salesforce.php' );
         }
 
     }
