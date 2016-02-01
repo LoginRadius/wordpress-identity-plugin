@@ -182,7 +182,6 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 					'api_key' => $loginradius_api_settings['LoginRadius_apikey'],
 					'spinner' => LR_Core::get_spinner(),
 					'local_domain' => site_url('/'),
-					'v2captcha' => ! empty( $lr_raas_settings['enable_v2captcha'] ) ? $lr_raas_settings['enable_v2captcha'] : '',
 					'storageVariable' => $storageVariable,
 					'emailVerificationUrl' => $emailVerificationUrl,
 					'forgotPasswordUrl' => $forgotPasswordUrl,
@@ -191,7 +190,8 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 					'ajax_url' => get_admin_url() . 'admin-ajax.php',
 					'login_page_url' => get_permalink( $lr_raas_settings['login_page_id'] ),
 					'current_page' => get_permalink(),
-					'disable_email_verify' => ! empty( $lr_raas_settings['disable_email_verify'] ) ? $lr_raas_settings['disable_email_verify'] : ''
+					'disable_email_verify' => ! empty( $lr_raas_settings['disable_email_verify'] ) ? $lr_raas_settings['disable_email_verify'] : '',
+					'enable_username' => ! empty( $lr_raas_settings['enable_username'] ) ? $lr_raas_settings['enable_username'] : ''
 				);
 				wp_localize_script( 'lr-raas-front-script', "RaasDetails", $args );
 				wp_enqueue_script( 'lr-raas-front-script' );

@@ -11,9 +11,16 @@ if( '1' == RaasDetails.disable_email_verify ) {
     raasoption.DisabledEmailVerification = true;
 }
 
-if( '1' == RaasDetails.v2captcha ) {
-    raasoption.V2RecaptchaSiteKey = RaasDetails.v2RecaptchaSiteKey;
-    raasoption.V2Recaptcha = true;
+// Enable V2recaptcha V2 by default
+raasoption.V2RecaptchaSiteKey = RaasDetails.v2RecaptchaSiteKey;
+if( '' == raasoption.V2RecaptchaSiteKey || undefined == raasoption.V2RecaptchaSiteKey ) {
+    console.log( 'The V2recaptcha Site Key is required. Please obtain this key from https://www.google.com/recaptcha and enter the site key in the User Registration settings. Please also update your LoginRadius account with your V2recaptcha account info.' )
+}
+raasoption.V2Recaptcha = true;
+
+// Enable UserName feature
+if( '1' == RaasDetails.enable_username ) {
+    raasoption.enableUserName = true;
 }
 
 raasoption.templatename = "loginradiuscustom_raas_tmpl";

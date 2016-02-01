@@ -18,8 +18,8 @@ if ( ! class_exists( 'LR_Raas_Install' ) ) {
             'change_password_page_id' => '',
             'lost_password_page_id' => '',
             'popup_forms_enable' => '',
-            'enable_v2captcha' => '1',
-            'v2captcha_site_key' => ''
+            'v2captcha_site_key' => '',
+            'enable_username' => '0'
         );
         private static $sociallogin_option = array(
             'LoginRadius_redirect' => 'samepage',
