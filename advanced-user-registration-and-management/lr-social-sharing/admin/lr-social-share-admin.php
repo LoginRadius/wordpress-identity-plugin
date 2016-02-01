@@ -42,11 +42,7 @@ if ( ! class_exists( 'LR_Social_Share_Admin' ) ) {
         /*
          * Register admin hook callbacks
          */
-
         public function register_hook_callbacks() {
-
-            // Used for aia activation.
-            add_action( 'wp_ajax_lr_save_apikey', array( $this, 'save_apikey' ) );
 
             // Add a meta box on all posts and pages to disable sharing.
             add_action( 'add_meta_boxes', array( $this, 'meta_box_setup' ) );
@@ -146,20 +142,6 @@ if ( ! class_exists( 'LR_Social_Share_Admin' ) ) {
             }
             update_post_meta( $postId, '_login_radius_meta', $newData );
             return $postId;
-        }
-
-        /**
-         * Save LoginRadius API key in the database
-         */
-        public static function save_apikey() {
-            if ( isset( $_POST['apikey'] ) && trim( $_POST['apikey'] ) != '' ) {
-                $options = get_option( 'LoginRadius_API_settings' );
-                $options['LoginRadius_apikey'] = trim( $_POST['apikey'] );
-                if ( update_option( 'LoginRadius_API_settings', $options ) ) {
-                    die('success');
-                }
-            }
-            die('error');
         }
 
         /*
