@@ -37,10 +37,10 @@ class LR_Social_Linking_Widget extends WP_Widget {
         echo $before_widget;
 
         if ( ! empty( $instance['title'] ) ) {
-            $title = apply_filters('widget_title', $instance['title']);
+            $title = apply_filters( 'widget_title', $instance['title'] );
             echo $before_title . $title . $after_title;
         }
-        if ( ! empty($instance['before_widget_content']) ) {
+        if ( ! empty( $instance['before_widget_content'] ) ) {
             echo $instance['before_widget_content'];
         }
         echo Login_Radius_Shortcode::linking_widget_shortcode();
@@ -59,7 +59,7 @@ class LR_Social_Linking_Widget extends WP_Widget {
      */
     function update( $new_instance, $old_instance ) {
         $instance = $old_instance;
-        $instance['title'] = strip_tags($new_instance['title']);
+        $instance['title'] = strip_tags( $new_instance['title'] );
         $instance['before_widget_content'] = $new_instance['before_widget_content'];
         $instance['after_widget_content'] = $new_instance['after_widget_content'];
         return $instance;
@@ -74,17 +74,17 @@ class LR_Social_Linking_Widget extends WP_Widget {
         /* Set up default widget settings. */
         $defaults = array('title' => 'Social Linking', 'before_widget_content' => '', 'after_widget_content' => '');
         foreach ( $instance as $key => $value ) {
-            $instance[$key] = esc_attr($value);
+            $instance[$key] = esc_attr( $value );
         }
         $instance = wp_parse_args( (array) $instance, $defaults );
         ?>
             <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'lr-plugin-slug'); ?></label>
-                <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $instance['title']; ?>" />
-                <label for="<?php echo $this->get_field_id('before_widget_content'); ?>"><?php _e('Before widget content:', 'lr-plugin-slug'); ?></label>
-                <input class="widefat" id="<?php echo $this->get_field_id('before_widget_content'); ?>" name="<?php echo $this->get_field_name('before_widget_content'); ?>" type="text" value="<?php echo $instance['before_widget_content']; ?>" />
-                <label for="<?php echo $this->get_field_id('after_widget_content'); ?>"><?php _e('After widget content:', 'lr-plugin-slug'); ?></label>
-                <input class="widefat" id="<?php echo $this->get_field_id('after_widget_content'); ?>" name="<?php echo $this->get_field_name('after_widget_content'); ?>" type="text" value="<?php echo $instance['after_widget_content']; ?>" />
+                <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'lr-plugin-slug' ); ?></label>
+                <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $instance['title']; ?>" />
+                <label for="<?php echo $this->get_field_id( 'before_widget_content' ); ?>"><?php _e('Before widget content:', 'lr-plugin-slug'); ?></label>
+                <input class="widefat" id="<?php echo $this->get_field_id( 'before_widget_content' ); ?>" name="<?php echo $this->get_field_name( 'before_widget_content' ); ?>" type="text" value="<?php echo $instance['before_widget_content']; ?>" />
+                <label for="<?php echo $this->get_field_id( 'after_widget_content' ); ?>"><?php _e('After widget content:', 'lr-plugin-slug'); ?></label>
+                <input class="widefat" id="<?php echo $this->get_field_id( 'after_widget_content' ); ?>" name="<?php echo $this->get_field_name( 'after_widget_content' ); ?>" type="text" value="<?php echo $instance['after_widget_content']; ?>" />
             </p>
         <?php
     }

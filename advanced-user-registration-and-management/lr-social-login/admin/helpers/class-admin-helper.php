@@ -91,10 +91,10 @@ if ( ! class_exists( 'Admin_Helper' ) ) {
                                 if ( data == 'done' ) {
                                     if ( currentStatus == 0 ) {
                                         jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 1 ) " ><img width="20" height="20" src="<?php echo LOGINRADIUS_PLUGIN_URL . 'assets/images/enable.png'; ?>" /></a></span>');
-                                    } else if (currentStatus == 1) {
+                                    } else if ( currentStatus == 1 ) {
                                         jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Inactive ( Click to Enable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Inactive ( Click to Enable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 0 ) " ><img width="20" height="20" src="<?php echo LOGINRADIUS_PLUGIN_URL . 'assets/images/disable.png'; ?>" /></a></span>');
                                     }
-                                } else if (data == 'error') {
+                                } else if ( data == 'error' ) {
                                     jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 1 ) " ><img width="20" height="20" src="<?php echo plugins_url( 'images/enable.png', __FILE__ ) ?>" /></a></span>');
                                 }
                             },
@@ -147,7 +147,7 @@ if ( ! class_exists( 'Admin_Helper' ) ) {
                 'logoutUrl' => 'LoginRadius_loutRedirect'
             );
 
-            if ( isset($loginRadiusSettings[$tempArray[$settingName]]) && $loginRadiusSettings[$tempArray[$settingName]] == $optionName ) {
+            if ( isset( $loginRadiusSettings[ $tempArray[$settingName] ] ) && $loginRadiusSettings[$tempArray[$settingName]] == $optionName ) {
                 return 'checked="checked"';
             } else {
                 return '';

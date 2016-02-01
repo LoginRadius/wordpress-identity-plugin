@@ -56,11 +56,11 @@ if ( ! class_exists( 'LR_Social_Login' ) ) {
             // Register Activation hook callback.
             $this->install();
             
-            add_action('lr_admin_page', array('LR_Social_Login', 'create_loginradius_menu'),2);
+            add_action( 'lr_admin_page', array('LR_Social_Login', 'create_loginradius_menu'),2 );
         }
 
         public static function create_loginradius_menu() {
-                add_submenu_page( 'LoginRadius', 'Social Login Settings', 'Social Login', 'manage_options', 'SocialLogin', array('LR_Social_Login_Admin', 'options_page'));
+                add_submenu_page( 'LoginRadius', 'Social Login Settings', 'Social Login', 'manage_options', 'SocialLogin', array( 'LR_Social_Login_Admin', 'options_page'));
         }
 
         /**
@@ -74,7 +74,7 @@ if ( ! class_exists( 'LR_Social_Login' ) ) {
             global $wp_version;
 
             if ( ! version_compare( $wp_version, self:: $wp_min_version, '>=' ) ) {
-                add_action( 'admin_notices', array( $this, 'notify_admin') );
+                add_action( 'admin_notices', array( $this, 'notify_admin' ) );
                 return false;
             }
             return true;
@@ -93,8 +93,8 @@ if ( ! class_exists( 'LR_Social_Login' ) ) {
          * Define constants needed across the plug-in.
          */
         private function define_constants() {
-            define('LOGINRADIUS_PLUGIN_DIR', plugin_dir_path(__FILE__));
-            define('LOGINRADIUS_PLUGIN_URL', plugin_dir_url(__FILE__));
+            define( 'LOGINRADIUS_PLUGIN_DIR', plugin_dir_path(__FILE__) );
+            define( 'LOGINRADIUS_PLUGIN_URL', plugin_dir_url(__FILE__) );
         }
 
         /**
@@ -113,11 +113,11 @@ if ( ! class_exists( 'LR_Social_Login' ) ) {
             require_once( LOGINRADIUS_PLUGIN_DIR.'public/inc/login/class-login-helper.php' );
 
             // Get LoginRadius plugin options.
-            $loginRadiusSettings = get_option('LoginRadius_settings');
+            $loginRadiusSettings = get_option( 'LoginRadius_settings' );
 
             $loginRadiusLoginIsBpActive = false;
 
-            add_action('bp_include', array('Login_Helper', 'set_budddy_press_status_variable'));
+            add_action('bp_include', array( 'Login_Helper', 'set_budddy_press_status_variable' ) );
 
             // Admin Panel
 
@@ -152,6 +152,5 @@ if ( ! class_exists( 'LR_Social_Login' ) ) {
         }
 
     }
-
     new LR_Social_Login();
 }

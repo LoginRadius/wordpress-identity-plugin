@@ -92,13 +92,13 @@ if (!class_exists('Login_Radius_Shortcode')) {
 
             $html = LR_Common:: check_linking_status_parameters();
             if (!( $loginRadiusObject->loginradius_is_valid_guid(trim($loginradius_api_settings['LoginRadius_apikey'])) && $loginRadiusObject->loginradius_is_valid_guid(trim($loginradius_api_settings['LoginRadius_secret'])) )) {
-                $html .= '<div style="color:red">' . __('Your LoginRadius API key or secret is not valid, please correct it or contact LoginRadius support at <b><a href ="http://www.loginradius.com" target = "_blank">www.LoginRadius.com</a></b>', 'lr-plugin-slug') . '</div>';
+                $html .= '<div style="color:red">' . __('Your LoginRadius API key or secret is not valid, please correct it or contact LoginRadius support at <b><a href ="http://www.loginradius.com" target = "_blank">www.LoginRadius.com</a></b>', 'lr-plugin-slug' ) . '</div>';
             }
 
             // function call
             LR_Common:: link_account_if_possible();
             if (!( $loginRadiusObject->loginradius_is_valid_guid(trim($loginradius_api_settings['LoginRadius_apikey'])) && $loginRadiusObject->loginradius_is_valid_guid(trim($loginradius_api_settings['LoginRadius_secret'])) )) {
-                $html .= '<div style="color:red">' . __('Your LoginRadius API key or secret is not valid, please correct it or contact LoginRadius support at <b><a href ="http://www.loginradius.com" target = "_blank">www.LoginRadius.com</a></b>', 'lr-plugin-slug') . '</div>';
+                $html .= '<div style="color:red">' . __('Your LoginRadius API key or secret is not valid, please correct it or contact LoginRadius support at <b><a href ="http://www.loginradius.com" target = "_blank">www.LoginRadius.com</a></b>', 'lr-plugin-slug' ) . '</div>';
             }
 
             $html .= Login_Helper::get_loginradius_interface_container(true);

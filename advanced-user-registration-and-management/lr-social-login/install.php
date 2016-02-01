@@ -33,16 +33,16 @@ class LR_Social_Login_Install {
      */
     public static function set_default_options() {
 
-        if (version_compare(get_bloginfo('version'), LR_MIN_WP_VERSION, '<')) {
+        if ( version_compare( get_bloginfo( 'version' ), LR_MIN_WP_VERSION, '<' ) ) {
             $message = "Plugin could not be activated because ";
             $message .= "WordPress version is lower than ";
             $message .= LR_MIN_WP_VERSION;
             die($message);
         }
 
-        if ( ! get_option('LoginRadius_settings') ) {
+        if ( ! get_option( 'LoginRadius_settings' ) ) {
             // If plugin loginradius_db_version option not exist, it means plugin is not latest and update options.
-            update_option('LoginRadius_settings', self::$login_options);
+            update_option( 'LoginRadius_settings', self::$login_options );
         }
 
         if ( ! get_option( 'LoginRadius_API_settings' ) ) {
@@ -53,9 +53,9 @@ class LR_Social_Login_Install {
                 'sitename' => ''
             );
 
-            if ( get_option('LoginRadius_sharing_settings') ) {
-                $loginradius_existing_settings = get_option('LoginRadius_sharing_settings');
-                if (isset($loginradius_existing_settings['LoginRadius_apikey']) && !empty($loginradius_existing_settings['LoginRadius_apikey'])) {
+            if ( get_option( 'LoginRadius_sharing_settings' ) ) {
+                $loginradius_existing_settings = get_option( 'LoginRadius_sharing_settings' );
+                if ( isset( $loginradius_existing_settings['LoginRadius_apikey'] ) && ! empty( $loginradius_existing_settings['LoginRadius_apikey'] ) ) {
                     $api_options['LoginRadius_apikey'] = $loginradius_existing_settings['LoginRadius_apikey'];
                 }
             }
@@ -63,14 +63,14 @@ class LR_Social_Login_Install {
             // Get Existing API key for update.
             if ( get_option( 'LoginRadius_settings' ) ) {
                 $loginradius_existing_settings = get_option('LoginRadius_settings');
-                if (isset($loginradius_existing_settings['LoginRadius_apikey']) && !empty($loginradius_existing_settings['LoginRadius_apikey'])) {
+                if ( isset( $loginradius_existing_settings['LoginRadius_apikey'] ) && ! empty( $loginradius_existing_settings['LoginRadius_apikey'] ) ) {
                     $api_options['LoginRadius_apikey'] = $loginradius_existing_settings['LoginRadius_apikey'];
                 }
-                if (isset($loginradius_existing_settings['LoginRadius_secret']) && !empty($loginradius_existing_settings['LoginRadius_secret'])) {
+                if ( isset( $loginradius_existing_settings['LoginRadius_secret'] ) && ! empty( $loginradius_existing_settings['LoginRadius_secret'] ) ) {
                     $api_options['LoginRadius_secret'] = $loginradius_existing_settings['LoginRadius_secret'];
                 }
             }
-            update_option('LoginRadius_API_settings', $api_options);
+            update_option( 'LoginRadius_API_settings', $api_options );
         }
     }
 
@@ -79,9 +79,9 @@ class LR_Social_Login_Install {
      */
     public static function reset_loginradius_login_options() {
         global $loginRadiusSettings;
-        do_action('lr_reset_admin_action','LoginRadius_settings', self::$login_options);
+        do_action( 'lr_reset_admin_action','LoginRadius_settings', self::$login_options );
         // Get LoginRadius plugin options
-        $loginRadiusSettings = get_option('LoginRadius_settings');
+        $loginRadiusSettings = get_option( 'LoginRadius_settings' );
     }
 
 }
