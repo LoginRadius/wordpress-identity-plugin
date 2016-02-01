@@ -340,10 +340,22 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                     <h4>
                                         <?php _e( 'Enable account linking', 'lr-plugin-slug' ); ?>
                                     </h4>
-                                    <input type="checkbox" class="lr-toggle" id="lr-social-link-enable" name="LR_Raas_Settings[LoginRadius_socialLinking]" value='1' <?php echo ( ( isset( $loginRadiusSettings['LoginRadius_socialLinking'] ) && $loginRadiusSettings['LoginRadius_socialLinking'] == 1 ) || ! isset( $loginRadiusSettings['LoginRadius_socialLinking'] ) ) ? 'checked' : ''; ?> />
+                                    <input type="checkbox" class="lr-toggle" id="lr-social-link-enable" name="LR_Raas_Settings[LoginRadius_socialLinking]" value='1' <?php echo ( isset( $loginRadiusSettings['LoginRadius_socialLinking'] ) && $loginRadiusSettings['LoginRadius_socialLinking'] == '1' ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-social-link-enable">
                                         <?php _e( 'Enable account linking' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Select Yes, If you want to enable social account linking. This option will also shows users the linking interface on the wordpress dashboard that allows users to link their other social providers', 'lr-plugin-slug' ); ?>">
+                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, If you want to enable social account linking. This option will also shows users the linking interface on the wordpress dashboard that allows users to link their other social providers', 'lr-plugin-slug' ); ?>">
+                                            <span class="dashicons dashicons-editor-help"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <h4>
+                                        <?php _e( 'Enable User Name Login', 'lr-plugin-slug' ); ?> 
+                                    </h4>
+                                    <input type="checkbox" class="lr-toggle" id="lr-enable_username" name="LR_Raas_Settings[enable_username]" value='1' <?php echo ( isset( $loginRadiusSettings['enable_username'] ) && $loginRadiusSettings['enable_username'] == '1' ) ? 'checked' : ''; ?> />
+                                    <label class="lr-show-toggle" for="lr-enable_username">
+                                        <?php _e( 'Enable User Name Login' ); ?>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, If you want to enable username login.', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </label>
@@ -356,22 +368,13 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                             <div class="lr-row">
                                 <h3><?php _e( 'reCAPTCHA Options', 'lr-plugin-slug' ); ?></h3>
                                 <div>
-                                    <input type="checkbox" class="lr-toggle" id="lr-v2captcha-enable" name="LR_Raas_Settings[enable_v2captcha]" value='1' <?php echo ( isset( $lr_raas_settings['enable_v2captcha'] ) && $lr_raas_settings['enable_v2captcha'] == '1' ) ? 'checked' : '' ?> />
-                                    <label class="lr-show-toggle" for="lr-v2captcha-enable">
-                                        <?php _e( 'Enable v2reCAPTCHA' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to enable v2reCAPTCHA. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
+                                    <label>
+                                        <?php _e( 'v2reCAPTCHA Site Key' ); ?>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'Enter your Google reCAPTCHA Site Key to activate v2 reCAPTCHA. (Required)', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </label>
-                                    <div class="lr-row lr-v2captcha-key">
-                                        <label>
-                                            <?php _e( 'v2reCAPTCHA Site Key' ); ?>
-                                            <span class="lr-tooltip" data-title="<?php _e( 'Enter your Google reCAPTCHA Site Key to activate v2 reCAPTCHA. (Required)', 'lr-plugin-slug' ); ?>">
-                                                <span class="dashicons dashicons-editor-help"></span>
-                                            </span>
-                                        </label>
-                                        <input type="text" name="LR_Raas_Settings[v2captcha_site_key]" value="<?php echo ! empty( $lr_raas_settings['v2captcha_site_key'] ) ? $lr_raas_settings['v2captcha_site_key'] : ''; ?>" />
-                                    </div>
+                                    <input type="text" name="LR_Raas_Settings[v2captcha_site_key]" value="<?php echo ! empty( $lr_raas_settings['v2captcha_site_key'] ) ? $lr_raas_settings['v2captcha_site_key'] : ''; ?>" />
                                 </div>
                             </div>
                         </div>

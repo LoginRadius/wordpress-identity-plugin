@@ -88,7 +88,7 @@ if ( ! class_exists( 'Login_Helper' ) ) {
          * Login user, if user is inactive, then provide notification to user
          */
         public static function login_user( $userId, $profileData, $firstLogin = false, $register = false, $redirect = true ) {
-            global $lr_raas_custom_obj_settings,$loginRadiusSettings;
+            global $lr_raas_custom_obj_settings, $loginRadiusSettings;
             
             if ( get_user_meta( $userId, 'loginradius_status', true ) === '0' ) {
                 //If redirection default notify user through popup
@@ -708,7 +708,7 @@ if ( ! class_exists( 'Login_Helper' ) ) {
         public static function response_to_popup_submission() {
             global $wpdb, $loginRadiusSettings, $lr_social_profile_data_settings;
 
-            if ($_POST['LoginRadius_popupSubmit'] == 'Submit') {
+            if ( $_POST['LoginRadius_popupSubmit'] == 'Submit' ) {
 
                 $session = isset($_POST['session']) ? trim($_POST['session']) : '';
                 $split_session = explode('.', $session);

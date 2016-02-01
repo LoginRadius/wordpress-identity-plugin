@@ -285,12 +285,12 @@ class Ajax_Helper {
             $comment_content = $comment_content . $comment_image;
         }
 
-        $comment_parent = isset($_POST['comment_parent']) ? absint($_POST['comment_parent']) : 0;
+        $comment_parent = isset( $_POST['comment_parent'] ) ? absint( $_POST['comment_parent'] ) : 0;
         $commentdata = compact('comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content', 'comment_type', 'comment_parent', 'user_id');
         $comment_id = wp_new_comment($commentdata);
 
         if ( ! $comment_id ) {
-            echo json_encode(array(
+            echo json_encode( array(
                 "Error" => _e( 'The comment could not be saved. Please try again later.' )
             ));
             die();
@@ -312,10 +312,10 @@ class Ajax_Helper {
 
         // Post Content to Social Media if Logged In
         $status = strip_tags( $comment_content );
-        $post_url = self::url_shortener( get_permalink($comment->comment_post_ID) . "#comment-" . $comment->comment_ID );
+        $post_url = self::url_shortener( get_permalink( $comment->comment_post_ID ) . "#comment-" . $comment->comment_ID );
         $post_title = get_the_title( $comment->comment_post_ID );
-        $site_description = get_bloginfo('description');
-        $site_caption = get_bloginfo('name');
+        $site_description = get_bloginfo( 'description' );
+        $site_caption = get_bloginfo( 'name' );
         $image_url = get_permalink( $comment->comment_post_ID );
 
         if ( ! empty( $_POST['share_facebook_token'] ) ) {

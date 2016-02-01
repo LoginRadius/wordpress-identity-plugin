@@ -54,13 +54,13 @@ if ( ! class_exists( 'LR_Social_Share_Shortcode' ) ) {
                     $style = 'style="' . $style . '"';
                 }
 
-                if ( $type == 'vertical' && $loginradius_share_settings['vertical_enable'] == '1' ) {
+                if ( $type == 'vertical' && isset( $loginradius_share_settings['vertical_enable'] ) && $loginradius_share_settings['vertical_enable'] == '1' ) {
                     LR_Common_Sharing::vertical_sharing();
                     $unique_id = uniqid();
                     LR_Vertical_Sharing::$position['class'][] = $unique_id;
                     $share = LR_Vertical_Sharing::get_vertical_sharing('lr_ver_share_shortcode ' . $unique_id, $style);
                 }
-                if ($type == 'horizontal' && $loginradius_share_settings['horizontal_enable'] == '1') {
+                if ( $type == 'horizontal' && isset( $loginradius_share_settings['horizontal_enable'] ) && $loginradius_share_settings['horizontal_enable'] == '1' ) {
                     LR_Common_Sharing::horizontal_sharing();
                     $share = '<div class="lr_horizontal_share" ' . $style . ' data-share-url="' . get_permalink($post->ID) . '" data-counter-url="' . get_permalink($post->ID) . '"></div>';
                 }

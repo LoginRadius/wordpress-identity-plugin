@@ -233,7 +233,7 @@ if ( ! class_exists( 'LR_Raas_Admin' ) ) {
 			$settings = apply_filters( 'lr_raas_save_setting', $settings );
 				
 			$loginRadiusSetting = get_option( 'LoginRadius_settings' );
-			$advance_settings = array( 'LoginRadius_redirect', 'custom_redirect', 'username_separator', 'LoginRadius_noProvider', 'profileDataUpdate', 'LoginRadius_socialavatar', 'LoginRadius_socialLinking', 'enable_degugging' );
+			$advance_settings = array( 'LoginRadius_redirect', 'custom_redirect', 'username_separator', 'LoginRadius_noProvider', 'profileDataUpdate', 'LoginRadius_socialavatar', 'LoginRadius_socialLinking', 'enable_degugging', 'enable_username' );
 			
 
 			foreach ( $advance_settings as $advance_setting ) {

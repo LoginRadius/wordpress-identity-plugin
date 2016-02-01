@@ -3,8 +3,8 @@ Contributors: loginradius
 Donate link: http://www.loginradius.com/
 Tags: User Registration, User Management, Hosted Registration, Social login, Single Sign-on, Social Profile Data, multisite, loginradius
 Requires at least: 3.5
-Tested up to: 4.4
-Stable tag: 2.3
+Tested up to: 4.4.1
+Stable tag: 2.3.5
 License: GPLv2 or later
 
 Get fully customized hosted user registration with social login using Facebook, Google, Twitter, Vkontakte, QQ and over 25 more!
@@ -102,6 +102,11 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 
 == Changelog ==
 
+= 2.3.5 =
+* Set V2captcha as default
+* Added new Customer Registration features - User Name Login
+* Removed unused Social Sharing ajax call
+
 = 2.3 =
 * Added Customer Registration email verification disable feature
 * Social Profile Data bug fixes
@@ -139,3 +144,8 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 = 2.3 =
 * Added Customer Registration email verification disable feature
 * Social Profile Data bug fixes
+
+= 2.3.5 =
+* Set V2captcha as default
+* Added new Customer Registration features - User Name Login
+* Removed unused Social Sharing ajax call

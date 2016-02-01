@@ -23,7 +23,7 @@ function login_radius_email_popup() {
             // Format date for input field.
             if( ! empty( $profileData['BirthDate'] ) ) { 
                 
-                $datebool = strpos($profileData['BirthDate'],'-');
+                $datebool = strpos( $profileData['BirthDate'],'-' );
 
                 // Date format matches mm/dd/YYYY
                 if( ! $datebool ) {
@@ -58,13 +58,13 @@ function login_radius_email_popup() {
 
             ?>
                 <script>
-                    jQuery(document).ready(function() {
+                    jQuery(document).ready( function() {
                         jQuery('#birthdate').datepicker({
                             changeMonth: true,
                             changeYear: true,
                             dateFormat: 'yy-mm-dd',
                             yearRange: "-100:+0",
-                            <?php if( ! empty( $profileData['BirthDate'] )) { ?>
+                            <?php if( ! empty( $profileData['BirthDate'] ) ) { ?>
                                 defaultDate: new Date(<?php echo $year . ',' . $month . ',' . $day; ?>)
                             <?php } ?>
                         });
@@ -92,7 +92,7 @@ function login_radius_email_popup() {
                                             echo '<div id="textmatter" class="lr-noerror">';
                                         }
                                         if ( isset( $_GET['message'] ) && $_GET['message'] != '' ) {
-                                            echo str_replace(  '@provider', $provider, $_GET['message'] );
+                                            echo str_replace( '@provider', $provider, $_GET['message'] );
                                         }
                                         ?>
                                         </div><!-- END TEXTMATTER DIV -->
@@ -103,36 +103,36 @@ function login_radius_email_popup() {
                                 
                                 <?php
 
-                                if( ! $has_email && $notdummyemail && ( isset($lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' || isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ) ) { ?>
+                                if( ! $has_email && $notdummyemail && ( isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' || isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ) ) { ?>
                                     <div>
                                         <div class="emailtext" id="innerp">Enter your email:</div>
                                         <input type="text" name="email" id="loginRadiusEmail" class="inputtxt" style = "padding-top: 0px;" data-validation="email" value="<?php echo $profileData['Email']; ?>"/>
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_gender'] ) && $lr_social_profile_data_settings['show_gender'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_gender'] ) && $lr_social_profile_data_settings['show_gender'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp">Select your Gender:</div>
-                                        <input type="radio" name="gender" value="male" <?php echo (isset($profileData['Gender']) && $profileData['Gender'] == 'M' || $profileData['Gender'] == 'male' ) ? 'checked' : ''; ?> />Male
-                                        <input type="radio" name="gender" value="female" <?php echo (isset($profileData['Gender']) && $profileData['Gender'] == 'F' || $profileData['Gender'] == 'female' ) ? 'checked' : ''; ?> />Female
+                                        <input type="radio" name="gender" value="male" <?php echo ( isset( $profileData['Gender'] ) && $profileData['Gender'] == 'M' || $profileData['Gender'] == 'male' ) ? 'checked' : ''; ?> />Male
+                                        <input type="radio" name="gender" value="female" <?php echo ( isset( $profileData['Gender'] ) && $profileData['Gender'] == 'F' || $profileData['Gender'] == 'female' ) ? 'checked' : ''; ?> />Female
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_birthdate'] ) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_birthdate'] ) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp">Select your BirthDate:</div>
                                         <input class="inputtxt" type="text" id="birthdate" name="birthdate" data-validation="date" data-validation-format="yyyy-mm-dd" value="<?php echo $profileData['BirthDate']; ?>"/>
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_phonenumber'] ) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_phonenumber'] ) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp">Enter your Phone Number:</div>
                                         <input class="inputtxt" type="text" name="phonenumber" data-validation="required" data-validation-length="min10" value="<?php echo $profileData['PhoneNumber']; ?>"/>
                                     </div>
                                 <?php } ?>
                                 
-                                <?php if( isset($lr_social_profile_data_settings['show_city'] ) && $lr_social_profile_data_settings['show_city'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_city'] ) && $lr_social_profile_data_settings['show_city'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp">Enter your City:</div>
                                         <input class="inputtxt" type="text" name="city" data-validation="required" value="<?php echo $profileData['City']; ?>"/>
@@ -146,25 +146,25 @@ function login_radius_email_popup() {
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_relationshipstatus'] ) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_relationshipstatus'] ) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp">Enter your Relationship Status:</div>
                                         <input class="inputtxt" type="text" name="relationshipstatus" data-validation="required" value="<?php echo $profileData['RelationshipStatus']; ?>"/>
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_custom_one'] ) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_custom_one'] ) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp"><?php echo $lr_social_profile_data_settings['custom_one_title']; ?></div>
 
-                                        <?php if( isset($lr_social_profile_data_settings['custom_one_type'] ) && $lr_social_profile_data_settings['custom_one_type'] == 'dropdown' ) { 
+                                        <?php if( isset( $lr_social_profile_data_settings['custom_one_type'] ) && $lr_social_profile_data_settings['custom_one_type'] == 'dropdown' ) { 
                                             $dropdown_id = $wpdb->get_var( $wpdb->prepare( "SELECT field_id FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_map WHERE field_name = %s", 'field_1' ) );
                                             $dropdown_values = $wpdb->get_results( $wpdb->prepare( "SELECT field_value FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_dropdown WHERE field_id = %d", $dropdown_id ), 'ARRAY_A' );   
                                         ?>
                                             <select class="inputtxt" name="field_1">
                                                <?php
                                                     for ( $i = 0; $i < count( $dropdown_values ); $i++ ) {
-                                                        $selected = isset($profileData['Field_1']) && $profileData['Field_1'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
+                                                        $selected = isset( $profileData['Field_1'] ) && $profileData['Field_1'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
                                                         echo '<option value="' . $dropdown_values[$i]['field_value'] . '" ' . $selected . '>' . $dropdown_values[$i]['field_value'] . '</option>'; 
                                                     }
                                                ?> 
@@ -179,14 +179,14 @@ function login_radius_email_popup() {
                                     <div>
                                         <div id="innerp"><?php echo $lr_social_profile_data_settings['custom_two_title']; ?></div>
 
-                                        <?php if( isset($lr_social_profile_data_settings['custom_two_type'] ) && $lr_social_profile_data_settings['custom_two_type'] == 'dropdown' ) { 
+                                        <?php if( isset( $lr_social_profile_data_settings['custom_two_type'] ) && $lr_social_profile_data_settings['custom_two_type'] == 'dropdown' ) { 
                                             $dropdown_id = $wpdb->get_var( $wpdb->prepare( "SELECT field_id FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_map WHERE field_name = %s", 'field_2' ) );
                                             $dropdown_values = $wpdb->get_results( $wpdb->prepare( "SELECT field_value FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_dropdown WHERE field_id = %d", $dropdown_id ), 'ARRAY_A' );   
                                         ?>
                                             <select class="inputtxt" name="field_2">
                                                <?php
                                                     for ($i=0; $i < count( $dropdown_values ) ; $i++) {
-                                                        $selected = isset($profileData['Field_2']) && $profileData['Field_2'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
+                                                        $selected = isset( $profileData['Field_2'] ) && $profileData['Field_2'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
                                                         echo '<option value="' . $dropdown_values[$i]['field_value'] . '" ' . $selected . '>' . $dropdown_values[$i]['field_value'] . '</option>'; 
                                                     }
                                                ?> 
@@ -197,18 +197,18 @@ function login_radius_email_popup() {
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_custom_three'] ) && $lr_social_profile_data_settings['show_custom_three'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_custom_three'] ) && $lr_social_profile_data_settings['show_custom_three'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp"><?php echo $lr_social_profile_data_settings['custom_three_title']; ?></div>
 
-                                        <?php if( isset($lr_social_profile_data_settings['custom_three_type'] ) && $lr_social_profile_data_settings['custom_three_type'] == 'dropdown' ) { 
+                                        <?php if( isset( $lr_social_profile_data_settings['custom_three_type'] ) && $lr_social_profile_data_settings['custom_three_type'] == 'dropdown' ) { 
                                             $dropdown_id = $wpdb->get_var( $wpdb->prepare( "SELECT field_id FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_map WHERE field_name = %s", 'field_3' ) );
                                             $dropdown_values = $wpdb->get_results( $wpdb->prepare( "SELECT field_value FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_dropdown WHERE field_id = %d", $dropdown_id ), 'ARRAY_A' );
                                         ?>
                                             <select class="inputtxt" name="field_3">
                                                <?php
-                                                    for ($i=0; $i < count( $dropdown_values ) ; $i++) {
-                                                        $selected = isset($profileData['Field_3']) && $profileData['Field_3'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
+                                                    for ( $i=0; $i < count( $dropdown_values ) ; $i++ ) {
+                                                        $selected = isset( $profileData['Field_3'] ) && $profileData['Field_3'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
                                                         echo '<option value="' . $dropdown_values[$i]['field_value'] . '" ' . $selected . '>' . $dropdown_values[$i]['field_value'] . '</option>'; 
                                                     }
                                                ?> 
@@ -219,18 +219,18 @@ function login_radius_email_popup() {
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_custom_four'] ) && $lr_social_profile_data_settings['show_custom_four'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_custom_four'] ) && $lr_social_profile_data_settings['show_custom_four'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp"><?php echo $lr_social_profile_data_settings['custom_four_title']; ?></div>
 
-                                        <?php if( isset($lr_social_profile_data_settings['custom_four_type'] ) && $lr_social_profile_data_settings['custom_four_type'] == 'dropdown' ) { 
+                                        <?php if( isset( $lr_social_profile_data_settings['custom_four_type'] ) && $lr_social_profile_data_settings['custom_four_type'] == 'dropdown' ) { 
                                             $dropdown_id = $wpdb->get_var( $wpdb->prepare( "SELECT field_id FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_map WHERE field_name = %s", 'field_4' ) );
                                             $dropdown_values = $wpdb->get_results( $wpdb->prepare( "SELECT field_value FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_dropdown WHERE field_id = %d", $dropdown_id ), 'ARRAY_A' );
                                         ?>
                                             <select class="inputtxt" name="field_4">
                                                <?php
                                                     for ($i=0; $i < count( $dropdown_values ) ; $i++) {
-                                                        $selected = isset($profileData['Field_4']) && $profileData['Field_4'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
+                                                        $selected = isset( $profileData['Field_4'] ) && $profileData['Field_4'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
                                                         echo '<option value="' . $dropdown_values[$i]['field_value'] . '" ' . $selected . '>' . $dropdown_values[$i]['field_value'] . '</option>'; 
                                                     }
                                                ?> 
@@ -241,18 +241,18 @@ function login_radius_email_popup() {
                                     </div>
                                 <?php } ?>
 
-                                <?php if( isset($lr_social_profile_data_settings['show_custom_five'] ) && $lr_social_profile_data_settings['show_custom_five'] == '1' ) { ?>
+                                <?php if( isset( $lr_social_profile_data_settings['show_custom_five'] ) && $lr_social_profile_data_settings['show_custom_five'] == '1' ) { ?>
                                     <div>
                                         <div id="innerp"><?php echo $lr_social_profile_data_settings['custom_five_title']; ?></div>
 
-                                        <?php if( isset($lr_social_profile_data_settings['custom_five_type'] ) && $lr_social_profile_data_settings['custom_five_type'] == 'dropdown' ) { 
+                                        <?php if( isset( $lr_social_profile_data_settings['custom_five_type'] ) && $lr_social_profile_data_settings['custom_five_type'] == 'dropdown' ) { 
                                             $dropdown_id = $wpdb->get_var( $wpdb->prepare( "SELECT field_id FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_map WHERE field_name = %s", 'field_5' ) );
                                             $dropdown_values = $wpdb->get_results( $wpdb->prepare( "SELECT field_value FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_dropdown WHERE field_id = %d", $dropdown_id ), 'ARRAY_A' );
                                         ?>
                                             <select class="inputtxt" name="field_5">
                                                <?php
-                                                    for ($i=0; $i < count( $dropdown_values ) ; $i++) {
-                                                        $selected = isset($profileData['Field_5']) && $profileData['Field_5'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
+                                                    for ($i=0; $i < count( $dropdown_values ) ; $i++ ) {
+                                                        $selected = isset( $profileData['Field_5'] ) && $profileData['Field_5'] == $dropdown_values[$i]['field_value'] ? "selected" : '';
                                                         echo '<option value="' . $dropdown_values[$i]['field_value'] . '" ' . $selected . '>' . $dropdown_values[$i]['field_value'] . '</option>'; 
                                                     }
                                                ?> 
@@ -265,12 +265,12 @@ function login_radius_email_popup() {
 
                                 <div class="footerbox">
                                     <input type="submit" id="LoginRadius_popupSubmit" name="LoginRadius_popupSubmit" value="Submit" class="inputbutton">
-                                    <input type="hidden" value="<?php echo $_GET['key'] ?>" name = "session"/>
+                                    <input type="hidden" value="<?php echo $_GET['key']; ?>" name = "session"/>
                                 
                             </form>
                             <form method = "post">
                                     <input type="submit" name="LoginRadius_popupSubmit" value="Cancel" class="inputbutton" />
-                                    <input type="hidden" value="<?php echo $_GET['key'] ?>" name = "session"/>
+                                    <input type="hidden" value="<?php echo $_GET['key']; ?>" name = "session"/>
                             </form>
                                 </div><!-- END FOOTERBOX -->
                         </div>
@@ -296,7 +296,7 @@ function login_radius_email_popup() {
                                     echo '<div id="textmatter" class="lr-noerror">';
                                 }
                                 if ( isset( $_GET['message'] ) && $_GET['message'] != '' ) {
-                                    echo str_replace(  '@provider', $provider, $_GET['message'] );
+                                    echo str_replace( '@provider', $provider, $_GET['message'] );
                                 }
                                 $_GET['message'];
                                 ?>
@@ -310,12 +310,12 @@ function login_radius_email_popup() {
                                 </div>
                                 <div class="footerbox">
                                     <input type="submit" id="LoginRadius_popupSubmit" name="LoginRadius_popupSubmit" value="Submit" class="inputbutton">
-                                    <input type="hidden" value="<?php echo $_GET['key'] ?>" name = "session"/>
+                                    <input type="hidden" value="<?php echo $_GET['key']; ?>" name = "session"/>
                                 
                             </form>
                             <form method = "post">
                                     <input type="submit" name="LoginRadius_popupSubmit" value="Cancel" class="inputbutton" />
-                                    <input type="hidden" value="<?php echo $_GET['key'] ?>" name = "session"/>
+                                    <input type="hidden" value="<?php echo $_GET['key']; ?>" name = "session"/>
                             </form>
                                 </div><!-- END FOOTERBOX -->
                         </div>
@@ -353,14 +353,14 @@ function login_radius_notification_popup() {
                     ?>
                     <form method="post" action=''>
                         <div>
-                            <input type="button" value="OK" class="inputbutton" onclick="location.href = '<?php echo $_GET['redirection'] ?>'">
+                            <input type="button" value="OK" class="inputbutton" onclick="location.href = '<?php echo $_GET['redirection']; ?>'">
                         </div>
                     </form>
 
                     <?php
                 } else {
                     ?>
-                    <form method="post" action="<?php echo site_url() ?>">
+                    <form method="post" action="<?php echo site_url(); ?>">
                         <div>
                             <input type="submit" value="OK" class="inputbutton">
                         </div>
@@ -378,10 +378,10 @@ add_action( 'wp_ajax_nopriv_login_radius_notification_popup', 'login_radius_noti
 // change user status
 function login_radius_change_user_status() {
     $currentStatus = $_POST['current_status'];
-    $userId = $_POST['user_id'];
-    if( class_exists('LR_Raas_Install') ){
-        $uid = get_user_meta($userId, 'lr_raas_uid', true);
-        raas_block_user(array('isblock'=>!$currentStatus), $uid);
+    $userId = $_POST[ 'user_id' ];
+    if( class_exists( 'LR_Raas_Install' ) ) {
+        $uid = get_user_meta( $userId, 'lr_raas_uid', true );
+        raas_block_user( array( 'isblock'=> ! $currentStatus ), $uid );
     }
     if ( $currentStatus == '1' ) {
         update_user_meta( $userId, 'loginradius_status', '0' );
@@ -399,5 +399,4 @@ function login_radius_change_user_status() {
         die( 'done' );
     }
 }
-
 add_action( 'wp_ajax_login_radius_change_user_status', 'login_radius_change_user_status' );

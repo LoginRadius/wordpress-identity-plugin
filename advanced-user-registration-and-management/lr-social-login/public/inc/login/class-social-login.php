@@ -114,7 +114,7 @@ if ( ! class_exists( 'Social_Login' ) ) {
                 LR_Common::perform_linking_operation();
             }
 
-            if (isset($_GET['loginRadiusVk']) && trim($_GET['loginRadiusVk']) != '') {
+            if ( isset( $_GET['loginRadiusVk'] ) && trim( $_GET['loginRadiusVk'] ) != '' ) {
                 //If verification link is clicked
                 Login_Helper::verify_user_after_email_confirmation();
             }
@@ -138,28 +138,28 @@ if ( ! class_exists( 'Social_Login' ) ) {
                     $responseFromLoginRadius = $loginRadiusObject->loginradius_get_user_profiledata($token); 
                 } catch ( LoginRadiusException $e ) {
                     // Error Handling
-                    if ($loginRadiusSettings['enable_degugging'] == '0') {
+                    if ( $loginRadiusSettings['enable_degugging'] == '0' ) {
                         // if debugging is off and Social profile not recieved, redirect to home page.
                         wp_redirect(site_url());
                         exit();
                     } else {
                         $responseFromLoginRadius = null;
-                        $message = isset($e->getErrorResponse()->description) ? $e->getErrorResponse()->description : $e->getMessage();
+                        $message = isset( $e->getErrorResponse()->description ) ? $e->getErrorResponse()->description : $e->getMessage();
                         error_log( $message );
                         // If debug option is set and Social Profile not retrieved
-                        Login_Helper::login_radius_notify($message, 'isProfileNotRetrieved');
+                        Login_Helper::login_radius_notify( $message, 'isProfileNotRetrieved' );
                         return;
                     }
                 }
 
-                if (isset($responseFromLoginRadius->ID) && $responseFromLoginRadius->ID != null) {
+                if ( isset( $responseFromLoginRadius->ID ) && $responseFromLoginRadius->ID != null ) {
                     // If profile data is retrieved successfully
                     self::$loginRadiusProfileData = Login_Helper::filter_loginradius_data_for_wordpress_use($responseFromLoginRadius);
                 }
-                $userId = Login_Helper::is_socialid_exists_in_wordpress(self::$loginRadiusProfileData);
-                if ($userId) {
+                $userId = Login_Helper::is_socialid_exists_in_wordpress( self::$loginRadiusProfileData );
+                if ( $userId ) {
                     //if Social id exists in wordpress database
-                    if ( ( 1 == get_user_meta($userId, self::$loginRadiusProfileData['Provider'] . 'LrVerified', true ) ) || class_exists('LR_Raas_Install') ) {
+                    if ( ( 1 == get_user_meta( $userId, self::$loginRadiusProfileData['Provider'] . 'LrVerified', true ) ) || class_exists( 'LR_Raas_Install' ) ) {
                         // if user is verified, provide login.
                         Login_Helper::login_user( $userId, self::$loginRadiusProfileData );
                     } else {
@@ -170,14 +170,15 @@ if ( ! class_exists( 'Social_Login' ) ) {
                 }
 
                 // check if id already exists.
-                $loginRadiusUserId = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key='loginradius_provider_id' AND meta_value = %s", self::$loginRadiusProfileData['ID']));
+                $loginRadiusUserId = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key='loginradius_provider_id' AND meta_value = %s", self::$loginRadiusProfileData['ID']));
                 if ( ! empty( $loginRadiusUserId ) ) {
                     // id exists
-                    $tempUserId = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM " . $wpdb->usermeta . " WHERE user_id = %d and meta_key='loginradius_isVerified'", $loginRadiusUserId));
+                    $tempUserId = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE user_id = %d and meta_key='loginradius_isVerified'", $loginRadiusUserId));
                     if ( ! empty( $tempUserId ) ) {
                         // check if verification field exists.
-                        $isVerified = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM " . $wpdb->usermeta . " WHERE user_id = %d and meta_key='loginradius_isVerified'", $loginRadiusUserId));
-                        if ($isVerified == '1') {                             // if email is verified
+                        $isVerified = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM " . $wpdb->usermeta . " WHERE user_id = %d and meta_key='loginradius_isVerified'", $loginRadiusUserId));
+                        
+                        if ( $isVerified == '1' ) {                             // if email is verified
                             Login_Helper::login_user( $loginRadiusUserId, self::$loginRadiusProfileData );
                             return;
                         } else {
@@ -185,58 +186,58 @@ if ( ! class_exists( 'Social_Login' ) ) {
                             return;
                         }
                     } else {
-                        Login_Helper::login_user($loginRadiusUserId, self::$loginRadiusProfileData);
+                        Login_Helper::login_user( $loginRadiusUserId, self::$loginRadiusProfileData );
                         return;
                     }
                 } else {
 
                     // Email is empty for social profile data.
-                    $dummyEmail = isset($loginRadiusSettings['LoginRadius_dummyemail']) ? $loginRadiusSettings['LoginRadius_dummyemail'] : '';
+                    $dummyEmail = isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) ? $loginRadiusSettings['LoginRadius_dummyemail'] : '';
 
                     // Create dummy email.
-                    if (empty(self::$loginRadiusProfileData['Email']) && $dummyEmail == 'dummyemail') {
+                    if ( empty( self::$loginRadiusProfileData['Email'] ) && $dummyEmail == 'dummyemail' ) {
                         // Email not required according to plugin settings
-                        self::$loginRadiusProfileData['Email'] = Login_Helper:: generate_dummy_email(self::$loginRadiusProfileData);
+                        self::$loginRadiusProfileData['Email'] = Login_Helper:: generate_dummy_email( self::$loginRadiusProfileData );
                     }
 
                     // Retrieve Profile Data in Popup - Custom popup enabled
-                    if (isset($lr_social_profile_data_settings['enable_custom_popup']) && $lr_social_profile_data_settings['enable_custom_popup'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['enable_custom_popup'] ) && $lr_social_profile_data_settings['enable_custom_popup'] == '1' ) {
 
                         //Has Email from provider or from dummy email
-                        $has_email = isset(self::$loginRadiusProfileData['Email']) && !empty(self::$loginRadiusProfileData['Email']) ? true : false;
+                        $has_email = isset( self::$loginRadiusProfileData['Email'] ) && ! empty( self::$loginRadiusProfileData['Email'] ) ? true : false;
 
-                        $notdummyemail = isset($loginRadiusSettings['LoginRadius_dummyemail']) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ? true : false;
+                        $notdummyemail = isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ? true : false;
 
                         $showpopup = false;
 
                         if ( ! $has_email && $notdummyemail && isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' || isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_gender']) && $lr_social_profile_data_settings['show_gender'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_gender']) && $lr_social_profile_data_settings['show_gender'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_birthdate']) && $lr_social_profile_data_settings['show_birthdate'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_birthdate']) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_phonenumber']) && $lr_social_profile_data_settings['show_phonenumber'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_phonenumber']) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_city']) && $lr_social_profile_data_settings['show_city'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_city']) && $lr_social_profile_data_settings['show_city'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_postalcode']) && $lr_social_profile_data_settings['show_postalcode'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_postalcode']) && $lr_social_profile_data_settings['show_postalcode'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_relationshipstatus']) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_relationshipstatus']) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_custom_three']) && $lr_social_profile_data_settings['show_custom_three'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_custom_three']) && $lr_social_profile_data_settings['show_custom_three'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_custom_four']) && $lr_social_profile_data_settings['show_custom_four'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_custom_four']) && $lr_social_profile_data_settings['show_custom_four'] == '1' ) {
                             $showpopup = true;
-                        } elseif (isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1') {
+                        } elseif ( isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1' ) {
                             $showpopup = true;
                         }
 
                         if ( $showpopup ) {
-                            $lrUniqueId = Login_Helper::store_temporary_data(self::$loginRadiusProfileData);
+                            $lrUniqueId = Login_Helper::store_temporary_data( self::$loginRadiusProfileData );
                             $queryString = '?lrid=' . $lrUniqueId;
                             wp_redirect( site_url() . $queryString );
                             exit();
@@ -246,7 +247,7 @@ if ( ! class_exists( 'Social_Login' ) ) {
                         }
                     } else {
                         // Normal flow no custom popup.
-                        if (empty(self::$loginRadiusProfileData['Email'])) {
+                        if ( empty( self::$loginRadiusProfileData['Email'] ) ) {
                             if ( $dummyEmail == 'dummyemail' ) {
                                 Login_Helper::register_user(self::$loginRadiusProfileData);
                                 return;
@@ -259,11 +260,11 @@ if ( ! class_exists( 'Social_Login' ) ) {
                             }
                         } else {
                             // Email is not empty
-                            $userObject = get_user_by('email', self::$loginRadiusProfileData['Email']);
-                            $loginRadiusUserId = is_object($userObject) ? $userObject->ID : '';
-                            if (!empty($loginRadiusUserId)) {// Email exists
-                                $isVerified = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM " . $wpdb->usermeta . " WHERE user_id = %d and meta_key='loginradius_isVerified'", $loginRadiusUserId));
-                                if (!empty($isVerified)) {
+                            $userObject = get_user_by( 'email', self::$loginRadiusProfileData['Email'] );
+                            $loginRadiusUserId = is_object( $userObject ) ? $userObject->ID : '';
+                            if ( ! empty($loginRadiusUserId )) {// Email exists
+                                $isVerified = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM " . $wpdb->usermeta . " WHERE user_id = %d and meta_key='loginradius_isVerified'", $loginRadiusUserId ) );
+                                if ( ! empty( $isVerified ) ) {
                                     if ($isVerified == '1') {
                                         // Social linking
                                         LR_Common::link_account($loginRadiusUserId, self::$loginRadiusProfileData['ID'], self::$loginRadiusProfileData['Provider'], self::$loginRadiusProfileData['ThumbnailImageUrl'], self::$loginRadiusProfileData['Provider'], '');
@@ -453,7 +454,7 @@ if ( ! class_exists( 'Social_Login' ) ) {
                 $key = trim($_GET['lrid']);
                 $message = 'Please ensure all fields are filled in correctly';
             } else {
-                $loginRadiusTempUniqueId = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key='tmpsession' AND meta_value = %s", trim($_GET['lrid'])));
+                $loginRadiusTempUniqueId = $wpdb->get_var($wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key='tmpsession' AND meta_value = %s", trim( $_GET['lrid'] ) ) );
                 if (!empty($loginRadiusTempUniqueId)) {
                     $key = trim($_GET['lrid']);
                     $message = trim($loginRadiusSettings['msg_email']);

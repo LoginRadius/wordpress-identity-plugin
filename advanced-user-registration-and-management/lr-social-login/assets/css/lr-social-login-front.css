@@ -33,7 +33,7 @@
 }
 
 .LoginRadius_overlay input[type=text] {
-    padding: 0px;
+    padding: 5px;
     width: auto;
     min-width: 350px;
     border-radius: 0px 12px;
