@@ -456,7 +456,8 @@ label.lr-sharing-cb {
 	margin-bottom: 15px;
 }
 
-.lr_options_container {
+.lr_options_container{
+	position: relative;
 	z-index: 1;
 	padding:10px;
 	background-color: white;
@@ -915,3 +916,20 @@ input.lr-toggle:checked + .lr-toggle-name:after, input.lr-toggle:checked + label
 #wp-admin-bar-logout a {
 	cursor: pointer;
 }
+
+/*General CSS*/
+.is-hidden    { display:    none !important; }
+.is-invisible { visibility: none !important; }
+
+.block        { display: block        !important; }
+.inline       { display: inline       !important; }
+.inline-block { display: inline-block !important; }
+.inline-width-50{ width: calc(50% - 4px) }
+
+
+.left  { float: left  !important; }
+.right { float: right !important; }
+
+.text-left   { text-align: left   !important; }
+.text-center { text-align: center !important; }
+.text-right  { text-align: right  !important; }
