@@ -1,20 +1,20 @@
 <?php
 // Exit if called directly
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit();
 }
 
 /**
  * The commenting admin settings page.
  */
-if (!class_exists('LR_Social_Profile_Data_Admin_Settings')) {
+if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
 
     class LR_Social_Profile_Data_Admin_Settings {
 
         public static function render_options_page() {
             global $wpdb;
             
-            if (isset($_POST['reset'])) {
+            if ( isset( $_POST['reset'] ) ) {
                 LR_Social_Profile_Data_Install::reset_options();
                 echo '<p style="display:none;" class="lr-alert-box lr-notif">Social Profile Data settings have been reset and default values loaded</p>';
                 echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
@@ -39,12 +39,41 @@ if (!class_exists('LR_Social_Profile_Data_Admin_Settings')) {
                         <div class="lr_options_container">
                             <div class="lr-row">
                                 <h3>
-                                    <?php _e('Save Profile Data', 'lr-plugin-slug'); ?>
+                                    <?php _e('Profile Data Options', 'lr-plugin-slug'); ?>
                                 </h3>
                                 <div>
-                                    <h5>
-                                        <?php _e('Please select the user profile data fields you would like to save in your database:', 'lr-plugin-slug'); ?>
-                                    </h5>
+                                    <input type="checkbox" class="lr-toggle" id="lr-display-admin-profile-data" name="LoginRadius_Social_Profile_Data_settings[viewProfileData]" value='1' <?php echo( isset( $lr_social_profile_data_settings['viewProfileData'] ) && $lr_social_profile_data_settings['viewProfileData'] == '1' ) ? 'checked' : ''; ?> />
+
+                                    <label class="lr-show-toggle" for="lr-display-admin-profile-data">
+                                        <?php _e( 'Enable to show the view profile data option in ', 'lr-plugin-slug' ); ?><a href="<?php echo get_admin_url() ?>users.php" target="_self" ><?php _e( 'WordPress Users List?', 'lr-plugin-slug' ); ?></a>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'If enabled, a link will be added to each user in the sites User List to view the saved data collected.', 'lr-plugin-slug' ); ?>">
+                                            <span class="dashicons dashicons-editor-help"></span>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div>
+                                    <input type="checkbox" class="lr-toggle" id="lr-display-profile-data" name="LoginRadius_Social_Profile_Data_settings[display_UserProfileData]" value="1" <?php echo isset( $lr_social_profile_data_settings['display_UserProfileData'] ) && $lr_social_profile_data_settings['display_UserProfileData'] == '1' ? 'checked' : ''; ?> />
+                                    <label class="lr-show-toggle" for="lr-display-profile-data">
+                                        <?php _e( 'Enable to display a profile data link to your website users in their account dashboard?', 'lr-plugin-slug' ); ?>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'If enabled, registered users will see a list of their saved pofile data on the profile page in the WordPress admin panel.', 'lr-plugin-slug' ); ?>">
+                                            <span class="dashicons dashicons-editor-help"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lr_options_container">
+
+                            <div class="lr-row inline-block inline-width-50">
+                                <h3>
+                                    <?php _e('Save Profile Data', 'lr-plugin-slug'); ?>
+                                </h3>
+                                <h5>
+                                    <?php _e('Please select the user profile data fields you would like to save in your database:', 'lr-plugin-slug'); ?>
+                                </h5>
+                                <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-basic" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="basic" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'basic', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-basic">
                                         <?php _e('Basic Profile Data', 'lr-plugin-slug'); ?>
@@ -153,39 +182,13 @@ if (!class_exists('LR_Social_Profile_Data_Admin_Settings')) {
                                     </label>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="lr_options_container">
-                            <div class="lr-row">
+                            <div class="lr-row inline-block inline-width-50">
                                 <h3>
-                                    <?php _e('Display Social Profile Data', 'lr-plugin-slug'); ?>
+                                    <?php _e('Display Profile Data', 'lr-plugin-slug'); ?>
                                 </h3>
-                                <div>
-                                    <input type="checkbox" class="lr-toggle" id="lr-display-admin-profile-data" name="LoginRadius_Social_Profile_Data_settings[viewProfileData]" value='1' <?php echo( isset($lr_social_profile_data_settings['viewProfileData']) && $lr_social_profile_data_settings['viewProfileData'] == 1 ) ? 'checked' : ''; ?> />
-
-                                    <label class="lr-show-toggle" for="lr-display-admin-profile-data">
-                                        <?php _e('Do you want to view the Social Login profile data of the users in the WordPress admin panel? YES, display the option to view profile data on the Users page', 'lr-plugin-slug') ?><?php _e('YES, display the option to view profile data on the ', 'lr-plugin-slug') ?> 
-                                        <a href="<?php echo get_admin_url() ?>users.php" target="_self" ><?php _e('Users', 'lr-plugin-slug'); ?></a><?php _e(' page', 'lr-plugin-slug') ?><br />
-                                        <span class="lr-tooltip" data-title="<?php _e('If enabled, you will be able to see a list of the saved data collected from each user on the Users page in the WordPress admin panel.', 'lr-plugin-slug') ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" class="lr-toggle" id="lr-display-profile-data" name="LoginRadius_Social_Profile_Data_settings[display_UserProfileData]" value="1" <?php echo isset($lr_social_profile_data_settings['display_UserProfileData']) && $lr_social_profile_data_settings['display_UserProfileData'] == '1' ? 'checked' : ''; ?> />
-                                    <label class="lr-show-toggle" for="lr-display-profile-data">
-                                        <?php _e('Do you want to display Social Login profile data to your website users in their account dashboard?', 'lr-plugin-slug'); ?>
-                                        <span style="font-size: 13px;"><?php _e('You can also use <u>Shortcode</u> <strong> [LoginRadius_ProfileData]</strong> at the post/page to display Social Profile data of user', 'lr-plugin-slug') ?></span>
-                                        <span class="lr-tooltip" data-title="<?php _e('If enabled, registered users will see a list of their saved pofile data on the profile page in the WordPress admin panel.', 'lr-plugin-slug') ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="lr-row">
-                                <h3>
+                                <h5>
                                     <?php _e('Please select the user profile data fields you would like to display:', 'lr-plugin-slug'); ?>
-                                </h3>
+                                </h5>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-basic" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="basic" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'basic', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-basic">
@@ -307,6 +310,20 @@ if (!class_exists('LR_Social_Profile_Data_Admin_Settings')) {
                                 <?php } ?>
                             </div>
                         </div>
+
+                        <div class="lr_options_container">
+                            <div class="lr-row">
+                                <h3><?php _e('Profile Data Short Code', 'lr-plugin-slug'); ?>
+                                    <span class="lr-tooltip tip-bottom" data-title="<?php _e( 'Use the following shortcode on a page or post to display the logged in users profile data', 'lr-plugin-slug' ); ?>">
+                                        <span class="dashicons dashicons-editor-help"></span>
+                                    </span>
+                                </h3>
+                                <div>
+                                    <textarea rows="1" onclick="this.select()" spellcheck="false" class="lr-shortcode" readonly="readonly">[LoginRadius_ProfileData]</textarea>
+                                </div>
+                            </div><!-- lr-row -->
+                        </div>
+
                         <?php if ( class_exists( 'LR_Social_Login' ) && ! class_exists( 'LR_Raas_Install' ) ) { ?>
                             <div class="lr_options_container">
                                 <div class="lr-row cf">	
@@ -523,6 +540,7 @@ if (!class_exists('LR_Social_Profile_Data_Admin_Settings')) {
                                 </div>
                             </div>
                         <?php } ?>
+
                         <p class="submit">
                             <?php submit_button('Save Options', 'primary', 'submit', false); ?>
                         </p>

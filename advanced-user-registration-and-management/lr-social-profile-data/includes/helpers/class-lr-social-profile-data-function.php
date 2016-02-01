@@ -160,9 +160,10 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Function' ) ) {
                         $wpdb->insert($wpdb->base_prefix . 'lr_basic_profile_data', $data);
                     }
                 }
+
                 // Emails.
-                if (isset($profileData['Emails']) && count($profileData['Emails']) > 0) {
-                    foreach ($profileData['Emails'] as $lrEmail) {
+                if ( is_array( $profileData['Emails'] ) || is_object( $profileData['Emails'] ) && ( isset( $profileData['Emails'] ) && count( $profileData['Emails'] ) > 0 ) ) {
+                    foreach ( $profileData['Emails'] as $lrEmail ) {
                         $data = array();
                         $data['wp_users_id'] = $userId;
                         $data['email_type'] = $lrEmail->Type;
