@@ -51,29 +51,29 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Function' ) ) {
                    error_log( $e );
                 }
                 
-                if ( isset( $lr_social_profile_data_settings['enable_custom_popup'] ) && $lr_social_profile_data_settings['enable_custom_popup'] == '1') {
+                if ( isset( $lr_social_profile_data_settings['enable_custom_popup'] ) && $lr_social_profile_data_settings['enable_custom_popup'] == '1' ) {
 
-                    if ( isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' ) {
                         $userProfileObject->Email = $profileData['Email'];
                     }
 
-                    if ( isset( $lr_social_profile_data_settings['show_gender'] ) && $lr_social_profile_data_settings['show_gender'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_gender'] ) && $lr_social_profile_data_settings['show_gender'] == '1' ) {
                         $userProfileObject->Gender = $profileData['Gender'];
                     }
 
-                    if ( isset( $lr_social_profile_data_settings['show_birthdate'] ) && $lr_social_profile_data_settings['show_birthdate'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_birthdate'] ) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) {
                         $userProfileObject->BirthDate = $profileData['BirthDate'];
                     }
 
-                    if ( isset( $lr_social_profile_data_settings['show_phonenumber'] ) && $lr_social_profile_data_settings['show_phonenumber'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_phonenumber'] ) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) {
                         $userProfileObject->PhoneNumber = $profileData['PhoneNumber'];
                     }
 
-                    if ( isset( $lr_social_profile_data_settings['show_city'] ) && $lr_social_profile_data_settings['show_city'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_city'] ) && $lr_social_profile_data_settings['show_city'] == '1' ) {
                         $userProfileObject->City = $profileData['City'];
                     }
 
-                    if ( isset( $lr_social_profile_data_settings['show_postalcode'] ) && $lr_social_profile_data_settings['show_postalcode'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_postalcode'] ) && $lr_social_profile_data_settings['show_postalcode'] == '1' ) {
                         $userProfileObject->PostalCode = $profileData['PostalCode'];
                     }
 
@@ -81,29 +81,29 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Function' ) ) {
                         $userProfileObject->RelationshipStatus = $profileData['RelationshipStatus'];
                     }
 
-                    if ( isset( $lr_social_profile_data_settings['show_custom_one'] ) && $lr_social_profile_data_settings['show_custom_one'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_custom_one'] ) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) {
                         $userProfileObject->Field_1 = $profileData['Field_1'];
-                        $wpdb->insert($wpdb->base_prefix . 'lr_popup_custom_fields_data', array('wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_one_title'], 'field_value' => $profileData['Field_1']));
+                        $wpdb->insert( $wpdb->base_prefix . 'lr_popup_custom_fields_data', array( 'wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_one_title'], 'field_value' => $profileData['Field_1'] ) );
                     }
 
                     if ( isset( $lr_social_profile_data_settings['show_custom_two'] ) && $lr_social_profile_data_settings['show_custom_two'] == '1') {
                         $userProfileObject->Field_2 = $profileData['Field_2'];
-                        $wpdb->insert($wpdb->base_prefix . 'lr_popup_custom_fields_data', array('wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_two_title'], 'field_value' => $profileData['Field_2']));
+                        $wpdb->insert( $wpdb->base_prefix . 'lr_popup_custom_fields_data', array( 'wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_two_title'], 'field_value' => $profileData['Field_2'] ) );
                     }
 
                     if ( isset( $lr_social_profile_data_settings['show_custom_three'] ) && $lr_social_profile_data_settings['show_custom_three'] == '1') {
                         $userProfileObject->Field_3 = $profileData['Field_3'];
-                        $wpdb->insert($wpdb->base_prefix . 'lr_popup_custom_fields_data', array('wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_three_title'], 'field_value' => $profileData['Field_3']));
+                        $wpdb->insert( $wpdb->base_prefix . 'lr_popup_custom_fields_data', array( 'wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_three_title'], 'field_value' => $profileData['Field_3'] ) );
                     }
 
                     if ( isset( $lr_social_profile_data_settings['show_custom_four'] ) && $lr_social_profile_data_settings['show_custom_four'] == '1') {
                         $userProfileObject->Field_4 = $profileData['Field_4'];
-                        $wpdb->insert($wpdb->base_prefix . 'lr_popup_custom_fields_data', array('wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_four_title'], 'field_value' => $profileData['Field_4']));
+                        $wpdb->insert( $wpdb->base_prefix . 'lr_popup_custom_fields_data', array( 'wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_four_title'], 'field_value' => $profileData['Field_4'] ) );
                     }
 
                     if ( isset( $lr_social_profile_data_settings['show_custom_five'] ) && $lr_social_profile_data_settings['show_custom_five'] == '1') {
                         $userProfileObject->Field_5 = $profileData['Field_5'];
-                        $wpdb->insert($wpdb->base_prefix . 'lr_popup_custom_fields_data', array('wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_five_title'], 'field_value' => $profileData['Field_5']));
+                        $wpdb->insert( $wpdb->base_prefix . 'lr_popup_custom_fields_data', array( 'wp_users_id' => $userId, 'field_title' => $lr_social_profile_data_settings['custom_five_title'], 'field_value' => $profileData['Field_5'] ) );
                     }
                 }
 
@@ -138,26 +138,26 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Function' ) ) {
             if ( in_array( 'basic', $lr_social_profile_data_settings['profiledata'] ) ) {
                 $data = array();
                 $data['wp_users_id'] = $userId;
-                $data['social_id'] = isset($profileData['ID']) ? $profileData['ID'] : '';
-                $data['provider'] = isset($profileData['Provider']) ? $profileData['Provider'] : '';
-                $data['prefix'] = isset($profileData['Prefix']) ? $profileData['Prefix'] : '';
-                $data['first_name'] = isset($profileData['FirstName']) ? $profileData['FirstName'] : '';
-                $data['middle_name'] = isset($profileData['MiddleName']) ? $profileData['MiddleName'] : '';
-                $data['last_name'] = isset($profileData['LastName']) ? $profileData['LastName'] : '';
-                $data['suffix'] = isset($profileData['Suffix']) ? $profileData['Suffix'] : '';
-                $data['nick_name'] = isset($profileData['NickName']) ? $profileData['NickName'] : '';
-                $data['profile_name'] = isset($profileData['ProfileName']) ? $profileData['ProfileName'] : '';
-                $data['profile_url'] = isset($profileData['ProfileUrl']) ? $profileData['ProfileUrl'] : '';
+                $data['social_id'] = isset( $profileData['ID'] ) ? $profileData['ID'] : '';
+                $data['provider'] = isset( $profileData['Provider'] ) ? $profileData['Provider'] : '';
+                $data['prefix'] = isset( $profileData['Prefix'] ) ? $profileData['Prefix'] : '';
+                $data['first_name'] = isset( $profileData['FirstName'] ) ? $profileData['FirstName'] : '';
+                $data['middle_name'] = isset( $profileData['MiddleName'] ) ? $profileData['MiddleName'] : '';
+                $data['last_name'] = isset( $profileData['LastName'] ) ? $profileData['LastName'] : '';
+                $data['suffix'] = isset( $profileData['Suffix'] ) ? $profileData['Suffix'] : '';
+                $data['nick_name'] = isset( $profileData['NickName'] ) ? $profileData['NickName'] : '';
+                $data['profile_name'] = isset( $profileData['ProfileName'] ) ? $profileData['ProfileName'] : '';
+                $data['profile_url'] = isset( $profileData['ProfileUrl'] ) ? $profileData['ProfileUrl'] : '';
                 $data['birth_date'] = ! empty( $profileData['BirthDate'] ) ? $profileData['BirthDate'] : NULL;
-                $data['gender'] = isset($profileData['Gender']) && $profileData['Gender'] != '' ? $profileData['Gender'] : 'unknown';
-                $data['website'] = isset($profileData['Website']) ? $profileData['Website'] : '';
-                $data['thumbnail_image_url'] = isset($profileData['Thumbnail']) ? $profileData['Thumbnail'] : '';
-                $data['image_url'] = isset($profileData['ImageUrl']) ? $profileData['ImageUrl'] : '';
+                $data['gender'] = isset( $profileData['Gender'] ) && $profileData['Gender'] != '' ? $profileData['Gender'] : 'unknown';
+                $data['website'] = isset( $profileData['Website'] ) ? $profileData['Website'] : '';
+                $data['thumbnail_image_url'] = isset( $profileData['Thumbnail'] ) ? $profileData['Thumbnail'] : '';
+                $data['image_url'] = isset( $profileData['ImageUrl'] ) ? $profileData['ImageUrl'] : '';
 
-                $data = self::check_data($data);
-                if ( ! $wpdb->update($wpdb->base_prefix . 'lr_basic_profile_data', $data, array('wp_users_id' => $userId))) {
-                    if ( ! $wpdb->get_var($wpdb->prepare('SELECT wp_users_id FROM ' . $wpdb->base_prefix . 'lr_basic_profile_data' . " WHERE wp_users_id = %d", $userId))) {
-                        $wpdb->insert($wpdb->base_prefix . 'lr_basic_profile_data', $data);
+                $data = self::check_data( $data );
+                if ( ! $wpdb->update( $wpdb->base_prefix . 'lr_basic_profile_data', $data, array( 'wp_users_id' => $userId ) ) ) {
+                    if ( ! $wpdb->get_var( $wpdb->prepare('SELECT wp_users_id FROM ' . $wpdb->base_prefix . 'lr_basic_profile_data' . " WHERE wp_users_id = %d", $userId))) {
+                        $wpdb->insert( $wpdb->base_prefix . 'lr_basic_profile_data', $data);
                     }
                 }
 

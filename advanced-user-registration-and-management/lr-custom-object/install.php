@@ -48,12 +48,12 @@ if ( ! class_exists( 'LR_Custom_Obj_Install' ) ) {
         public static function set_default_options() {
             global $wpdb, $lr_raas_custom_obj_settings;
 
-            if (!get_option('LR_Raas_Custom_Obj_Settings')) {
-                update_option('LR_Raas_Custom_Obj_Settings', self::custom_obj_options());
+            if ( ! get_option('LR_Raas_Custom_Obj_Settings') ) {
+                update_option( 'LR_Raas_Custom_Obj_Settings', self::custom_obj_options() );
             }
-            $lr_raas_custom_obj_settings = get_option('LR_Raas_Custom_Obj_Settings');
+            $lr_raas_custom_obj_settings = get_option( 'LR_Raas_Custom_Obj_Settings' );
 
-            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'loginradius_custom_object_data` (
+            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_custom_object_data` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `field_title` varchar( 100 ) DEFAULT NULL,

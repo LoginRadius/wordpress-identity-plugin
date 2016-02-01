@@ -110,7 +110,7 @@ if ( ! class_exists( 'Social_Login' ) ) {
         public static function login_radius_connect() {
             global $wpdb, $loginRadiusSettings, $loginRadiusObject, $lr_social_profile_data_settings;
 
-            if (isset($_GET['loginradius_linking']) && isset($_REQUEST['token'])) {
+            if ( isset( $_GET['loginradius_linking'] ) && isset( $_REQUEST['token'] ) ) {
                 LR_Common::perform_linking_operation();
             }
 
@@ -140,7 +140,7 @@ if ( ! class_exists( 'Social_Login' ) ) {
                     // Error Handling
                     if ( $loginRadiusSettings['enable_degugging'] == '0' ) {
                         // if debugging is off and Social profile not recieved, redirect to home page.
-                        wp_redirect(site_url());
+                        wp_redirect( site_url() );
                         exit();
                     } else {
                         $responseFromLoginRadius = null;
@@ -212,27 +212,27 @@ if ( ! class_exists( 'Social_Login' ) ) {
 
                         if ( ! $has_email && $notdummyemail && isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' || isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_gender']) && $lr_social_profile_data_settings['show_gender'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_gender'] ) && $lr_social_profile_data_settings['show_gender'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_birthdate']) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_birthdate'] ) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_phonenumber']) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_phonenumber'] ) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_city']) && $lr_social_profile_data_settings['show_city'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_city'] ) && $lr_social_profile_data_settings['show_city'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_postalcode']) && $lr_social_profile_data_settings['show_postalcode'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_postalcode'] ) && $lr_social_profile_data_settings['show_postalcode'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_relationshipstatus']) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_relationshipstatus'] ) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_custom_one'] ) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_custom_two'] ) && $lr_social_profile_data_settings['show_custom_two'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_custom_three']) && $lr_social_profile_data_settings['show_custom_three'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_custom_three'] ) && $lr_social_profile_data_settings['show_custom_three'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_custom_four']) && $lr_social_profile_data_settings['show_custom_four'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_custom_four'] ) && $lr_social_profile_data_settings['show_custom_four'] == '1' ) {
                             $showpopup = true;
-                        } elseif ( isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1' ) {
+                        } elseif ( isset( $lr_social_profile_data_settings['show_custom_five'] ) && $lr_social_profile_data_settings['show_custom_five'] == '1' ) {
                             $showpopup = true;
                         }
 
@@ -440,24 +440,24 @@ if ( ! class_exists( 'Social_Login' ) ) {
             $isError = 'no';
             $message = $key = '';
 
-            wp_enqueue_script('jquery');
-            wp_enqueue_script('jquery-ui-datepicker');
-            wp_enqueue_style('jquery-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
-            wp_enqueue_script('jquery-validator', '//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js');
+            wp_enqueue_script( 'jquery');
+            wp_enqueue_script( 'jquery-ui-datepicker');
+            wp_enqueue_style( 'jquery-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+            wp_enqueue_script( 'jquery-validator', '//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js');
 
-            if (isset($_GET['LoginRadiusMessage']) && trim($_GET['LoginRadiusMessage']) == 'emailExists') {
+            if ( isset( $_GET['LoginRadiusMessage'] ) && trim( $_GET['LoginRadiusMessage'] ) == 'emailExists' ) {
 
-                $key = trim($_GET['lrid']);
-                $message = trim($loginRadiusSettings['msg_existemail']);
+                $key = trim( $_GET['lrid'] );
+                $message = trim( $loginRadiusSettings['msg_existemail'] );
                 $isError = 'yes';
-            } elseif (isset($_GET['LoginRadiusMessage']) && trim($_GET['LoginRadiusMessage']) == 'formData') {
+            } elseif ( isset( $_GET['LoginRadiusMessage'] ) && trim( $_GET['LoginRadiusMessage'] ) == 'formData' ) {
                 $key = trim($_GET['lrid']);
                 $message = 'Please ensure all fields are filled in correctly';
             } else {
-                $loginRadiusTempUniqueId = $wpdb->get_var($wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key='tmpsession' AND meta_value = %s", trim( $_GET['lrid'] ) ) );
-                if (!empty($loginRadiusTempUniqueId)) {
+                $loginRadiusTempUniqueId = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key='tmpsession' AND meta_value = %s", trim( $_GET['lrid'] ) ) );
+                if ( ! empty( $loginRadiusTempUniqueId ) ) {
                     $key = trim($_GET['lrid']);
-                    $message = trim($loginRadiusSettings['msg_email']);
+                    $message = trim( $loginRadiusSettings['msg_email'] );
                 }
             }
             $ajaxUrl = add_query_arg(
