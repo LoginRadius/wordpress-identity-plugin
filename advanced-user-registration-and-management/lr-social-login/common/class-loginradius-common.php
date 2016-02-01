@@ -67,7 +67,7 @@ if ( ! class_exists( 'LR_Common' ) ) {
                     }
                 } else {
                     $loginRadiusMappingProvider = $loginRadiusMappingData['provider'];
-                    $wp_user_lrid = $wpdb->get_var( $wpdb->prepare('SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key="' . $loginRadiusMappingProvider . 'Lrid" AND meta_value = %s', $loginRadiusMappingData['id'] ) );
+                    $wp_user_lrid = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key="' . $loginRadiusMappingProvider . 'Lrid" AND meta_value = %s', $loginRadiusMappingData['id'] ) );
                     if ( ! empty( $wp_user_lrid ) ) {
                         $lrVerified = get_user_meta( $wp_user_lrid, $loginRadiusMappingProvider . 'LrVerified', true );
                         if ( $lrVerified == '1' ) {

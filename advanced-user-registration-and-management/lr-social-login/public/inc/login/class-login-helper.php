@@ -16,37 +16,37 @@ if ( ! class_exists( 'Login_Helper' ) ) {
          */
         public static function verify_user_after_email_confirmation() {
             global $wpdb, $loginRadiusSettings;
-            $verificationKey = esc_sql(trim($_GET['loginRadiusVk']));
+            $verificationKey = esc_sql( trim($_GET['loginRadiusVk'] ) );
             if ( isset( $_GET['loginRadiusProvider'] ) && trim( $_GET['loginRadiusProvider'] ) != '' ) {
-                $provider = esc_sql( trim($_GET['loginRadiusProvider'] ) );
-                $userId = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key = '" . $provider . "LoginRadiusVkey' and meta_value = %s", $verificationKey ) );
+                $provider = esc_sql( trim( $_GET['loginRadiusProvider'] ) );
+                $userId = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key = '" . $provider . "LoginRadiusVkey' and meta_value = %s", $verificationKey ) );
                 if ( ! empty( $userId ) ) {
-                    update_user_meta($userId, $provider . 'LrVerified', '1');
-                    delete_user_meta($userId, $provider . 'LoginRadiusVkey', $verificationKey);
+                    update_user_meta( $userId, $provider . 'LrVerified', '1' );
+                    delete_user_meta( $userId, $provider . 'LoginRadiusVkey', $verificationKey );
                 } else {
-                    wp_redirect(site_url());
+                    wp_redirect( site_url() );
                     exit();
                 }
             } else {
                 $userId = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key = 'loginradius_verification_key' and meta_value = %s", $verificationKey ) );
-                if ( ! empty($userId) ) {
+                if ( ! empty( $userId ) ) {
                     update_user_meta( $userId, 'loginradius_isVerified', '1' );
                     delete_user_meta( $userId, 'loginradius_verification_key', $verificationKey );
                 } else {
-                    wp_redirect(site_url());
+                    wp_redirect( site_url() );
                     exit();
                 }
             }
             // new user notification
             if ( isset( $loginRadiusSettings['LoginRadius_sendemail'] ) && $loginRadiusSettings['LoginRadius_sendemail'] == 'sendemail' ) {
                 $userPassword = wp_generate_password();
-                wp_update_user(array('ID' => $userId, 'user_pass' => $userPassword));
-                wp_new_user_notification($userId, $userPassword);
+                wp_update_user( array( 'ID' => $userId, 'user_pass' => $userPassword ) );
+                wp_new_user_notification( $userId, $userPassword );
             } else {
                 // notification to admin
                 LR_Common::login_radius_send_verification_email( trim( get_option( 'admin_email' ) ), '', '', 'admin notification', $userId );
             }
-            if (get_user_meta($userId, 'loginradius_status', true) === '0') {
+            if ( get_user_meta( $userId, 'loginradius_status', true ) === '0') {
                 self::login_radius_notify( __( 'Your account is currently inactive. You will be notified through email, once Administrator activates your account.', 'lr-plugin-slug' ), 'isAccountInactive' );
             } else {
                 self::login_radius_notify( __( 'Your email has been successfully verified. Now you can login into your account.', 'lr-plugin-slug' ), 'isEmailVerified' );
@@ -172,6 +172,7 @@ if ( ! class_exists( 'Login_Helper' ) ) {
                     $userName = str_replace(' ', '-', $userName);
                 }
                 $username = self::create_another_username_if_already_exists( $userName );
+
                 $userdata = array(
                     'user_login' => $username,
                     'user_pass' => $userPassword,
@@ -363,7 +364,13 @@ if ( ! class_exists( 'Login_Helper' ) ) {
             $tmpdata['tmpThumbnailImageUrl']  = isset( $profileData['ThumbnailImageUrl'] ) ? $profileData['ThumbnailImageUrl'] : '';
             $tmpdata['tmpaboutme']            = isset( $profileData['Bio'] ) ? $profileData['Bio'] : '';
             $tmpdata['tmpwebsite']            = isset( $profileData['ProfileUrl'] ) ? $profileData['ProfileUrl'] : '';
-            $tmpdata['tmpEmail']              = isset( $profileData['Email'] ) ? $profileData['Email'] : '';
+            
+            if( isset( $profileData['Email'] ) && is_array( $profileData['Email'] ) ) {
+                $tmpdata['tmpEmail']          = $profileData['Email'][0]->Value;
+            }else {
+                $tmpdata['tmpEmail']          = isset( $profileData['Email'] ) ? $profileData['Email'] : ''; 
+            }
+
             $tmpdata['tmpGender']             = isset( $profileData['Gender'] ) ? $profileData['Gender'] : '';
             $tmpdata['tmpBirthDate']          = isset( $profileData['BirthDate']  ) ? date('m-d-Y', strtotime( $profileData['BirthDate'] ) ) : '';
             $tmpdata['tmpPhoneNumber']        = isset( $profileData['PhoneNumber'] ) ? $profileData['PhoneNumber'] : '';
@@ -710,57 +717,59 @@ if ( ! class_exists( 'Login_Helper' ) ) {
 
             if ( $_POST['LoginRadius_popupSubmit'] == 'Submit' ) {
 
-                $session = isset($_POST['session']) ? trim($_POST['session']) : '';
-                $split_session = explode('.', $session);
+                $session = isset( $_POST['session'] ) ? trim( $_POST['session'] ) : '';
+                $split_session = explode( '.', $session );
                 $unique_id = $split_session[1];
 
                 // Current email from user_meta table
-                $current_email = get_user_meta($unique_id, 'tmpEmail', true);
+                $current_email = get_user_meta( $unique_id, 'tmpEmail', true );
+                
                 //Has Email from provider or from dummy email
-                $has_email = isset($current_email) && !empty($current_email) ? true : false;
+                $has_email = isset( $current_email ) && ! empty( $current_email ) ? true : false;
+
                 $notdummyemail = isset($loginRadiusSettings['LoginRadius_dummyemail']) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ? true : false;
 
                 $popupenable = false;
 
-                if (!$has_email && $notdummyemail && ( isset($lr_social_profile_data_settings['show_email']) && $lr_social_profile_data_settings['show_email'] == '1' || isset($loginRadiusSettings['LoginRadius_dummyemail']) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' )) {
+                if ( ! $has_email && $notdummyemail && ( isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' || isset($loginRadiusSettings['LoginRadius_dummyemail']) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' )) {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_gender']) && $lr_social_profile_data_settings['show_gender'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_gender']) && $lr_social_profile_data_settings['show_gender'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_birthdate']) && $lr_social_profile_data_settings['show_birthdate'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_birthdate']) && $lr_social_profile_data_settings['show_birthdate'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_phonenumber']) && $lr_social_profile_data_settings['show_phonenumber'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_phonenumber']) && $lr_social_profile_data_settings['show_phonenumber'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_city']) && $lr_social_profile_data_settings['show_city'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_city']) && $lr_social_profile_data_settings['show_city'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_postalcode']) && $lr_social_profile_data_settings['show_postalcode'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_postalcode']) && $lr_social_profile_data_settings['show_postalcode'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_relationshipstatus']) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_relationshipstatus']) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_custom_three']) && $lr_social_profile_data_settings['show_custom_three'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_custom_three']) && $lr_social_profile_data_settings['show_custom_three'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_custom_four']) && $lr_social_profile_data_settings['show_custom_four'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_custom_four']) && $lr_social_profile_data_settings['show_custom_four'] == '1') {
                     $popupenable = true;
-                } elseif (isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1') {
+                } elseif ( isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1') {
                     $popupenable = true;
                 }
 
-                if (isset($lr_social_profile_data_settings['enable_custom_popup']) && $lr_social_profile_data_settings['enable_custom_popup'] == '1' && $popupenable) {
+                if ( isset( $lr_social_profile_data_settings['enable_custom_popup'] ) && $lr_social_profile_data_settings['enable_custom_popup'] == '1' && $popupenable ) {
 
                     $valid = true;
 
-                    if (!$has_email && $notdummyemail && ( isset($lr_social_profile_data_settings['show_email']) && $lr_social_profile_data_settings['show_email'] == '1' || isset($loginRadiusSettings['LoginRadius_dummyemail']) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' )) {
-                        $email = trim($_POST['email']);
-                        if (empty($email)) {
+                    if ( ! $has_email && $notdummyemail && ( isset( $lr_social_profile_data_settings['show_email'] ) && $lr_social_profile_data_settings['show_email'] == '1' || isset($loginRadiusSettings['LoginRadius_dummyemail']) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ) ) {
+                        $email = trim( $_POST['email'] );
+                        if ( empty( $email ) ) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpEmail', $email);
+                        update_user_meta( $unique_id, 'tmpEmail', $email );
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_gender']) && $lr_social_profile_data_settings['show_gender'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_gender'] ) && $lr_social_profile_data_settings['show_gender'] == '1' ) {
                         $gender = isset($_POST['gender']) ? $_POST['gender'] : '';
                         if (empty($gender)) {
                             $valid = false;
@@ -768,55 +777,55 @@ if ( ! class_exists( 'Login_Helper' ) ) {
                         update_user_meta($unique_id, 'tmpGender', $gender);
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_birthdate']) && $lr_social_profile_data_settings['show_birthdate'] == '1') {
-                        $birthdate = isset($_POST['birthdate']) ? $_POST['birthdate'] : '';
-                        if (empty($birthdate)) {
+                    if ( isset( $lr_social_profile_data_settings['show_birthdate'] ) && $lr_social_profile_data_settings['show_birthdate'] == '1' ) {
+                        $birthdate = isset( $_POST['birthdate'] ) ? $_POST['birthdate'] : '';
+                        if ( empty( $birthdate ) ) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpBirthDate', $birthdate);
+                        update_user_meta( $unique_id, 'tmpBirthDate', $birthdate );
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_phonenumber']) && $lr_social_profile_data_settings['show_phonenumber'] == '1') {
-                        $phonenumber = isset($_POST['phonenumber']) ? trim($_POST['phonenumber']) : '';
-                        if (empty($phonenumber)) {
+                    if ( isset( $lr_social_profile_data_settings['show_phonenumber'] ) && $lr_social_profile_data_settings['show_phonenumber'] == '1' ) {
+                        $phonenumber = isset( $_POST['phonenumber'] ) ? trim( $_POST['phonenumber'] ) : '';
+                        if ( empty( $phonenumber ) ) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpPhoneNumber', $phonenumber);
+                        update_user_meta( $unique_id, 'tmpPhoneNumber', $phonenumber );
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_city']) && $lr_social_profile_data_settings['show_city'] == '1') {
-                        $city = isset($_POST['city']) ? trim($_POST['city']) : '';
-                        if (empty($city)) {
+                    if ( isset( $lr_social_profile_data_settings['show_city'] ) && $lr_social_profile_data_settings['show_city'] == '1' ) {
+                        $city = isset( $_POST['city'] ) ? trim( $_POST['city'] ) : '';
+                        if ( empty( $city ) ) {
                             $valid = false;
                         }
                         update_user_meta($unique_id, 'tmpCity', $city);
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_postalcode']) && $lr_social_profile_data_settings['show_postalcode'] == '1') {
-                        $postalcode = isset($_POST['postalcode']) ? trim($_POST['postalcode']) : '';
-                        if (empty($postalcode)) {
+                    if ( isset( $lr_social_profile_data_settings['show_postalcode'] ) && $lr_social_profile_data_settings['show_postalcode'] == '1' ) {
+                        $postalcode = isset( $_POST['postalcode'] ) ? trim( $_POST['postalcode'] ) : '';
+                        if ( empty( $postalcode ) ) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpPostalCode', $postalcode);
+                        update_user_meta( $unique_id, 'tmpPostalCode', $postalcode );
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_relationshipstatus']) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1') {
-                        $relationshipstatus = isset($_POST['relationshipstatus']) ? trim($_POST['relationshipstatus']) : '';
-                        if (empty($relationshipstatus)) {
+                    if (isset($lr_social_profile_data_settings['show_relationshipstatus'] ) && $lr_social_profile_data_settings['show_relationshipstatus'] == '1' ) {
+                        $relationshipstatus = isset( $_POST['relationshipstatus'] ) ? trim( $_POST['relationshipstatus'] ) : '';
+                        if ( empty( $relationshipstatus ) ) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpRelationshipStatus', $relationshipstatus);
+                        update_user_meta( $unique_id, 'tmpRelationshipStatus', $relationshipstatus );
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1') {
-                        $field_1 = isset($_POST['field_1']) ? trim($_POST['field_1']) : '';
-                        if (empty($field_1)) {
+                    if ( isset( $lr_social_profile_data_settings['show_custom_one']) && $lr_social_profile_data_settings['show_custom_one'] == '1' ) {
+                        $field_1 = isset( $_POST['field_1'] ) ? trim( $_POST['field_1'] ) : '';
+                        if ( empty( $field_1 ) ) {
                             $valid = false;
                         }
                         update_user_meta($unique_id, 'tmpField_1', $field_1);
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1') {
+                    if ( isset( $lr_social_profile_data_settings['show_custom_two']) && $lr_social_profile_data_settings['show_custom_two'] == '1' ) {
                         $field_2 = isset($_POST['field_2']) ? trim($_POST['field_2']) : '';
                         if (empty($field_2)) {
                             $valid = false;
@@ -824,41 +833,41 @@ if ( ! class_exists( 'Login_Helper' ) ) {
                         update_user_meta($unique_id, 'tmpField_2', $field_2);
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_custom_three']) && $lr_social_profile_data_settings['show_custom_three'] == '1') {
-                        $field_3 = isset($_POST['field_3']) ? trim($_POST['field_3']) : '';
-                        if (empty($field_3)) {
+                    if ( isset( $lr_social_profile_data_settings['show_custom_three'] ) && $lr_social_profile_data_settings['show_custom_three'] == '1' ) {
+                        $field_3 = isset( $_POST['field_3'] ) ? trim( $_POST['field_3'] ) : '';
+                        if ( empty( $field_3 ) ) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpField_3', $field_3);
+                        update_user_meta( $unique_id, 'tmpField_3', $field_3 );
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_custom_four']) && $lr_social_profile_data_settings['show_custom_four'] == '1') {
-                        $field_4 = isset($_POST['field_4']) ? trim($_POST['field_4']) : '';
+                    if (isset($lr_social_profile_data_settings['show_custom_four'] ) && $lr_social_profile_data_settings['show_custom_four'] == '1' ) {
+                        $field_4 = isset( $_POST['field_4'] ) ? trim( $_POST['field_4'] ) : '';
                         if (empty($field_4)) {
                             $valid = false;
                         }
                         update_user_meta($unique_id, 'tmpField_4', $field_4);
                     }
 
-                    if (isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1') {
+                    if (isset($lr_social_profile_data_settings['show_custom_five']) && $lr_social_profile_data_settings['show_custom_five'] == '1' ) {
                         $field_5 = isset($_POST['field_5']) ? trim($_POST['field_5']) : '';
                         if (empty($field_5)) {
                             $valid = false;
                         }
-                        update_user_meta($unique_id, 'tmpField_5', $field_5);
+                        update_user_meta( $unique_id, 'tmpField_5', $field_5 );
                     }
 
-                    $loginRadiusTempUserId = $wpdb->get_var($wpdb->prepare('SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key=\'tmpsession\' AND meta_value = %s', $_POST['session']));
+                    $loginRadiusTempUserId = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key=\'tmpsession\' AND meta_value = %s', $_POST['session'] ) );
 
-                    if ($valid) {
+                    if ( $valid ) {
 
-                        $profileData = self::fetch_temp_data_from_usermeta($loginRadiusTempUserId);
-                        $loginRadiusProvider = get_user_meta($loginRadiusTempUserId, 'tmpProvider', true);
+                        $profileData = self::fetch_temp_data_from_usermeta( $loginRadiusTempUserId );
+                        $loginRadiusProvider = get_user_meta( $loginRadiusTempUserId, 'tmpProvider', true );
 
-                        if (!empty($session)) {
+                        if ( ! empty( $session ) ) {
 
                             // Check for existing registered account
-                            if ($loginRadiusUserId = email_exists($profileData['Email'])) {
+                            if ( $loginRadiusUserId = email_exists( $profileData['Email'] ) ) {
 
                                 // Email exists and matches registered provider - Re-register user
                                 if (get_user_meta($loginRadiusUserId, 'loginradius_provider', true) == $loginRadiusProvider) {
@@ -867,20 +876,20 @@ if ( ! class_exists( 'Login_Helper' ) ) {
                                     require_once( getcwd() . $directorySeparator . 'wp-admin' . $directorySeparator . 'inc' . $directorySeparator . 'user.php' );
                                     wp_delete_user($loginRadiusUserId);
                                     // New user.
-                                    self::register_user($profileData, true);
+                                    self::register_user( $profileData, true );
                                     return;
                                 } else {
                                     // Email is already registered!
                                     $queryString = '?lrid=' . $session;
-                                    wp_redirect(site_url() . $queryString . '&LoginRadiusMessage="emailExists"');
+                                    wp_redirect( site_url() . $queryString . '&LoginRadiusMessage="emailExists"' );
                                     exit();
                                 }
                             } else {
                                 //Controls
                                 $verify = $has_email == true ? false : true;
                                 // New user.
-                                self::login_radius_delete_temporary_data(array('UniqueId' => trim($_POST['session'])));
-                                self::register_user($profileData, $verify);
+                                self::login_radius_delete_temporary_data( array('UniqueId' => trim( $_POST['session'] ) ) );
+                                self::register_user( $profileData, $verify );
                             }
                         }
                     } else {
