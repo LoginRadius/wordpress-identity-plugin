@@ -221,7 +221,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
 
                                 
                                 <div>
-                                    <h4><?php _e('Registration Form', 'lr-plugin-slug'); ?>
+                                    <h4><?php _e( 'Registration Form', 'lr-plugin-slug' ); ?>
                                         <span class="lr-tooltip tip-bottom" data-title="<?php _e('Copy and paste the following shortcode into a page or post to display the Registration Form', 'lr-plugin-slug'); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
@@ -242,7 +242,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                 
                                 <div>
                                     <h4><?php _e( 'Change Password Form', 'lr-plugin-slug' ); ?>
-                                        <span class="lr-tooltip tip-bottom" data-title="<?php _e( 'Copy and paste the following shortcode into a page or post to display Change Password Form', 'lr-plugin-slug'); ?>">
+                                        <span class="lr-tooltip tip-top" data-title="<?php _e( 'Copy and paste the following shortcode into a page or post to display Change Password Form', 'lr-plugin-slug'); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </h4>
@@ -252,7 +252,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                 
                                 <div>
                                     <h4><?php _e( 'Default WP Login Form', 'lr-plugin-slug' ); ?>
-                                        <span class="lr-tooltip tip-bottom" data-title="<?php _e( 'Copy and paste the following shortcode into a page or post to display the default Wordpress Login Form. This can be used while configuring your site', 'lr-plugin-slug'); ?>">
+                                        <span class="lr-tooltip tip-top" data-title="<?php _e( 'Copy and paste the following shortcode into a page or post to display the default Wordpress Login Form. This can be used while configuring your site', 'lr-plugin-slug'); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </h4>
