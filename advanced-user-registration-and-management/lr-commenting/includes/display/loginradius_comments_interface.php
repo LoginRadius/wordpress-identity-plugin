@@ -129,7 +129,7 @@ $commenter = wp_get_current_commenter();
 $user = wp_get_current_user();
 $user_identity = $user->exists() ? $user->display_name : '';
 
-if (!isset($args['format']))
+if ( ! isset( $args['format'] ) )
     $args['format'] = current_theme_supports('html5', 'comment-form') ? 'html5' : 'xhtml';
 
 $req = get_option('require_name_email');
@@ -156,9 +156,9 @@ $defaults = array(
 // Filter the comment form default arguments.
 // Use 'comment_form_default_fields' to filter the comment fields.
 
-$args = wp_parse_args($args, apply_filters('comment_form_defaults', $defaults));
+$args = wp_parse_args( $args, apply_filters( 'comment_form_defaults', $defaults ) );
 
-if ( comments_open($post_id) ) { ?>
+if ( comments_open( $post_id ) ) { ?>
     <div class="lr-comment-overlay" style="display:none"></div>
         <div class="lr-comment-editor">
 
@@ -175,11 +175,11 @@ if ( comments_open($post_id) ) { ?>
                         </div>
                         <?php
                             // Fires after the HTML-formatted 'must log in after' message in the comment form.
-                            do_action('comment_form_must_log_in_after');
+                            do_action( 'comment_form_must_log_in_after' );
                         ?>
                     </div>
                 <?php } else { ?>
-                    <form id="<?php echo esc_attr($args['id_form']); ?>" class="comment-form"<?php echo $html5 ? ' novalidate' : ''; ?>>
+                    <form id="<?php echo esc_attr( $args['id_form'] ); ?>" class="comment-form"<?php echo $html5 ? ' novalidate' : ''; ?>>
                         <h3 id="reply-title" class="comment-reply-title"><?php comment_form_title($args['title_reply'], $args['title_reply_to']); ?> <small><?php cancel_comment_reply_link($args['cancel_reply_link']); ?></small></h3>
                         <?php do_action('comment_form_top'); ?>
 
