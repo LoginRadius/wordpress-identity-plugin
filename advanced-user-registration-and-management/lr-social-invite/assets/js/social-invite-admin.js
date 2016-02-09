@@ -4,7 +4,7 @@ Version: 1.0
 Author URI: http://www.LoginRadius.com
 */
 
-jQuery(function($) {
+jQuery( function( $ ) {
 
 	function hideAndShowElement(element, inputBoxName) {
 		if (element.is(':checked')) {
@@ -15,7 +15,7 @@ jQuery(function($) {
 	}
 
 	jQuery('#lr-enable-custom-email').change(function() {
-		hideAndShowElement(jQuery(this), '.lr-custom-email-settings');
+		hideAndShowElement( jQuery(this), '.lr-custom-email-settings' );
 	});
 
 	hideAndShowElement(jQuery('#lr-enable-custom-email'), '.lr-custom-email-settings');

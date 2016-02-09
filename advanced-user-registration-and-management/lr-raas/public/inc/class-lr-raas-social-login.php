@@ -130,8 +130,14 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 			$country = ! empty( $profileData['CountryName'] ) ? $profileData['CountryName'] : '' ;
 			$phone = ! empty( $profileData['PhoneNumber'] ) ? $profileData['PhoneNumber'] : '';
 
-			update_user_meta( $user_id, 'lr_raas_uid', $profileData['uid'] );
-			update_user_meta( $user_id, 'lr_raas_accountid', $profileData['ID'] );
+			if( ! empty( $profileData['uid'] ) ) {
+				update_user_meta( $user_id, 'lr_raas_uid', $profileData['uid'] );
+			}
+			
+			if( ! empty( $profileData['ID'] ) ) {
+				update_user_meta( $user_id, 'lr_raas_accountid', $profileData['ID'] );
+			}
+			
 			update_user_meta( $user_id, 'lr_birthdate', $birthdate );
 			update_user_meta( $user_id, 'lr_gender',    $gender );
 			update_user_meta( $user_id, 'lr_city',      $city );
@@ -191,8 +197,10 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 					'login_page_url' => get_permalink( $lr_raas_settings['login_page_id'] ),
 					'current_page' => get_permalink(),
 					'disable_email_verify' => ! empty( $lr_raas_settings['disable_email_verify'] ) ? $lr_raas_settings['disable_email_verify'] : '',
+					'optional_email_verify' => ! empty( $lr_raas_settings['optional_email_verify'] ) ? $lr_raas_settings['optional_email_verify'] : '',
 					'enable_username' => ! empty( $lr_raas_settings['enable_username'] ) ? $lr_raas_settings['enable_username'] : ''
 				);
+
 				wp_localize_script( 'lr-raas-front-script', "RaasDetails", $args );
 				wp_enqueue_script( 'lr-raas-front-script' );
 				

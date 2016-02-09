@@ -351,11 +351,10 @@ if ( ! class_exists( 'LR_Raas_Popup' ) ) {
                 $html .= '<div id="lr_popup_changepassword_form" class="lr-popup-container">';
                 $html .= self::popup_header('Change Password');
                 $html .= '<div id="lr-popup-body-container">';
-
                 $html .= '<div class="messageinfo">' . $db_message . '</div>';
                 $html .= '<div id="custom-object-container" class="lr-input-style lr-input-frame">';
                 $html .= self::raas_forms('lr-popup-password');
-                $html .= '<div class="lr-column hr-or-rule vr">';
+                $html .= '<div class="lr-column">';
                 $html .= '<div id="popup-changepasswordbox" class="lr-input-style" style="display:none;"></div>
                 <div id="popup-setpasswordbox" class="lr-input-style"></div>
                 </div></div></div></div>';
