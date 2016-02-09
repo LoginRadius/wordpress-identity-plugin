@@ -45,7 +45,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
                                     <input type="checkbox" class="lr-toggle" id="lr-display-admin-profile-data" name="LoginRadius_Social_Profile_Data_settings[viewProfileData]" value='1' <?php echo( isset( $lr_social_profile_data_settings['viewProfileData'] ) && $lr_social_profile_data_settings['viewProfileData'] == '1' ) ? 'checked' : ''; ?> />
 
                                     <label class="lr-show-toggle" for="lr-display-admin-profile-data">
-                                        <?php _e( 'Enable to show the view profile data option in ', 'lr-plugin-slug' ); ?><a href="<?php echo get_admin_url() ?>users.php" target="_self" ><?php _e( 'WordPress Users List?', 'lr-plugin-slug' ); ?></a>
+                                        <?php _e( 'Enable this option to show the view profile data option in ', 'lr-plugin-slug' ); ?><a href="<?php echo get_admin_url() ?>users.php" target="_self" ><?php _e( 'WordPress Users List?', 'lr-plugin-slug' ); ?></a>
                                         <span class="lr-tooltip" data-title="<?php _e( 'If enabled, a link will be added to each user in the sites User List to view the saved data collected.', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
@@ -55,7 +55,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-display-profile-data" name="LoginRadius_Social_Profile_Data_settings[display_UserProfileData]" value="1" <?php echo isset( $lr_social_profile_data_settings['display_UserProfileData'] ) && $lr_social_profile_data_settings['display_UserProfileData'] == '1' ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-display-profile-data">
-                                        <?php _e( 'Enable to display a profile data link to your website users in their account dashboard?', 'lr-plugin-slug' ); ?>
+                                        <?php _e( 'Enable this option to display a profile data link to your website users in their account dashboard?', 'lr-plugin-slug' ); ?>
                                         <span class="lr-tooltip" data-title="<?php _e( 'If enabled, registered users will see a list of their saved pofile data on the profile page in the WordPress admin panel.', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
