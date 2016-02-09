@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit();
 }
 
-if ( ! class_exists('LR_Raas_WP_Default_Login') ) {
+if ( ! class_exists( 'LR_Raas_WP_Default_Login' ) ) {
 
 	/**
 	 * Class LR_Raas_WP_Default_Login

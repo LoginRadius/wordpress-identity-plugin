@@ -255,10 +255,10 @@ class LoginRadius {
      *   $e->getErrorResponse();
      * }
      */
-    public function loginradius_get_audio($accessToken, $raw = false) {
+    public function loginradius_get_audio( $accessToken, $raw = false ) {
         $url = LR_API_ENDPOINT . "/audio" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
         $result = $this->loginradius_api_client($url);
-        return $raw ? $result : json_decode($result);
+        return $raw ? $result : json_decode( $result );
     }
 
     /**

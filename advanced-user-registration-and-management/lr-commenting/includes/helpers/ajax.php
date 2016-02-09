@@ -236,14 +236,14 @@ class Ajax_Helper {
 
         $comment_type = '';
 
-        if ( get_option('require_name_email') && ! $user->exists() ) {
-            if ( 6 > strlen($comment_author_email) || '' == $comment_author )
-                $error_msg = 'Please fill the required fields (name, email).';
-            elseif ( !is_email($comment_author_email) )
+        if ( get_option( 'require_name_email' ) && ! $user->exists() ) {
+            if ( 6 > strlen( $comment_author_email) || '' == $comment_author )
+                $error_msg = 'Please fill the required fields ( name, email ).';
+            elseif ( ! is_email( $comment_author_email ) )
                 $error_msg = 'Please enter a valid email address.';
         }
 
-        if ('' == $comment_content || null === $comment_content) {
+        if ( '' == $comment_content || null === $comment_content ) {
             echo json_encode(array(
                 "Error" => $lr_commenting_settings['no_comment_msg']
             ));
@@ -253,7 +253,7 @@ class Ajax_Helper {
         // Replace URLs with Short URL
         $comment_content = self::url_shortener( $comment_content );
         // Replace all escaped apostropes
-        $comment_content = str_replace("\'", "'", $comment_content);
+        $comment_content = str_replace( "\'", "'", $comment_content );
 
         // Post Images
         if ( isset( $_POST['images'] ) && count( $_POST['images'] ) > 0) {
@@ -266,7 +266,7 @@ class Ajax_Helper {
             $comment_image = "";
             $rel_id = uniqid();
 
-            for ($i = 0; $i < count($_POST['images']); $i++) {
+            for ( $i = 0; $i < count( $_POST['images'] ); $i++ ) {
 
                 $data = $_POST['images'][$i];
                 list($type, $data) = explode(';', $data);
@@ -369,10 +369,10 @@ class Ajax_Helper {
         }
 
         echo json_encode(array(
-            "Facebook_msg" => isset($facebook_msg) ? $facebook_msg : '',
-            "Twitter_msg" => isset($twitter_msg) ? $twitter_msg : '',
-            "Linkedin_msg" => isset($linkedin_msg) ? $linkedin_msg : '',
-            "Message" => isset($comment_content) ? $comment_content : '',
+            "Facebook_msg" => isset( $facebook_msg ) ? $facebook_msg : '',
+            "Twitter_msg" => isset( $twitter_msg ) ? $twitter_msg : '',
+            "Linkedin_msg" => isset( $linkedin_msg ) ? $linkedin_msg : '',
+            "Message" => isset( $comment_content ) ? $comment_content : '',
             "Error" => $error_msg
         ));
 
@@ -382,12 +382,12 @@ class Ajax_Helper {
     /**
      * Custom Commenting theme.
      */
-    function loginradius_comment_theme($comment, $args, $depth) {
+    function loginradius_comment_theme( $comment, $args, $depth ) {
         global $lr_commenting_settings;
         $GLOBALS['comment'] = $comment;
-        extract($args, EXTR_SKIP);
+        extract( $args, EXTR_SKIP );
 
-        if ('div' == $args['style']) {
+        if ( 'div' == $args['style'] ) {
             $tag = 'div';
             $add_below = 'comment';
         } else {
@@ -395,39 +395,39 @@ class Ajax_Helper {
             $add_below = 'div-comment';
         }
         ?>
-        <?php echo '<' . $tag . ' ' ?><?php comment_class(empty($args['has_children']) ? '' : 'parent' ) ?> id="comment-<?php comment_ID() ?>">
-        <?php if ('div' != $args['style']) : ?>
+        <?php echo '<' . $tag . ' ' ?><?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ) ?> id="comment-<?php comment_ID() ?>">
+        <?php if ( 'div' != $args['style'] ) : ?>
             <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
         <?php endif; ?>
             <div class="comment-author vcard">
-            <?php if ($args['avatar_size'] != 0) echo get_avatar($comment, $args['avatar_size']); ?>
-                <?php printf(__('<cite class="fn">%s</cite> <span class="says">says:</span>'), get_comment_author_link()); ?>
+            <?php if ( $args['avatar_size'] != 0 ) echo get_avatar( $comment, $args['avatar_size'] ); ?>
+                <?php printf( __( '<cite class="fn">%s</cite> <span class="says">says:</span>'), get_comment_author_link() ); ?>
             </div>
-                <?php if ($comment->comment_approved == '0') : ?>
+                <?php if ( $comment->comment_approved == '0' ) : ?>
                 <em class="comment-awaiting-moderation"><?php echo $lr_commenting_settings['moderation_msg']; ?></em>
                 <br />
         <?php endif; ?>
 
             <div class="comment-meta commentmetadata">
-                <a href="<?php echo htmlspecialchars(get_comment_link($comment->comment_ID)); ?>">
+                <a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ); ?>">
         <?php
         /* translators: 1: date, 2: time */
-        printf(__('%1$s at %2$s'), get_comment_date(), get_comment_time());
+        printf( __( '%1$s at %2$s' ), get_comment_date(), get_comment_time() );
         ?>
                 </a>
                     <?php
                     $id = $comment->comment_ID;
                     $site = urlencode(get_permalink());
-                    $template = ' <a class="comment-edit-link" href="%1$s%2$s">%3$s</a>';
+                    $template = '<a class="comment-edit-link" href="%1$s%2$s">%3$s</a>';
                     $admin_url = admin_url("comment.php?c=$id&action=");
 
-                    if ( current_user_can('moderate_comments') ) {
+                    if ( current_user_can( 'moderate_comments' ) ) {
 
-                        edit_comment_link(__('(Edit)'), '  ', '');
+                        edit_comment_link( __( '(Edit)' ), '  ', '' );
                         // Delete.
-                        printf($template, $admin_url, 'cdc', __('(Delete)'));
+                        printf( $template, $admin_url, 'cdc', __( '(Delete)' ) );
                         // Mark as Spam.
-                        printf($template, $admin_url, 'cdc&dt=spam', __('(Spam)'));
+                        printf( $template, $admin_url, 'cdc&dt=spam', __( '(Spam)' ) );
                     }
                     ?>
             </div>
@@ -435,7 +435,7 @@ class Ajax_Helper {
                 <?php comment_text(); ?>
             </div>
             <div class="reply">
-        <?php comment_reply_link(array_merge($args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+        <?php comment_reply_link( array_merge( $args, array( 'add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
             </div>
                 <?php if ( 'div' != $args['style'] ) : ?>
             </div>
@@ -452,17 +452,17 @@ class Ajax_Helper {
         $user = wp_get_current_user();
         $post_id = $post->ID;
 
-        if (current_user_can('moderate_comments')) {
+        if ( current_user_can('moderate_comments') ) {
             $comments_args = array(
                 'post_id' => $post_id
             );
-            $comments = get_comments($comments_args);
+            $comments = get_comments( $comments_args );
         } else {
             $comments_args = array(
                 'post_id' => $post_id,
                 'status' => 'approve'
             );
-            $comments = get_comments($comments_args);
+            $comments = get_comments( $comments_args );
 
             if ( isset( $lr_commenting_settings['enable_moderation_msg'] ) && $lr_commenting_settings['enable_moderation_msg'] == '1' ) {
                 $comments_args2 = array(
@@ -470,9 +470,9 @@ class Ajax_Helper {
                     'status' => 'hold',
                     'author_email' => $user->user_email
                 );
-                $comments2 = get_comments($comments_args2);
+                $comments2 = get_comments( $comments_args2 );
 
-                $comments = array_merge($comments, $comments2);
+                $comments = array_merge( $comments, $comments2 );
             }
         }
 
@@ -480,7 +480,7 @@ class Ajax_Helper {
             'walker' => null,
             'max_depth' => 15,
             'style' => 'ul',
-            'callback' => array($this, 'loginradius_comment_theme'),
+            'callback' => array( $this, 'loginradius_comment_theme' ),
             'end-callback' => null,
             'type' => $lr_commenting_settings['display_comment_type'],
             'reply_text' => 'Reply',
@@ -494,7 +494,7 @@ class Ajax_Helper {
             'echo' => true // boolean, default is true
         );
 
-        wp_list_comments($args, $comments);
+        wp_list_comments( $args, $comments );
     }
 
     /**
@@ -504,18 +504,18 @@ class Ajax_Helper {
 
         $loginRadiusObject = new LoginRadius();
 
-        if (isset($_POST['share_twitter_token']) && $_POST['share_twitter_token'] != null) {
+        if ( isset( $_POST['share_twitter_token'] ) && $_POST['share_twitter_token'] != null ) {
             // Twitter
             $accessToken = $_POST['share_twitter_token'];
             //Get loginradius_get_following
             try {
                $twitter = $loginRadiusObject->loginradius_get_following($accessToken); 
-            } catch (Exception $e) {
+            } catch ( Exception $e ) {
                 error_log( 'Twitter Get Mentions Error ' . $e->errorResponse->providerErrorResponse );
             }    
         }
 
-        echo json_encode(array(
+        echo json_encode( array(
             "Twitter" => isset( $twitter ) ? $twitter : ''
         ));
 
