@@ -379,24 +379,15 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                             </div>
                         </div>
 
-                        <!-- mail Verification Options -->
+                        <!-- Disable Email Verification Options -->
                         <div class="lr_options_container">
                             <div class="lr-row">
-                                <h3><?php _e( 'Email Verification Options', 'lr-plugin-slug' ); ?></h3>
+                                <h3><?php _e( 'Email Verification', 'lr-plugin-slug' ); ?></h3>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-disable-email-verify" name="LR_Raas_Settings[disable_email_verify]" value='1' <?php echo ( isset( $lr_raas_settings['disable_email_verify'] ) && $lr_raas_settings['disable_email_verify'] == '1' ) ? 'checked' : '' ?> />
                                     <label class="lr-show-toggle" for="lr-disable-email-verify">
                                         <?php _e( 'Disable Email Verification' ); ?>
                                         <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to disable user registration email verification. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" class="lr-toggle" id="lr-optional-email-verify" name="LR_Raas_Settings[optional_email_verify]" value='1' <?php echo ( isset( $lr_raas_settings['optional_email_verify'] ) && $lr_raas_settings['optional_email_verify'] == '1' ) ? 'checked' : '' ?> />
-                                    <label class="lr-show-toggle" for="lr-optional-email-verify">
-                                        <?php _e( 'Optional Email Verification' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to enable optional user registration email verification. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </label>

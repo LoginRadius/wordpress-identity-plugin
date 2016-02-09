@@ -1,4 +1,5 @@
 ﻿
+
 jQuery(document).ready(function($) {
 
 $LRSI = {};
@@ -10,7 +11,7 @@ $LRSI.util = {};
 		return document.getElementById(id);
 	};
 
-	util.elementsByClass = function getElementsByClassName( classname, node ) {
+	util.elementsByClass = function getElementsByClassName(classname, node) {
 		node = node || document.body;
 		var a = [],
 			re = new RegExp('(^| )' + classname + '( |$)');
@@ -23,15 +24,15 @@ $LRSI.util = {};
 		return a;
 	};
 
-	util.addEvent = function ( type, element, handle ) {
+	util.addEvent = function (type, element, handle) {
 		var elements = [];
-		if ( element instanceof Array ) {
+		if (element instanceof Array) {
 			elements = element;
 		}
 		else {
-			elements.push( element );
+			elements.push(element);
 		}
-		for ( var i = 0; i < elements.length; i++ ) {
+		for (var i = 0; i < elements.length; i++) {
 			elements[i]["on" + type] = handle;
 		}
 	};
@@ -45,7 +46,7 @@ $LRSI.util = {};
 
 		var parser = document.createElement('a');
 		parser.href = _url;
-		var provider = util.getQueryParameterByName( "provider", parser.search );
+		var provider = util.getQueryParameterByName("provider", parser.search);
 
 
 		window.open(_url, 'lrpopupchildwindow', 'menubar=1,resizable=1,width=450,height=500');
@@ -436,7 +437,7 @@ $LRSI.util = {};
 		var sendbtn = object.util.elementById("lr_friendinvite_box_bottom_btn");
 		var headerdiv = object.util.elementById("lr_popupbox_heading");
   
-		if ( headerdiv != null && sendbtn != null ) {
+		if (headerdiv != null && sendbtn != null) {
 			$("#lr_popupbox_heading").removeClass('lr-header-twitter lr-header-google lr-header-facebook lr-header-yahoo lr-header-linkedin');
 			$("#lr_si_box_bottom_btn").removeClass('lr-header-twitter lr-header-google lr-header-facebook lr-header-yahoo lr-header-linkedin');
 		}
@@ -521,7 +522,7 @@ $LRSI.util = {};
 	}
 
 	function keygetter(event) {
-		if ( ! event && window.event )
+		if (!event && window.event)
 			event = window.event;
 		if (event)
 			lr_arrowkey = event.keyCode;
@@ -531,7 +532,7 @@ $LRSI.util = {};
 
 	function keyHandler() {
 
-		if ( document.getElementById("lr-contactlist-shadow").style.visibility == "visible" ) {
+		if (document.getElementById("lr-contactlist-shadow").style.visibility == "visible") {
 			var textfield = object.util.elementById("lr-si-txtautocomplete");
 			if (lr_arrowkey == 13)//key down
 			{
@@ -700,7 +701,7 @@ $LRSI.util = {};
 	//Init Html5 SDK & get contacts after login
 	$LRSI.initHtml5LoginradiusSdk = function () {
 
-		LoginRadiusSDK.getContacts(0, function ( contacts ) {
+		LoginRadiusSDK.getContacts(0, function (contacts) {
 			
 			if (contacts.errorCode) {
 
@@ -801,7 +802,7 @@ $LRSI.util = {};
 		$.ajax( {
 			type: 'POST',
 			async: false,
-			url: socialInviteDetails.ajax_url,
+			url: ajaxurl,
 			data: {
 				action: 'social_invite_get_provider_token',
 				provider: provider
@@ -822,7 +823,7 @@ $LRSI.util = {};
 		var response = "";
 		$.ajax( {
 			type: 'POST',
-			url: socialInviteDetails.ajax_url,
+			url: ajaxurl,
 			data: {
 				token: token,
 				action: 'social_invite_is_token_valid'
@@ -883,7 +884,7 @@ $LRSI.util = {};
 
 		$.ajax( {
 			type: 'POST',
-			url: socialInviteDetails.ajax_url,
+			url: ajaxurl,
 			data: {
 				contacts: contacts,
 				token: token,
@@ -907,7 +908,7 @@ $LRSI.util = {};
 
 	// Local function
 	// Selects contact from list
-	var selectContact = function( id, name ) {
+	var selectContact = function( id, name) {
 
 		//contactTag container div
 		var containerDiv = $LRIC.util.elementById('lr_divspantag');
@@ -959,8 +960,8 @@ $LRSI.util = {};
 
 	// Check duplicate record
 	function isAllreadyinList(selectId) {
-		for ( var i in selectedIds ) {
-			if ( selectedIds[i].Id.toLowerCase() == selectId.toLowerCase() ) {
+		for (var i in selectedIds) {
+			if (selectedIds[i].Id.toLowerCase() == selectId.toLowerCase()) {
 				return true;
 			}
 
@@ -982,7 +983,7 @@ $LRSI.util = {};
 		var headerdiv = $("#lr_popupbox_heading");
 		var sendbtn = $("#lr_si_box_bottom_btn");
 
-		if ( headerdiv != null && sendbtn != null ) {
+		if (headerdiv != null && sendbtn!=null) {
 			$("#lr_popupbox_heading").removeClass('lr-header-twitter lr-header-google lr-header-facebook lr-header-yahoo lr-header-linkedin');
 			$("#lr_si_box_bottom_btn").removeClass('lr-header-twitter lr-header-google lr-header-facebook lr-header-yahoo lr-header-linkedin');
 		}
@@ -995,7 +996,7 @@ $LRSI.util = {};
 	function SocialInviteSearchContacts( search ) {
 		$.ajax( {
 			type: 'POST',
-			url: socialInviteDetails.ajax_url,
+			url: ajaxurl,
 			data: {
 				search: search,
 				action: 'social_invite_search_contacts'
@@ -1006,10 +1007,10 @@ $LRSI.util = {};
 					$('.lr_social_invite_results').html('');
 					$.each( contacts, function( index, key ){
 						if(key.image_url == '') {
-							key.image_url = socialInviteDetails.mysteryperson;
+							key.image_url = mysteryperson;
 						}
 						if(key.provider == "facebook"){
-							$('.lr_social_invite_results').append('<div class="lr_si_contact_container"><div class="lr_si_contact"><div class="lr_si_contact_img"><img src="' + key.image_url + '" /></div><div class="lr_si_contact_title">' + key.name + '</div><button type="button" class="lr-si-btn rounded" data-provider="' + key.provider + '" onclick="javascript:$LRSI.fbMessage(\'' + socialInviteDetails.facebook_app_id + '\',\'' + key.name + '\',\'' + key.social_id + '\',\'' + socialInviteDetails.facebook_share_url + '\')"><span class="buttonText">INVITE</span></button></div></div>');
+							$('.lr_social_invite_results').append('<div class="lr_si_contact_container"><div class="lr_si_contact"><div class="lr_si_contact_img"><img src="' + key.image_url + '" /></div><div class="lr_si_contact_title">' + key.name + '</div><button type="button" class="lr-si-btn rounded" data-provider="' + key.provider + '" onclick="javascript:$LRSI.fbMessage(\'' + facebook_app_id + '\',\'' + key.name + '\',\'' + key.social_id + '\',\'' + facebook_share_url + '\')"><span class="buttonText">INVITE</span></button></div></div>');
 						}else{
 							$('.lr_social_invite_results').append('<div class="lr_si_contact_container"><div class="lr_si_contact"><div class="lr_si_contact_img"><img src="' + key.image_url + '" /></div><div class="lr_si_contact_title">' + key.name + '</div><button type="button" class="lr-si-btn rounded" data-provider="' + key.provider + '" onclick ="javascript:$LRSI.readySocialInvite(\'' + key.social_id + '\',\'' + key.provider + '\',\'' + key.email + '\',\'' + key.name + '\')"   class="if-button rounded"><span class="buttonText">INVITE</span></button></div></div>');
 						}
@@ -1025,6 +1026,15 @@ $LRSI.util = {};
 	};
 
 	function SocialInviteSuccess( element ) {
+			console.log( 'LR SOCIAL INVITE' );
+			//var cursor = 0;
+			// SocialInviteLoginRadiusSDK.getUserprofile(function (data) {
+			// 	$('.lr-social-invite-results').html(JSON.stringify(data));
+			// });
+
+			// SocialInviteLoginRadiusSDK.getContacts(cursor , function( contacts){
+			// 	$('.lr-social-invite-results').html(JSON.stringify(contacts));
+			// });
 
 			var token = sessionStorage.getItem("LRTokenKey");
 			var provider = sessionStorage.getItem("social_invite_provider");
@@ -1032,29 +1042,21 @@ $LRSI.util = {};
 			sessionStorage.removeItem("LRTokenKey");
 			sessionStorage.removeItem("social_invite_provider");
 
-			if( token != null && provider != null ) {
+			if( token != null && provider != null) {
 				$.ajax( {
 					type: 'POST',
-					url: socialInviteDetails.ajax_url,
+					url: ajaxurl,
 					data: {
 						token: token,
 						provider: provider,
 						action: 'social_invite_get_contacts'
 					},
 					success: function ( data, textStatus, XMLHttpRequest ) {
-								
-						
-						if( "" != data ) {
-							var data = $.parseJSON( data );
-							if( data.error ) {
-								console.log( data.error );
-							}
-						} else {
+							
 							SocialInviteSearchContacts('');
-						}
 					},
 					error: function ( xhr, textStatus, errorThrown ) {
-						console.log( 'Unexpected error occurred' );
+						alert( 'Unexpected error occurred' );
 					}
 				} );
 			}
@@ -1062,7 +1064,7 @@ $LRSI.util = {};
 
 	// Local Function
 	function loginMessage( event ) {
-		
+		console.log( 'LR SOCIAL INVITE LOGIN MSG' );
 		var token = sessionStorage.getItem("LRTokenKey");
 		var social_invite_provider = sessionStorage.getItem("social_invite_provider");
 
@@ -1072,7 +1074,7 @@ $LRSI.util = {};
 
 			$.ajax( {
 				type: 'POST',
-				url: socialInviteDetails.ajax_url,
+				url: ajaxurl,
 				data: {
 					token: token,
 					provider: currentprovider,

@@ -14,11 +14,8 @@ class LR_Social_Invite_Display {
         global $lr_social_invite_settings;
 
         if ( isset( $lr_social_invite_settings['social_invite_enable'] ) && $lr_social_invite_settings['social_invite_enable'] == '1' ) {
-            
-            add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_glob_scripts' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-            add_action( 'wp_footer', array( $this, 'footer_scripts' ), 1000 );
+            add_action( 'wp_footer', array( $this, 'footer_scripts'), 1000 );
             add_shortcode( 'LoginRadius_Social_Invite', array( $this, 'social_invite_shortcode' ) );
         }
     }
@@ -27,11 +24,20 @@ class LR_Social_Invite_Display {
         return in_array( $GLOBALS['pagenow'], array( 'wp-login.php', 'wp-register.php' ) );
     }
 
-    public static function enqueue_glob_scripts() {
-        
-        wp_enqueue_style( 'lr-social-invite-style', LR_SOCIAL_INVITE_URL . 'assets/css/lr-social-invite.css' );
-
+    public static function enqueue_scripts() {
+        global $loginradius_api_settings, $loginRadiusSettings, $lr_social_invite_settings;
         ?>
+            <!-- Global Variables -->
+            <script>
+                var ajaxurl = "<?php echo admin_url( 'admin-ajax.php' ); ?>";
+                var debugging = "<?php echo isset( $loginRadiusSettings['enable_degugging'] ) ? 'true' : 'false'; ?>";
+                var is_user_logged_in = "<?php echo ( is_user_logged_in() === '1' ) ? 'true' : 'false'; ?>";
+                var loginRadiusApiKey = "<?php echo isset( $loginradius_api_settings['LoginRadius_apikey'] ) ? trim($loginradius_api_settings['LoginRadius_apikey'] ) : ''; ?>";
+                var mysteryperson = "<?php echo LR_SOCIAL_INVITE_URL . 'assets/images/mysteryperson.jpeg'; ?>";
+                var facebook_app_id = "<?php echo isset( $lr_social_invite_settings['fb_id'] ) ? $lr_social_invite_settings['fb_id'] : ''; ?>";
+                var facebook_share_url = window.location.href;/* static URL */
+            </script>
+
             <!-- Custom Share Template -->
             <script type="text/html" id="lr_social_invite_template">
                 <label>
@@ -51,27 +57,10 @@ class LR_Social_Invite_Display {
             </script>
 
         <?php
-    }
 
-    public static function enqueue_scripts() {
-        global $loginradius_api_settings, $loginRadiusSettings, $lr_social_invite_settings;
-        
-        wp_register_script( 'lr-social-invite-lib', LR_SOCIAL_INVITE_URL . 'assets/js/social-invite-library.js', array( 'jquery','lr-custom-interface','lr-sdk' ), '1.0' );
-
-        $args = array( 
-            'ajax_url' => get_admin_url() . 'admin-ajax.php',
-            'debugging' => isset( $loginRadiusSettings['enable_degugging'] ) ? 'true' : 'false',
-            'is_user_logged_in' => ( is_user_logged_in() === '1' ) ? 'true' : 'false',
-            'loginRadiusApiKey' => isset( $loginradius_api_settings['LoginRadius_apikey'] ) ? trim( $loginradius_api_settings['LoginRadius_apikey'] ) : '',
-            'mysteryperson' => LR_SOCIAL_INVITE_URL . 'assets/images/mysteryperson.jpeg',
-            'facebook_app_id' => isset( $lr_social_invite_settings['fb_id'] ) ? $lr_social_invite_settings['fb_id'] : '',
-            'facebook_share_url' => get_permalink()
-        );
-
-        wp_localize_script( 'lr-social-invite-lib', "socialInviteDetails", $args );
-
+        wp_enqueue_style( 'lr-social-invite-style', LR_SOCIAL_INVITE_URL . 'assets/css/lr-social-invite.css' );
         wp_enqueue_script( 'fb-connect', '//connect.facebook.net/en_US/all.js' );
-        wp_enqueue_script( 'lr-social-invite-lib' );
+        wp_enqueue_script( 'lr-social-invite-lib', LR_SOCIAL_INVITE_URL . 'assets/js/social-invite-library.js', array( 'jquery','lr-custom-interface','lr-sdk' ), '1.0' );
     }
 
     static function footer_scripts() {

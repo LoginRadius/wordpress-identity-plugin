@@ -1,6 +1,13 @@
 
 
-
+$LRIC.util.ready(function () {
+    var options = {};
+    options.apikey = phpvar.apiKey;
+    options.appname = phpvar.siteName;
+    options.providers = phpvar.providers;
+    options.templatename = "loginradiuscustom_tmpl";
+    $LRIC.renderInterface("interface_container", options);
+});
 
 
 (function ($) {

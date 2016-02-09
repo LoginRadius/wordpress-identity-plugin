@@ -21,24 +21,24 @@ if ( ! class_exists( 'LR_Raas_Front' ) ) {
             add_action( 'init', array( 'LR_Raas_Social_Login', 'custom_page_redirection' ) );
 
             /* Display Profile field on RaaS */
-            add_action( 'show_user_profile', array( 'LR_Raas_Social_Login', 'display_extra_profile_fields' ) );
-            add_action( 'edit_user_profile', array( 'LR_Raas_Social_Login', 'display_extra_profile_fields' ) );
+            add_action( 'show_user_profile', array('LR_Raas_Social_Login', 'display_extra_profile_fields'));
+            add_action( 'edit_user_profile', array('LR_Raas_Social_Login', 'display_extra_profile_fields'));
             /* Display Profile field on RaaS */
             /* Start add custom field */
             add_action( 'user_new_form', array('LR_Raas_Social_Login', 'custom_fields'));
             /* End add custom field */
             /* Save Profile field on RaaS */
-            add_action( 'personal_options_update', array( 'LR_Raas_Social_Login', 'save_extra_profile_fields') );
-            add_action( 'edit_user_profile_update', array( 'LR_Raas_Social_Login', 'save_extra_profile_fields') );
+            add_action( 'personal_options_update', array('LR_Raas_Social_Login', 'save_extra_profile_fields'));
+            add_action( 'edit_user_profile_update', array('LR_Raas_Social_Login', 'save_extra_profile_fields'));
             /* Save Profile field on RaaS */
             /* Modify field on Profile page */
-            add_action( 'admin_footer-profile.php', array( 'LR_Raas_Social_Login', 'remove_extra_profile_fields' ) );
+            add_action( 'admin_footer-profile.php', array('LR_Raas_Social_Login', 'remove_extra_profile_fields'));
             /* Modify field on Profile page */
             /* Save RaaS profile data on wp db */
-            add_action( 'user_register', array( 'LR_Raas_Social_Login', 'raas_uid_updation' ), 10, 1 );
+            add_action( 'user_register', array('LR_Raas_Social_Login', 'raas_uid_updation'), 10, 1);
             /* Save RaaS profile data on wp db */
-            add_filter( 'bp_get_canonical_url',array( get_class(), 'bp_registration_url'), 20, 2 );
-            add_action( 'lr_save_profile_data', array( 'LR_Raas_Social_Login', 'lr_save_raas_profile_data'), 10, 2 );
+            add_filter( 'bp_get_canonical_url',array(get_class(), 'bp_registration_url'), 20, 2);
+            add_action( 'lr_save_profile_data', array('LR_Raas_Social_Login', 'lr_save_raas_profile_data'), 10, 2);
         }
 
         /**

@@ -124,7 +124,7 @@ if ( ! class_exists( 'LR_Core' ) ) {
             wp_register_script( 'lr-social-login', '//hub.loginradius.com/include/js/LoginRadius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer);
 
             // Social Sharing js must be loaded in head.
-            wp_register_script( 'lr-social-sharing', '//share.lrcontent.com/prod/v1/loginradius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer);
+            wp_register_script( 'lr-social-sharing', '//cdn.loginradius.com/share/v1/LoginRadius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer);
             wp_register_style( 'jquery-ui-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css', array(), LR_PLUGIN_VERSION);
         }
 

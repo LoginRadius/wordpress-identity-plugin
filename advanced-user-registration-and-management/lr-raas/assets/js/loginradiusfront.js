@@ -7,14 +7,8 @@ raasoption.emailVerificationUrl = RaasDetails.emailVerificationUrl;
 raasoption.forgotPasswordUrl = RaasDetails.forgotPasswordUrl;
 raasoption.inFormvalidationMessage = true;
 
-// Disable Email Verification
 if( '1' == RaasDetails.disable_email_verify ) {
     raasoption.DisabledEmailVerification = true;
-}
-
-// Optional Email Verification
-if( '1' == RaasDetails.optional_email_verify ) {
-    raasoption.OptionalEmailVerification = true;
 }
 
 // Enable V2recaptcha V2 by default
@@ -22,10 +16,6 @@ raasoption.V2RecaptchaSiteKey = RaasDetails.v2RecaptchaSiteKey;
 if( '' == raasoption.V2RecaptchaSiteKey || undefined == raasoption.V2RecaptchaSiteKey ) {
     console.log( 'The V2recaptcha Site Key is required. Please obtain this key from https://www.google.com/recaptcha and enter the site key in the User Registration settings. Please also update your LoginRadius account with your V2recaptcha account info.' )
 }
-
-// recaptcha V1 has been deprecated
-// To enable V1 comment out below line
-// recaptcha V1 not compatible with raas popup
 raasoption.V2Recaptcha = true;
 
 // Enable UserName feature
@@ -83,7 +73,7 @@ function ShowformbyId(currentform) {
 }
 
 function HideAllForms() {
-    jQuery('#registration-container,#resetpassword-container,#login-container,#reontainer,#forgotpassword-container,#changepasswordbox,#setpasswordbox').hide();
+    jQuery('#resetpassword-container,#login-container,#reontainer,#forgotpassword-container,#changepasswordbox,#setpasswordbox').hide();
 }
 
 function redirect(token) {
