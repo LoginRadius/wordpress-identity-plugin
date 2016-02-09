@@ -126,160 +126,164 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
             $noProfileData = true;
             $html = '<div class="menu_div" id="login_radius_profile_tabs"><ul>';
 
-            // Display Basic Profile Data #tab-1
-            if ( is_super_admin() || isset( $userId ) && in_array( 'basic', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // basic profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_basic_profile_data'" ) == $wpdb->base_prefix . 'lr_basic_profile_data' ) {
-                    $basicProfileResult = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_basic_profile_data` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $basicProfileResult ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-1">' . __( 'Basic Profile Data', 'lr-plugin-slug' ) . '</a></li>';
+            if( ! empty( $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                // Display Basic Profile Data #tab-1
+                if ( is_super_admin() || isset( $userId ) && in_array( 'basic', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // basic profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_basic_profile_data'" ) == $wpdb->base_prefix . 'lr_basic_profile_data' ) {
+                        $basicProfileResult = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_basic_profile_data` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $basicProfileResult ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-1">' . __( 'Basic Profile Data', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Display Extended Location Data #tab-2
-            if ( is_super_admin() || isset( $userId ) && in_array( 'exlocation', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended location data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_extended_location_data'" ) == $wpdb->base_prefix . 'lr_extended_location_data' ) {
-                    $extendedLocationResult = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_extended_location_data` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $extendedLocationResult ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-2">' . __('Extended Location Data', 'lr-plugin-slug') . '</a></li>';
+                // Display Extended Location Data #tab-2
+                if ( is_super_admin() || isset( $userId ) && in_array( 'exlocation', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended location data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_extended_location_data'" ) == $wpdb->base_prefix . 'lr_extended_location_data' ) {
+                        $extendedLocationResult = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_extended_location_data` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $extendedLocationResult ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-2">' . __('Extended Location Data', 'lr-plugin-slug') . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Display Extended Profile Data Tab. #tabs-3
-            if ( is_super_admin() || isset( $userId ) && in_array( 'extended', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_extended_profile_data'" ) == $wpdb->base_prefix . 'lr_extended_profile_data' ) {
-                    $extendedProfileResult = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_extended_profile_data` WHERE wp_users_id = %d', $userId));
-                    if ( count( $extendedProfileResult ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-3">' . __('Extended Profile Data', 'lr-plugin-slug') . '</a></li>';
+                // Display Extended Profile Data Tab. #tabs-3
+                if ( is_super_admin() || isset( $userId ) && in_array( 'extended', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_extended_profile_data'" ) == $wpdb->base_prefix . 'lr_extended_profile_data' ) {
+                        $extendedProfileResult = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_extended_profile_data` WHERE wp_users_id = %d', $userId));
+                        if ( count( $extendedProfileResult ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-3">' . __('Extended Profile Data', 'lr-plugin-slug') . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Display Contacts Data Tab. #tabs-4
-            if ( is_super_admin() || isset( $userId ) && in_array( 'contacts', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_contacts'" ) == $wpdb->base_prefix . 'lr_contacts' ) {
-                    $contacts = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_contacts` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $contacts ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-4">' . __('Contacts', 'lr-plugin-slug') . '</a></li>';
+                // Display Contacts Data Tab. #tabs-4
+                if ( is_super_admin() || isset( $userId ) && in_array( 'contacts', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_contacts'" ) == $wpdb->base_prefix . 'lr_contacts' ) {
+                        $contacts = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_contacts` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $contacts ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-4">' . __('Contacts', 'lr-plugin-slug') . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // linkedin_companies Companies Data Tab. #tabs-5
-            if ( is_super_admin() || isset( $userId ) && in_array( 'linkedin_companies', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_linkedin_companies'") == $wpdb->base_prefix . 'lr_linkedin_companies' ) {
-                    $linkedin = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_linkedin_companies` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $linkedin ) > 0) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-5">' . __( 'LinkedIn Companies', 'lr-plugin-slug' ) . '</a></li>';
+                // linkedin_companies Companies Data Tab. #tabs-5
+                if ( is_super_admin() || isset( $userId ) && in_array( 'linkedin_companies', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_linkedin_companies'") == $wpdb->base_prefix . 'lr_linkedin_companies' ) {
+                        $linkedin = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_linkedin_companies` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $linkedin ) > 0) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-5">' . __( 'LinkedIn Companies', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Status Data Tab. #tabs-6
-            if ( is_super_admin() || isset( $userId ) && in_array( 'status', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_status'" ) == $wpdb->base_prefix . 'lr_status' ) {
-                    $status = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_status` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $status ) > 0) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-6">' . __( 'Status', 'lr-plugin-slug' ) . '</a></li>';
+                // Status Data Tab. #tabs-6
+                if ( is_super_admin() || isset( $userId ) && in_array( 'status', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_status'" ) == $wpdb->base_prefix . 'lr_status' ) {
+                        $status = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_status` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $status ) > 0) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-6">' . __( 'Status', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Mentions Data Tab. #tabs-7
-            if ( is_super_admin() || isset( $userId ) && in_array( 'mentions', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_twitter_mentions'" ) == $wpdb->base_prefix . 'lr_twitter_mentions' ) {
-                    $mentions = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_twitter_mentions` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $mentions ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-7">' . __( 'Twitter Mentions', 'lr-plugin-slug' ) . '</a></li>';
+                // Mentions Data Tab. #tabs-7
+                if ( is_super_admin() || isset( $userId ) && in_array( 'mentions', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_twitter_mentions'" ) == $wpdb->base_prefix . 'lr_twitter_mentions' ) {
+                        $mentions = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_twitter_mentions` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $mentions ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-7">' . __( 'Twitter Mentions', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Groups Data Tab. #tabs-8
-            if ( is_super_admin() || isset( $userId ) && in_array( 'groups', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // extended profile data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_groups'" ) == $wpdb->base_prefix . 'lr_groups' ) {
-                    $groups = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_groups` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $groups ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-8">' . __( 'Groups', 'lr-plugin-slug' ) . '</a></li>';
+                // Groups Data Tab. #tabs-8
+                if ( is_super_admin() || isset( $userId ) && in_array( 'groups', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // extended profile data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_groups'" ) == $wpdb->base_prefix . 'lr_groups' ) {
+                        $groups = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_groups` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $groups ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-8">' . __( 'Groups', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // FaceBook like data #tabs-9
-            if ( is_super_admin() || isset( $userId ) && in_array( 'likes', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // FaceBook like data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_likes'" ) == $wpdb->base_prefix . 'lr_facebook_likes' ) {
-                    $likes = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_likes` WHERE wp_users_id = %d', $userId ) );
-                    if ( count($likes) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-9">' . __( 'FaceBook Likes', 'lr-plugin-slug') . '</a></li>';
+                // FaceBook like data #tabs-9
+                if ( is_super_admin() || isset( $userId ) && in_array( 'likes', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // FaceBook like data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_likes'" ) == $wpdb->base_prefix . 'lr_facebook_likes' ) {
+                        $likes = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_likes` WHERE wp_users_id = %d', $userId ) );
+                        if ( count($likes) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-9">' . __( 'FaceBook Likes', 'lr-plugin-slug') . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // FaceBook events #tabs-10
-            if ( is_super_admin() || isset( $userId ) && in_array( 'events', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // FaceBook like data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_events'" ) == $wpdb->base_prefix . 'lr_facebook_events' ) {
-                    $events = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_events` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $events ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-10">' . __( 'FaceBook Events', 'lr-plugin-slug') . '</a></li>';
+                // FaceBook events #tabs-10
+                if ( is_super_admin() || isset( $userId ) && in_array( 'events', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // FaceBook like data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_events'" ) == $wpdb->base_prefix . 'lr_facebook_events' ) {
+                        $events = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_events` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $events ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-10">' . __( 'FaceBook Events', 'lr-plugin-slug') . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // FaceBook posts #tabs-11
-            if ( is_super_admin() || isset( $userId ) && in_array( 'posts', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // FaceBook like data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_posts'" ) == $wpdb->base_prefix . 'lr_facebook_posts' ) {
-                    $posts = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_posts` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $posts ) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-11">' . __( 'FaceBook Posts', 'lr-plugin-slug' ) . '</a></li>';
+                // FaceBook posts #tabs-11
+                if ( is_super_admin() || isset( $userId ) && in_array( 'posts', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // FaceBook like data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_posts'" ) == $wpdb->base_prefix . 'lr_facebook_posts' ) {
+                        $posts = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_posts` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $posts ) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-11">' . __( 'FaceBook Posts', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // FaceBook Albums data #tabs-12
-            if ( is_super_admin() || isset( $userId ) && in_array( 'albums', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                //Albums Data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_albums'" ) == $wpdb->base_prefix . 'lr_albums' ) {
-                    $albums = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_albums` WHERE wp_users_id = %d', $userId ) );
-                    if ( count($albums) > 0 ) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-12">' . __( 'Albums', 'lr-plugin-slug') . '</a></li>';
+                // FaceBook Albums data #tabs-12
+                if ( is_super_admin() || isset( $userId ) && in_array( 'albums', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    //Albums Data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_albums'" ) == $wpdb->base_prefix . 'lr_albums' ) {
+                        $albums = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_albums` WHERE wp_users_id = %d', $userId ) );
+                        if ( count($albums) > 0 ) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-12">' . __( 'Albums', 'lr-plugin-slug') . '</a></li>';
+                        }
                     }
                 }
-            }
 
-            // Display Custom Fields Popup Data. #tabs-13
-            if ( is_super_admin() || isset( $userId ) && in_array( 'custom_fields', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                // Custom fields data
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_popup_custom_fields_data'" ) == $wpdb->base_prefix . 'lr_popup_custom_fields_data' ) {
-                    $customfields = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_popup_custom_fields_data` WHERE wp_users_id = %d', $userId ) );
-                    if ( count( $customfields ) > 0) {
-                        $noProfileData = false;
-                        $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-13">' . __( 'Custom Fields Data', 'lr-plugin-slug' ) . '</a></li>';
+                // Display Custom Fields Popup Data. #tabs-13
+                if ( is_super_admin() || isset( $userId ) && in_array( 'custom_fields', $lr_social_profile_data_settings['showprofiledata'] ) ) {
+                    // Custom fields data
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_popup_custom_fields_data'" ) == $wpdb->base_prefix . 'lr_popup_custom_fields_data' ) {
+                        $customfields = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_popup_custom_fields_data` WHERE wp_users_id = %d', $userId ) );
+                        if ( count( $customfields ) > 0) {
+                            $noProfileData = false;
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-13">' . __( 'Custom Fields Data', 'lr-plugin-slug' ) . '</a></li>';
+                        }
                     }
                 }
+            } else {
+                error_log( 'LoginRadius Display Profile Data settings have not been saved properly. Please select and save the Display Profile Data settings' );
             }
 
             $html .= '</ul>';
