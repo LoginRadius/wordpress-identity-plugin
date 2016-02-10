@@ -205,7 +205,7 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
                             <div class="lr_options_container">
                                 <div class="lr-row lr-cf">
                                     <div class="lr-ci-preview">
-                                        <h3><?php _e( 'Preview for the Custom Interface', 'lr-plugin-slug' ); ?></h3>
+                                        <h3><?php _e( 'Custom Interface Images', 'lr-plugin-slug' ); ?></h3>
                                         <ul class="interface_container lr-cf"></ul>
                                     </div>
                                 </div>

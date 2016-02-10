@@ -29,7 +29,7 @@ class LR_Social_Invite_Display {
 
     public static function enqueue_glob_scripts() {
         
-        wp_enqueue_style( 'lr-social-invite-style', LR_SOCIAL_INVITE_URL . 'assets/css/lr-social-invite.css' );
+        wp_enqueue_style( 'lr-social-invite-style', LR_SOCIAL_INVITE_URL . 'assets/css/lr-social-invite.min.css' );
 
         ?>
             <!-- Custom Share Template -->

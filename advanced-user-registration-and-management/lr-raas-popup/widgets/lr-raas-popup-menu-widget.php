@@ -17,7 +17,7 @@ class LR_Raas_Popup_Menu extends WP_Widget {
         parent::__construct(
             'LR_Raas_Popup_Menu', // Base ID
             __( 'LoginRadius - User Registration Popup Menu', 'lr-plugin-slug' ), // Name
-            array( 'description' => __( 'Display a Popup Menu Widget', 'lr-plugin-slug' ), ) // Args
+            array( 'classname' => 'widget_meta', 'description' => __( 'Display a Popup Menu Widget', 'lr-plugin-slug' ), ) // Args
         );
     }
 
