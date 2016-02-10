@@ -166,8 +166,8 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
                                     <?php _e( 'Custom Interface Settings', 'lr-plugin-slug' ); ?>
                                 </h3>
                                 <div>
-                                    <input type="hidden" id="checkbox_value" value="<?php echo $lr_custom_interface_settings['custom_interface']; ?>" />
-                                    <input type="checkbox" class="lr-toggle" id="lr-custom-interface-enable" name="LR_Custom_Interface_Settings[custom_interface]" value="1" <?php echo isset($lr_custom_interface_settings['custom_interface']) && $lr_custom_interface_settings['custom_interface'] == '1' ? 'checked' : ''; ?> />
+                                    <input type="hidden" id="checkbox_value" value="<?php echo ! empty( $lr_custom_interface_settings['custom_interface'] ) ? $lr_custom_interface_settings['custom_interface'] : ''; ?>" />
+                                    <input type="checkbox" class="lr-toggle" id="lr-custom-interface-enable" name="LR_Custom_Interface_Settings[custom_interface]" value="1" <?php echo isset( $lr_custom_interface_settings['custom_interface'] ) && $lr_custom_interface_settings['custom_interface'] == '1' ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-custom-interface-enable">
                                         <?php _e('Enable Custom Interface settings', 'lr-plugin-slug' ); ?>
                                         <span class="lr-tooltip" data-title="<?php _e( 'Enable, to use custom interface instead of LoginRadius themes', 'lr-plugin-slug' ); ?>">
