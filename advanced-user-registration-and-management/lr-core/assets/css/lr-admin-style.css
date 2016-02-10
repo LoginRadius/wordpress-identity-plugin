@@ -933,3 +933,5 @@ input.lr-toggle:checked + .lr-toggle-name:after, input.lr-toggle:checked + label
 .text-left   { text-align: left   !important; }
 .text-center { text-align: center !important; }
 .text-right  { text-align: right  !important; }
+
+.vertical-align-top { vertical-align: top; }

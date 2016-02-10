@@ -66,12 +66,12 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
 
                         <div class="lr_options_container">
 
-                            <div class="lr-row inline-block inline-width-50">
+                            <div class="lr-row inline-block vertical-align-top inline-width-50">
                                 <h3>
-                                    <?php _e('Save Profile Data', 'lr-plugin-slug'); ?>
+                                    <?php _e( 'Save Profile Data', 'lr-plugin-slug' ); ?>
                                 </h3>
                                 <h5>
-                                    <?php _e('Please select the user profile data fields you would like to save in your database:', 'lr-plugin-slug'); ?>
+                                    <?php _e( 'Please select the user profile data fields you would like to save in your database:', 'lr-plugin-slug' ); ?>
                                 </h5>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-basic" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="basic" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'basic', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
@@ -182,7 +182,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
                                     </label>
                                 </div>
                             </div>
-                            <div class="lr-row inline-block inline-width-50">
+                            <div class="lr-row inline-block vertical-align-top inline-width-50">
                                 <h3>
                                     <?php _e('Display Profile Data', 'lr-plugin-slug'); ?>
                                 </h3>

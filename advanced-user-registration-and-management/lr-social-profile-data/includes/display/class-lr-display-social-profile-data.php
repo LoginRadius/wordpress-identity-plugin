@@ -223,43 +223,43 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
                     }
                 }
 
-                // FaceBook like data #tabs-9
+                // Facebook like data #tabs-9
                 if ( is_super_admin() || isset( $userId ) && in_array( 'likes', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                    // FaceBook like data
+                    // Facebook like data
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_likes'" ) == $wpdb->base_prefix . 'lr_facebook_likes' ) {
-                        $likes = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_likes` WHERE wp_users_id = %d', $userId ) );
+                        $likes = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_likes` WHERE wp_users_id = %d', $userId ) );
                         if ( count($likes) > 0 ) {
                             $noProfileData = false;
-                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-9">' . __( 'FaceBook Likes', 'lr-plugin-slug') . '</a></li>';
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-9">' . __( 'Facebook Likes', 'lr-plugin-slug' ) . '</a></li>';
                         }
                     }
                 }
 
-                // FaceBook events #tabs-10
+                // Facebook events #tabs-10
                 if ( is_super_admin() || isset( $userId ) && in_array( 'events', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                    // FaceBook like data
+                    // Facebook like data
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_events'" ) == $wpdb->base_prefix . 'lr_facebook_events' ) {
-                        $events = $wpdb->get_results( $wpdb->prepare('SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_events` WHERE wp_users_id = %d', $userId ) );
+                        $events = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_events` WHERE wp_users_id = %d', $userId ) );
                         if ( count( $events ) > 0 ) {
                             $noProfileData = false;
-                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-10">' . __( 'FaceBook Events', 'lr-plugin-slug') . '</a></li>';
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-10">' . __( 'Facebook Events', 'lr-plugin-slug' ) . '</a></li>';
                         }
                     }
                 }
 
-                // FaceBook posts #tabs-11
+                // Facebook posts #tabs-11
                 if ( is_super_admin() || isset( $userId ) && in_array( 'posts', $lr_social_profile_data_settings['showprofiledata'] ) ) {
-                    // FaceBook like data
+                    // Facebook like data
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_facebook_posts'" ) == $wpdb->base_prefix . 'lr_facebook_posts' ) {
                         $posts = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $wpdb->base_prefix . 'lr_facebook_posts` WHERE wp_users_id = %d', $userId ) );
                         if ( count( $posts ) > 0 ) {
                             $noProfileData = false;
-                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-11">' . __( 'FaceBook Posts', 'lr-plugin-slug' ) . '</a></li>';
+                            $html .= '<li style="float: left; list-style: none;"><a style="margin:0; font-size:12px; font-weight:bold" class="nav-tab" href="#tabs-11">' . __( 'Facebook Posts', 'lr-plugin-slug' ) . '</a></li>';
                         }
                     }
                 }
 
-                // FaceBook Albums data #tabs-12
+                // Facebook Albums data #tabs-12
                 if ( is_super_admin() || isset( $userId ) && in_array( 'albums', $lr_social_profile_data_settings['showprofiledata'] ) ) {
                     //Albums Data
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $wpdb->base_prefix . "lr_albums'" ) == $wpdb->base_prefix . 'lr_albums' ) {
@@ -460,7 +460,7 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
                 $html .= '</div></div>';
             }
 
-            // FaceBook Like Data #tabs-9
+            // Facebook Like Data #tabs-9
             if ( isset( $likes ) && count( $likes ) > 0 && ( is_super_admin() || isset( $userId ) && in_array( 'likes', $lr_social_profile_data_settings['showprofiledata'] ) ) ) {
                 $html .= '<div class="menu_containt_div" id="tabs-9"><div class="wrap">';
                 $html .= '<table class="wp-list-table widefat users loginRadiusImagetable" cellspacing="0">
@@ -479,7 +479,7 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
                 $html .= '</div></div>';
             }
 
-            // FaceBook Events #tabs-10
+            // Facebook Events #tabs-10
             if ( isset( $events ) && count( $events ) > 0 && ( is_super_admin() || isset( $userId ) && in_array( 'events', $lr_social_profile_data_settings['showprofiledata'] ) ) ) {
                 $html .= '<div class="menu_containt_div" id="tabs-10"><div class="wrap">';
                 $html .= '<table class="wp-list-table widefat users loginRadiusImagetable" cellspacing="0">
@@ -503,7 +503,7 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
                 $html .= '</div></div>';
             }
 
-            // FaceBook Posts #tabs-11
+            // Facebook Posts #tabs-11
             if ( isset( $posts ) && count( $posts ) > 0 && ( is_super_admin() || isset( $userId ) && in_array( 'posts', $lr_social_profile_data_settings['showprofiledata'] ) ) ) {
                 $html .= '<div class="menu_containt_div" id="tabs-11"><div class="wrap">';
                 $html .= '<table class="wp-list-table widefat users loginRadiusImagetable" cellspacing="0">
@@ -527,7 +527,7 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
                 $html .= '</div></div>';
             }
 
-            // FaceBook Albums data #tabs-12
+            // Facebook Albums data #tabs-12
             if ( isset( $albums ) && count( $albums ) > 0 && ( is_super_admin() || isset( $userId ) && in_array( 'albums', $lr_social_profile_data_settings['showprofiledata'] ) ) ) {
                 $html .= '<div class="menu_containt_div" id="tabs-12"><div class="wrap">';
                 $html .= '<table class="wp-list-table widefat users loginRadiusImagetable" cellspacing="0">
