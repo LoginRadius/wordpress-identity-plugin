@@ -14,14 +14,20 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
          * @global type $lr_js_in_footer
          */
         public static function vertical_sharing() {
-            global $lr_js_in_footer;
-            // Enqueue main scripts in footer
-            if ($lr_js_in_footer) {
-                add_action('wp_footer', array(get_class(), 'get_vertical_sharing_script'), 100);
-            } else {
-                add_action('wp_head', array(get_class(), 'get_vertical_sharing_script'), 100);
+            global $loginRadiusObject, $lr_js_in_footer, $loginradius_api_settings;
+            
+            if( ! $loginRadiusObject->loginradius_is_valid_guid( $loginradius_api_settings['LoginRadius_apikey'] ) || ! $loginRadiusObject->loginradius_is_valid_guid( $loginradius_api_settings['LoginRadius_secret'] ) ) {
+                error_log('Please activate the LoginRadius plugin to enable vertical sharing');
+                return;
             }
-            wp_register_script( 'lr-social-sharing', '//cdn.loginradius.com/share/v1/LoginRadius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer);
+
+            // Enqueue main scripts in footer
+            if ( $lr_js_in_footer ) {
+                add_action( 'wp_footer', array( get_class(), 'get_vertical_sharing_script' ), 100 );
+            } else {
+                add_action( 'wp_head', array( get_class(), 'get_vertical_sharing_script' ), 100 );
+            }
+            wp_register_script( 'lr-social-sharing', '//share.lrcontent.com/prod/v1/loginradius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer );
         }
 
         /**
@@ -29,14 +35,20 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
          * @global type $lr_js_in_footer
          */
         public static function horizontal_sharing() {
-            global $lr_js_in_footer;
-            // Enqueue main scripts in footer
-            if ($lr_js_in_footer) {
-                add_action('wp_footer', array(get_class(), 'get_horizontal_sharing_script'), 100);
-            } else {
-                add_action('wp_head', array(get_class(), 'get_horizontal_sharing_script'), 100);
+            global $loginRadiusObject, $lr_js_in_footer, $loginradius_api_settings;
+            
+            if( ! $loginRadiusObject->loginradius_is_valid_guid( $loginradius_api_settings['LoginRadius_apikey'] ) || ! $loginRadiusObject->loginradius_is_valid_guid( $loginradius_api_settings['LoginRadius_secret'] ) ) {
+                error_log('Please activate the LoginRadius plugin to enable horizontal sharing');
+                return;
             }
-            wp_register_script( 'lr-social-sharing', '//cdn.loginradius.com/share/v1/LoginRadius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer);
+
+            // Enqueue main scripts in footer
+            if ( $lr_js_in_footer ) {
+                add_action( 'wp_footer', array( get_class(), 'get_horizontal_sharing_script' ), 100 );
+            } else {
+                add_action( 'wp_head', array( get_class(), 'get_horizontal_sharing_script' ), 100 );
+            }
+            wp_register_script( 'lr-social-sharing', '//share.lrcontent.com/prod/v1/loginradius.js', array(), LR_PLUGIN_VERSION, $lr_js_in_footer );
         }
 
         /**
@@ -46,12 +58,12 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
          * @global type $loginradius_api_settings
          */
         public static function get_horizontal_sharing_script() {
-            global $loginradius_share_settings, $loginradius_api_settings;
+            global $loginradius_share_settings, $loginradius_api_settings;            
 
             $hybrid = false;
             $theme = $loginradius_share_settings['horizontal_share_interface'];
 
-            switch ($theme) {
+            switch ( $theme ) {
                 case '32-h':
                     $size = '32';
                     $interface = 'horizontal';
@@ -87,7 +99,7 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
                     $interface = 'horizontal';
                     break;
             }
-            if ($hybrid == false) {
+            if ( $hybrid == false ) {
                 ?>
                 <script type="text/javascript">
                     LoginRadius.util.ready(function () {
@@ -111,8 +123,8 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
                         $SC.Providers.Selected = ["<?php echo implode('","', $loginradius_share_settings['horizontal_sharing_providers']['Hybrid']); ?>"];
                         $u = LoginRadius.user_settings;
                         $i.countertype = "<?php echo $countertype ?>";
-                        $u.isMobileFriendly = <?php echo ( isset($loginradius_share_settings['mobile_enable']) && $loginradius_share_settings['mobile_enable'] == '1' ) ? 'true' : 'false'; ?>;
-                <?php if (isset($loginradius_api_settings['LoginRadius_apikey']) && !empty($loginradius_api_settings['LoginRadius_apikey'])) { ?>
+                        $u.isMobileFriendly = <?php echo ( isset( $loginradius_share_settings['mobile_enable'] ) && $loginradius_share_settings['mobile_enable'] == '1' ) ? 'true' : 'false'; ?>;
+                <?php if ( isset( $loginradius_api_settings['LoginRadius_apikey'] ) && ! empty( $loginradius_api_settings['LoginRadius_apikey'] ) ) { ?>
                             $u.apikey = "<?php echo $loginradius_api_settings['LoginRadius_apikey']; ?>";
                 <?php } ?>
                         $i.isHorizontal = "<?php echo $countertype; ?>";
@@ -123,7 +135,6 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
                 <?php
             }
         }
-        
         
         /**
          * Get LoginRadius Vertical Simple Social Sharing div and script.
@@ -137,7 +148,7 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
             global $post, $loginradius_share_settings, $loginradius_api_settings;
 
             if ( is_object( $post ) ) {
-                $lrMeta = get_post_meta($post->ID, '_login_radius_meta', true);
+                $lrMeta = get_post_meta( $post->ID, '_login_radius_meta', true );
 
                 // If sharing disabled on this page/post, return content unaltered.
                 if ( isset( $lrMeta['sharing'] ) && $lrMeta['sharing'] == '1' && ! is_front_page() ) {
@@ -146,23 +157,23 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
             }
 
             $is_mobile = self::mobile_detect();
-            if ($is_mobile && isset($loginradius_share_settings['mobile_enable']) && $loginradius_share_settings['mobile_enable'] == '1') {
+            if ( $is_mobile && isset( $loginradius_share_settings['mobile_enable'] ) && $loginradius_share_settings['mobile_enable'] == '1' ) {
                 return;
             }
 
             $position = LR_Vertical_Sharing::get_vertical_position();
 
-            if (isset(LR_Vertical_Sharing::$position['class'])) {
-                foreach (LR_Vertical_Sharing::$position['class'] as $key => $value) {
+            if ( isset( LR_Vertical_Sharing::$position['class'] ) ) {
+                foreach ( LR_Vertical_Sharing::$position['class'] as $key => $value ) {
                     $position[$value]['class'] = $value;
                 }
             }
 
-            if (isset($position)) {
-                foreach ($position as $key => $value) {
+            if ( isset( $position ) ) {
+                foreach ( $position as $key => $value ) {
                     switch ($key) {
                         case 'top_left':
-                            if ($value) {
+                            if ( $value ) {
                                 $params = array(
                                     'top' => '0px',
                                     'right' => '',
@@ -218,7 +229,7 @@ if ( ! class_exists( 'LR_Common_Sharing' ) ) {
                             break;
                     }
 
-                    if (isset($params)) {
+                    if ( isset( $params ) ) {
                         $top = $params['top'] ? $params['top'] : '';
                         $right = $params['right'];
                         $bottom = $params['bottom'];
