@@ -3,7 +3,7 @@
  * Plugin Name: Advanced User Registration and Management
  * Plugin URI: http://www.loginradius.com
  * Description: Advanced User Registration and Management
- * Version: 2.4
+ * Version: 2.5
  * Author: LoginRadius Team
  * Author URI: http://www.loginradius.com
  * Text Domain: advanced-user-registration-and-management

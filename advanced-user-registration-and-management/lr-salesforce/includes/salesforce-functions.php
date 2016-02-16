@@ -185,7 +185,9 @@ if (!class_exists('LR_SalesForce_function')) {
                             $this->update_salesforce_user_profile($userId, $output, $sfAccountType, $sfAccountId);
                         }
                     } else {
-                        $this->create_salesforce_user_profile($userId, $output, $lr_salesforce_settings['salesforce_object_type']);
+                        if( ! empty( $lr_salesforce_settings['salesforce_object_type'] ) ) {
+                            $this->create_salesforce_user_profile( $userId, $output, $lr_salesforce_settings['salesforce_object_type'] );
+                        }
                     }
                 }
             }

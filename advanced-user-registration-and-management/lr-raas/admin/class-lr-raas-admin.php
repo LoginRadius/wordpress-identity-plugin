@@ -79,7 +79,7 @@ if ( ! class_exists( 'LR_Raas_Admin' ) ) {
 			global $lr_raas_settings;
 
 			// Return if disable email verification is true
-			if( ! empty( $lr_raas_settings['disable_email_verify'] ) ) {
+			if( ! empty( $lr_raas_settings['email_verify_option'] ) && 'disabled' == $lr_raas_settings['email_verify_option'] ) {
 				return;
 			}
 
@@ -196,7 +196,7 @@ if ( ! class_exists( 'LR_Raas_Admin' ) ) {
 		 * @global type $lr_raas_settings
 		 * @param type $blogId
 		 */
-		public function replicate_settings_to_new_blog($blogId) {
+		public function replicate_settings_to_new_blog( $blogId ) {
 			global $loginRadiusSettings;
 			add_blog_option( $blogId, 'LoginRadius_settings', $loginRadiusSettings );
 		}
@@ -233,13 +233,14 @@ if ( ! class_exists( 'LR_Raas_Admin' ) ) {
 			$settings = apply_filters( 'lr_raas_save_setting', $settings );
 				
 			$loginRadiusSetting = get_option( 'LoginRadius_settings' );
-			$advance_settings = array( 'LoginRadius_redirect', 'custom_redirect', 'username_separator', 'LoginRadius_noProvider', 'profileDataUpdate', 'LoginRadius_socialavatar', 'LoginRadius_socialLinking', 'enable_degugging', 'enable_username' );
-			
+			$advance_settings = array( 'LoginRadius_redirect', 'custom_redirect', 'username_separator', 'LoginRadius_noProvider', 'profileDataUpdate', 'LoginRadius_socialavatar', 'LoginRadius_socialLinking', 'enable_degugging' );
 
 			foreach ( $advance_settings as $advance_setting ) {
 				if ( isset( $settings[ $advance_setting ] ) ) {
 					$loginRadiusSetting[ $advance_setting ] = trim( $settings[ $advance_setting ] );
 					unset( $settings[ $advance_setting ] );
+				} else {
+					$loginRadiusSetting[ $advance_setting ] = "";
 				}
 			}
 			

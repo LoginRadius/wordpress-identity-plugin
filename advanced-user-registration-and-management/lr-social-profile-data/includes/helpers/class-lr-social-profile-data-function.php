@@ -582,7 +582,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Function' ) ) {
                     $status = null;
                     error_log( $profileData['Provider'] . ' failed getting (get_status) ' . json_encode( $e->errorResponse ) );
                 }
-
+                
                 if ( isset( $status ) && is_array( $status ) && count( $status ) > 0 ) {
                     foreach ($status as $lrStatus) {
                         $data = array();
@@ -773,7 +773,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Function' ) ) {
             }
 
             // Album API
-            if ( $profileData['Provider'] == 'facebook' && in_array( 'albums', $lr_social_profile_data_settings['profiledata'] ) ) {
+            if ( in_array( $profileData['Provider'], array( 'facebook', 'google', 'live', 'vkontakte' ) ) && in_array( 'albums', $lr_social_profile_data_settings['profiledata'] ) ) {
                 try {
                     $albums = $loginRadiusObject->loginradius_get_photo_albums($access_token);
                 } catch (LoginRadiusException $e) {

@@ -94,7 +94,8 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 		 */
 		public static function raas_social_linking_interface() {
 			global $loginRadiusSettings, $lr_js_in_footer;
-			if ( isset( $loginRadiusSettings['LoginRadius_socialLinking'] ) && $loginRadiusSettings['LoginRadius_socialLinking'] == 1 ) {
+
+			if ( ! empty( $loginRadiusSettings['LoginRadius_socialLinking'] ) ) {
 				wp_register_script( 'lr-raas-front-script', LR_RAAS_URL . 'assets/js/loginradiusfront.js', array('jquery-ui-datepicker' ), LR_PLUGIN_VERSION, $lr_js_in_footer);
 				wp_register_script( 'lr-raas', '//cdn.loginradius.com/hub/prod/js/LoginRadiusRaaS.js', array( 'jquery', 'lr-social-login' ), LR_PLUGIN_VERSION, $lr_js_in_footer);
 				wp_register_style( 'lr-raas-style', LR_RAAS_URL . 'assets/css/lr-raas-style.css', array(), LR_PLUGIN_VERSION );
@@ -196,9 +197,14 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 					'ajax_url' => get_admin_url() . 'admin-ajax.php',
 					'login_page_url' => get_permalink( $lr_raas_settings['login_page_id'] ),
 					'current_page' => get_permalink(),
-					'disable_email_verify' => ! empty( $lr_raas_settings['disable_email_verify'] ) ? $lr_raas_settings['disable_email_verify'] : '',
-					'optional_email_verify' => ! empty( $lr_raas_settings['optional_email_verify'] ) ? $lr_raas_settings['optional_email_verify'] : '',
-					'enable_username' => ! empty( $lr_raas_settings['enable_username'] ) ? $lr_raas_settings['enable_username'] : ''
+					'disable_email_verify' => ! empty( $lr_raas_settings['email_verify_option'] ) && 'disabled' == $lr_raas_settings['email_verify_option'] ? '1' : '',
+					'optional_email_verify' => ! empty( $lr_raas_settings['email_verify_option'] ) && 'optional' == $lr_raas_settings['email_verify_option'] ? '1' : '',
+					'enable_email_verify_login' => ! empty( $lr_raas_settings['enable_email_verify_login'] ) ? $lr_raas_settings['enable_email_verify_login'] : '',
+					'enable_ask_email_for_unverified' => ! empty( $lr_raas_settings['enable_ask_email_for_unverified'] ) ? $lr_raas_settings['enable_ask_email_for_unverified'] : '',
+					'enable_username' => ! empty( $lr_raas_settings['enable_username'] ) ? $lr_raas_settings['enable_username'] : '',
+					'enable_ask_for_password' => ! empty( $lr_raas_settings['enable_ask_for_password'] ) ? $lr_raas_settings['enable_ask_for_password'] : '',
+					'forgotPasswordTemplate' => ! empty( $lr_raas_settings['forgot_template'] ) ? $lr_raas_settings['forgot_template'] : '',
+					'emailVerificationTemplate' => ! empty( $lr_raas_settings['email_verify_template'] ) ? $lr_raas_settings['email_verify_template'] : ''
 				);
 
 				wp_localize_script( 'lr-raas-front-script', "RaasDetails", $args );
@@ -306,7 +312,7 @@ if ( ! class_exists( 'LR_Raas_Social_Login' ) ) {
 					LoginRadiusRaaS.init(raasoption, 'registration', function (response) {
 						<?php							
 							// Return if disable email verification is true
-							if( ! empty( $lr_raas_settings['disable_email_verify'] ) ) {
+							if( ! empty( $lr_raas_settings['email_verify_option'] ) && 'disabled' == $lr_raas_settings['email_verify_option'] ) {
 								?>
 									handleResponse( true, 'Registration complete, please login.', '.lr-user-reg-container' );
 								<?php	

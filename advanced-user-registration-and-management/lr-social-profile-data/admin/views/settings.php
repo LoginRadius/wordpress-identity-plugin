@@ -77,108 +77,72 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-basic" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="basic" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'basic', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-basic">
                                         <?php _e('Basic Profile Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip tip-bottom" data-title="<?php _e('Data fields include: Social ID, Social ID Provider, Prefix, First Name, Middle Name, Last Name, Suffix, Full Name, Nick Name, Profile Name, Birthdate, Gender, Country Code, Country Name, Thumbnail Image Url, Image Url, Local Country, Profile Country', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-extended" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="extended" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'extended', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-extended">
                                         <?php _e('Extended Profile Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Extended Profile Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-extended-location" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="exlocation" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'exlocation', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-extended-location">
                                         <?php _e('Extended Location Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Extended Location Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-likes" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="likes" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'likes', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-likes">
-                                        <?php _e('Facebook Likes Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Facebook Likes Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Likes', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-albums" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="albums" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'albums', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-albums">
-                                        <?php _e('Facebook Albums Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Facebook Albums Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Albums', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-mentions" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="mentions" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'mentions', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-mentions">
-                                        <?php _e('Twitter Mentions', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Twitter Mentions', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Mentions', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-groups" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="groups" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'groups', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-groups">
                                         <?php _e('Groups', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Groups', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-events" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="events" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'events', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-events">
-                                        <?php _e('Facebook Events', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Facebook Events', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Events', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-posts" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="posts" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'posts', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-posts">
-                                        <?php _e('Facebook Posts', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Facebook Posts', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Posts', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                  <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-contacts" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="contacts" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'contacts', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-contacts">
                                         <?php _e('Contacts', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Contacts', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-linkedincompanies" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="linkedin_companies" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'linkedin_companies', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-linkedincompanies">
-                                        <?php _e('LinkedInCompanies', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('LinkedInCompanies', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Companies', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-profile-data-status" name="LoginRadius_Social_Profile_Data_settings[profiledata][]" value="status" <?php echo isset( $lr_social_profile_data_settings['profiledata'] ) && in_array( 'status', $lr_social_profile_data_settings['profiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-profile-data-status">
                                         <?php _e( 'Status', 'lr-plugin-slug' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Status', 'lr-plugin-slug' ); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                             </div>
@@ -193,108 +157,72 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-basic" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="basic" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'basic', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-basic">
                                         <?php _e('Basic Profile Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip tip-bottom" data-title="<?php _e('Data fields include: Social ID, Social ID Provider, Prefix, First Name, Middle Name, Last Name, Suffix, Full Name, Nick Name, Profile Name, Birthdate, Gender, Country Code, Country Name, Thumbnail Image Url, Image Url, Local Country, Profile Country', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-extended" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="extended" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'extended', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-extended">
                                         <?php _e('Extended Profile Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Extended Profile Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-extended-location" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="exlocation" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'exlocation', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-extended-location">
                                         <?php _e('Extended Location Data'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Extended Location Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-likes" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="likes" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'likes', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-likes">
-                                        <?php _e('Likes Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Likes Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Likes', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-albums" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="albums" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'albums', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-albums">
-                                        <?php _e('Albums Data', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Albums Data', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Albums', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-mentions" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="mentions" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'mentions', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-mentions">
-                                        <?php _e('Twitter Mentions', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Twitter Mentions', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Mentions', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-groups" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="groups" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'groups', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-groups">
                                         <?php _e('Groups', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Groups', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-events" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="events" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'events', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-events">
-                                        <?php _e('Facebook Events', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Facebook Events', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Events', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-posts" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="posts" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'posts', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-posts">
-                                        <?php _e('Facebook Posts', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Facebook Posts', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Posts', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-contacts" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="contacts" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'contacts', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-contacts">
                                         <?php _e('Contacts', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Contacts', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-linkedin_companies" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="linkedin_companies" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'linkedin_companies', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-profile-data-linkedin_companies">
-                                        <?php _e('LinkedIn Companies', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('LinkedIn Companies', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                        <?php _e('Companies', 'lr-plugin-slug'); ?>
                                     </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" class="lr-toggle" id="lr-show-status" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="status" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'status', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                     <label class="lr-show-toggle" for="lr-show-status">
                                         <?php _e('Status', 'lr-plugin-slug'); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e('Status', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
                                     </label>
                                 </div>
                                 <?php if ( class_exists( 'LR_Social_Login' ) && ! class_exists( 'LR_Raas_Install' ) ) { ?>
@@ -302,12 +230,14 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Admin_Settings' ) ) {
                                         <input type="checkbox" class="lr-toggle" id="lr-show-profile-data-custom-fields" name="LoginRadius_Social_Profile_Data_settings[showprofiledata][]" value="custom_fields" <?php echo isset( $lr_social_profile_data_settings['showprofiledata'] ) && in_array( 'custom_fields', $lr_social_profile_data_settings['showprofiledata'] ) ? 'checked' : ''; ?> />
                                         <label class="lr-show-toggle" for="lr-show-profile-data-custom-fields">
                                             <?php _e('Custom Popup Fields Data'); ?>
-                                            <span class="lr-tooltip" data-title="<?php _e('Show the custom fields popup data', 'lr-plugin-slug'); ?>">
-                                                <span class="dashicons dashicons-editor-help"></span>
-                                            </span>
                                         </label>
                                     </div>
                                 <?php } ?>
+                            </div>
+                            <div class="lr-row">
+                                <h5>
+                                    <?php _e('Please visit the following section to see the complete listing of supported Data points using LoginRadius API: ', 'lr-plugin-slug'); ?><a href="www.loginradius.com/datapoints">here</a>
+                                </h5>
                             </div>
                         </div>
 

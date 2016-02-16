@@ -132,8 +132,8 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
                         <div class="lr-column2 lr-vr-sortable">
                             <ul id="loginRadiusVerticalSortable" class="cf">
                                 <?php
-                                if (isset($settings['vertical_rearrange_providers']) && count($settings['vertical_rearrange_providers']) > 0) {
-                                    foreach ($settings['vertical_rearrange_providers'] as $provider) {
+                                if ( isset( $settings['vertical_rearrange_providers'] ) && count( $settings['vertical_rearrange_providers'] ) > 0 ) {
+                                    foreach ( $settings['vertical_rearrange_providers'] as $provider ) {
                                         ?>
                                         <li title="<?php echo $provider ?>" id="loginRadiusVerticalLI<?php echo $provider ?>" class="lrshare_iconsprite32 lr-icon-<?php echo strtolower($provider) ?>">
                                             <input type="hidden" name="LoginRadius_share_settings[vertical_rearrange_providers][]" value="<?php echo $provider ?>" />
@@ -374,13 +374,13 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
             <?php
         }
 
-        private static function advance_settings($settings) {
+        private static function advance_settings( $settings ) {
             ?>
             <!-- Advanced Settings -->
             <div id="lr_options_tab-3" class="lr-tab-frame">
                 <div class="lr_options_container">
                     <div class="lr-row">
-                        <h3><?php _e('Short Code for Sharing widget', 'lr-plugin-slug'); ?>
+                        <h3><?php _e( 'Short Code for Sharing widget', 'lr-plugin-slug' ); ?>
                             <span class="lr-tooltip tip-bottom" data-title="<?php _e('Copy and paste the following shortcode into a page or post to display a horizontal sharing widget', 'lr-plugin-slug'); ?>">
                                 <span class="dashicons dashicons-editor-help"></span>
                             </span>
@@ -388,7 +388,7 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
                         <div>
                             <textarea rows="1" onclick="this.select()" spellcheck="false" class="lr-shortcode" readonly="readonly">[LoginRadius_Share]</textarea>
                         </div>
-                        <span><?php _e('Additional shortcode examples can be found <a target="_blank" href="http://ish.re/9WBX/#shortcode" >Here</a>', 'lr-plugin-slug'); ?></span>
+                        <span><?php _e( 'Additional shortcode examples can be found <a target="_blank" href="http://ish.re/9WBX/#shortcode" >Here</a>', 'lr-plugin-slug' ); ?></span>
                     </div><!-- lr-row -->
                     <div class="lr-row">
                         <h3><?php _e('Mobile Friendly', 'lr-plugin-slug'); ?>
@@ -453,7 +453,7 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
                     <div class="lr-frame">
                         <h4><?php _e('Help', 'lr-plugin-slug'); ?></h4>
                         <div>
-                            <a target="_blank" href="http://ish.re/9WBX"><?php _e('Plugin Installation, Configuration and Troubleshooting', 'lr-plugin-slug') ?></a>
+                            <a target="_blank" href="http://ish.re/YDLT"><?php _e('Plugin Installation, Configuration and Troubleshooting', 'lr-plugin-slug') ?></a>
                             <a target="_blank" href="http://ish.re/8PJ7"><?php _e('About LoginRadius', 'lr-plugin-slug') ?></a>
                             <a target="_blank" href="http://ish.re/5P2D"><?php _e('LoginRadius Products', 'lr-plugin-slug') ?></a>
                             <a target="_blank" href="http://ish.re/C8E7"><?php _e('CMS Plugins', 'lr-plugin-slug') ?></a>

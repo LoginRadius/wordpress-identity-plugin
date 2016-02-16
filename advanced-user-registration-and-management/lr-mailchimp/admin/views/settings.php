@@ -233,14 +233,13 @@ if ( ! class_exists( 'LR_Mailchimp_Admin_Settings' ) ) {
 										<input type="checkbox" class="lr-toggle" id="lr-mailchimp-verification-enable" name="LR_Mailchimp_Settings[enable_email_confirm]" value='1' <?php echo ( isset( $lr_mailchimp_settings['enable_email_confirm'] ) && $lr_mailchimp_settings['enable_email_confirm'] == '1' ) ? 'checked' : '' ?> />
 										<label class="lr-show-toggle" for="lr-mailchimp-verification-enable">
 											<?php _e( 'Enable MailChimp Double Opt-In Verification' ); ?>
-											<span class="lr-tooltip" data-title="<?php _e( 'Turn on, if you want Mailchimp to send an email to the user after they have been added to the selected list', 'lr-plugin-slug' ); ?>">
+											<span class="lr-tooltip" data-title="<?php _e( 'Turn on, if you want Mailchimp to send an email to the user for their permission to be added to the selected list', 'lr-plugin-slug' ); ?>">
 												<span class="dashicons dashicons-editor-help"></span>
 											</span>
 										</label>
 									</div>
 								</div>
 							</div>
-
 						</div>
 						<p class="submit">
 							<?php submit_button( 'Save Settings', 'primary', 'submit', false ); ?>

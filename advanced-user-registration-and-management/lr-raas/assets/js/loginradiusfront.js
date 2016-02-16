@@ -28,9 +28,34 @@ if( '' == raasoption.V2RecaptchaSiteKey || undefined == raasoption.V2RecaptchaSi
 // recaptcha V1 not compatible with raas popup
 raasoption.V2Recaptcha = true;
 
+// Enable login on Email Verification
+if( '1' == RaasDetails.enable_email_verify_login ) {
+    raasoption.enableLoginOnEmailVerification = true;
+}
+
+// Ask for email for unverified social login
+if( '1' == RaasDetails.enable_ask_email_for_unverified ) {
+    raasoption.askEmailAlwaysForUnverified = true;
+}
+
+// Ask for password for social logins
+if( '1' == RaasDetails.enable_ask_for_password ) {
+    raasoption.promptPasswordOnSocialLogin = true;
+}
+
 // Enable UserName feature
 if( '1' == RaasDetails.enable_username ) {
     raasoption.enableUserName = true;
+}
+
+// Email Verification Template
+if( '' != RaasDetails.emailVerificationTemplate ) {
+    raasoption.emailVerificationTemplate = RaasDetails.emailVerificationTemplate;
+}
+
+// Forgot Password Template
+if( '' != RaasDetails.forgotPasswordTemplate ) {
+    raasoption.emailVerificationTemplate = RaasDetails.forgotPasswordTemplate;
 }
 
 raasoption.templatename = "loginradiuscustom_raas_tmpl";

@@ -68,8 +68,8 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                 echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
             }
 
-            $lr_raas_settings = get_option('LR_Raas_Settings');
-            $loginRadiusSettings = get_option('LoginRadius_settings');
+            $lr_raas_settings = get_option( 'LR_Raas_Settings' );
+            $loginRadiusSettings = get_option( 'LoginRadius_settings' );
             ?>
 
             <div class="wrap lr-wrap cf">
@@ -348,18 +348,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                         </span>
                                     </label>
                                 </div>
-                                <div>
-                                    <h4>
-                                        <?php _e( 'Enable User Name Login', 'lr-plugin-slug' ); ?> 
-                                    </h4>
-                                    <input type="checkbox" class="lr-toggle" id="lr-enable_username" name="LR_Raas_Settings[enable_username]" value='1' <?php echo ( isset( $loginRadiusSettings['enable_username'] ) && $loginRadiusSettings['enable_username'] == '1' ) ? 'checked' : ''; ?> />
-                                    <label class="lr-show-toggle" for="lr-enable_username">
-                                        <?php _e( 'Enable User Name Login' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, If you want to enable username login.', 'lr-plugin-slug' ); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
-                                    </label>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -384,22 +373,100 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                             <div class="lr-row">
                                 <h3><?php _e( 'Email Verification Options', 'lr-plugin-slug' ); ?></h3>
                                 <div>
-                                    <input type="checkbox" class="lr-toggle" id="lr-disable-email-verify" name="LR_Raas_Settings[disable_email_verify]" value='1' <?php echo ( isset( $lr_raas_settings['disable_email_verify'] ) && $lr_raas_settings['disable_email_verify'] == '1' ) ? 'checked' : '' ?> />
-                                    <label class="lr-show-toggle" for="lr-disable-email-verify">
-                                        <?php _e( 'Disable Email Verification' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to disable user registration email verification. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
+                                    <input type="radio" name="LR_Raas_Settings[email_verify_option]" class="lr-toggle" id="lr-enable-email-verify" value='required' <?php echo ( isset( $lr_raas_settings['email_verify_option'] ) && $lr_raas_settings['email_verify_option'] == 'required' ) ? 'checked' : '' ?> />
+                                    <label class="lr-show-toggle" for="lr-enable-email-verify">
+                                        <?php _e( 'Required Email Verification' ); ?>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to enable required email verification. This is the default setting.', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" class="lr-toggle" id="lr-optional-email-verify" name="LR_Raas_Settings[optional_email_verify]" value='1' <?php echo ( isset( $lr_raas_settings['optional_email_verify'] ) && $lr_raas_settings['optional_email_verify'] == '1' ) ? 'checked' : '' ?> />
-                                    <label class="lr-show-toggle" for="lr-optional-email-verify">
-                                        <?php _e( 'Optional Email Verification' ); ?>
-                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to enable optional user registration email verification. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
+                                    <input type="radio" name="LR_Raas_Settings[email_verify_option]" class="lr-toggle" id="lr-disable-email-verify" value='disabled' <?php echo ( isset( $lr_raas_settings['email_verify_option'] ) && $lr_raas_settings['email_verify_option'] == 'disabled' ) ? 'checked' : '' ?> />
+                                    <label class="lr-show-toggle" for="lr-disable-email-verify">
+                                        <?php _e( 'Disable Email Verification' ); ?>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to disable email verification. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </label>
+                                </div>
+                                <div>
+                                    <input type="radio" name="LR_Raas_Settings[email_verify_option]" class="lr-toggle" id="lr-optional-email-verify" value='optional' <?php echo ( isset( $lr_raas_settings['email_verify_option'] ) && $lr_raas_settings['email_verify_option'] == 'optional' ) ? 'checked' : '' ?> />
+                                    <label class="lr-show-toggle" for="lr-optional-email-verify">
+                                        <?php _e( 'Optional Email Verification' ); ?>
+                                        <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to enable optional email verification. This will also need to be enabled by your LoginRadius Account Manager.', 'lr-plugin-slug' ); ?>">
+                                            <span class="dashicons dashicons-editor-help"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="lr-row">
+                                    <div>
+                                        <h4>
+                                            <?php _e( 'Login Upon Email Verification', 'lr-plugin-slug' ); ?> 
+                                        </h4>
+                                        <input type="checkbox" class="lr-toggle" id="lr-optional-enable-email-verify-login" name="LR_Raas_Settings[enable_email_verify_login]" value='1' <?php echo ( isset( $lr_raas_settings['enable_email_verify_login'] ) && $lr_raas_settings['enable_email_verify_login'] == '1' ) ? 'checked' : ''; ?> />
+                                        <label class="lr-show-toggle" for="lr-optional-enable-email-verify-login">
+                                            <?php _e( 'Enable Login Upon Email Verification' ); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e( 'Turn on, to enable user login after email verification.', 'lr-plugin-slug' ); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            <?php _e( 'Request Email For Unverified Users', 'lr-plugin-slug' ); ?> 
+                                        </h4>
+                                        <input type="checkbox" class="lr-toggle" id="lr-enable-ask-email-for-unverified" name="LR_Raas_Settings[enable_ask_email_for_unverified]" value='1' <?php echo ( isset( $lr_raas_settings['enable_ask_email_for_unverified'] ) && $lr_raas_settings['enable_ask_email_for_unverified'] == '1' ) ? 'checked' : ''; ?> />
+                                        <label class="lr-show-toggle" for="lr-enable-ask-email-for-unverified">
+                                            <?php _e( 'Request Email For Unverified Users' ); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e( 'Turn on, If you want to ask unverified users for an email during social login.', 'lr-plugin-slug' ); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            <?php _e( 'Enable User Name Login', 'lr-plugin-slug' ); ?> 
+                                        </h4>
+                                        <input type="checkbox" class="lr-toggle" id="lr-enable_username" name="LR_Raas_Settings[enable_username]" value='1' <?php echo ( isset( $lr_raas_settings['enable_username'] ) && $lr_raas_settings['enable_username'] == '1' ) ? 'checked' : ''; ?> />
+                                        <label class="lr-show-toggle" for="lr-enable_username">
+                                            <?php _e( 'Enable User Name Login' ); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e( 'Turn on, If you want to enable username login.', 'lr-plugin-slug' ); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            <?php _e( 'Prompt Password On Social Login', 'lr-plugin-slug' ); ?> 
+                                        </h4>
+                                        <input type="checkbox" class="lr-toggle" id="lr-enable-ask-pwd" name="LR_Raas_Settings[enable_ask_for_password]" value='1' <?php echo ( isset( $lr_raas_settings['enable_ask_for_password'] ) && $lr_raas_settings['enable_ask_for_password'] == '1' ) ? 'checked' : ''; ?> />
+                                        <label class="lr-show-toggle" for="lr-enable-ask-pwd">
+                                            <?php _e( 'Prompt Password On Social Login' ); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e( 'Turn on, To ask social login users for an account password.', 'lr-plugin-slug' ); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            <?php _e( 'Email Verification Template', 'lr-plugin-slug' ); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e( 'Enter the email verification template.', 'lr-plugin-slug' ); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
+                                        </h4>
+                                        <textarea id="lr-forgot-template" name="LR_Raas_Settings[email_verify_template]"><?php echo ! empty( $lr_raas_settings['email_verify_template'] ) ? $lr_raas_settings['email_verify_template'] : ''; ?></textarea>
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            <?php _e( 'Forgot Password Email Template', 'lr-plugin-slug' ); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e( 'Enter the forgot password email template.', 'lr-plugin-slug' ); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
+                                        </h4>
+                                        <textarea id="lr-forgot-template" name="LR_Raas_Settings[forgot_template]"><?php echo ! empty( $lr_raas_settings['forgot_template'] ) ? $lr_raas_settings['forgot_template'] : ''; ?></textarea>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

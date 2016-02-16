@@ -193,7 +193,7 @@ if ( ! class_exists( 'LR_Raas_Popup' ) ) {
     		                        LoginRadiusRaaS.init(raasoption, 'registration', function ( response ) {
     		                            <?php
                                             // Return if disable email verification is true
-                                            if( ! empty( $lr_raas_settings['disable_email_verify'] ) ) {
+                                            if( ! empty( $lr_raas_settings['email_verify_option'] ) && 'disabled' == $lr_raas_settings['email_verify_option'] ) {
                                                 ?>
                                                     handleResponse( true, 'Registration complete, please login.', '#lr-popup-body-container' );
                                                 <?php   
@@ -334,9 +334,8 @@ if ( ! class_exists( 'LR_Raas_Popup' ) ) {
                 $html .= '<div id="lr-popup-body-container">';
                 $html .= $message;
                 $html .= '<div id="custom-object-container" class="lr-input-style lr-input-frame">';
-                $html .= self::get_interface( 'lr-popup-sociallogin-lost' );
                 $html .= self::raas_forms('lr-popup-forgotpassword');
-                $html .= '<div class="lr-column hr-or-rule vr">';
+                $html .= '<div class="lr-column">';
                 $html .= '<div id="popup-forgotpassword-container" class="lr-input-style"></div>
                 <span class="lr-link"><a href = "#!login">Login</a></span>
                 <span class="lr-link"><a href="#!register">Register</a></span>

@@ -37,7 +37,13 @@ if ( ! class_exists( 'LR_Disqus_SSO_Template' ) ) {
          * Initializes the plugin by setting filters and administration functions.
          */
         private function __construct() {
-
+            global $lr_disqus_settings;
+            
+            // Disable template when disqus sso is disabled
+            if( empty( $lr_disqus_settings['disqus_sso_enable'] ) ) {
+                return;
+            }
+            
             $this->templates = array();
 
             // Add a filter to the attributes metabox to inject template into the cache.
@@ -60,6 +66,7 @@ if ( ! class_exists( 'LR_Disqus_SSO_Template' ) ) {
          *
          */
         public function register_project_templates( $atts ) {
+                
 
                 // Create the key used for the themes cache
                 $cache_key = 'page_templates-' . md5( get_theme_root() . '/' . get_stylesheet() );

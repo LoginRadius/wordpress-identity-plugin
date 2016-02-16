@@ -102,7 +102,7 @@ if ( ! class_exists( 'LR_Raas_Front' ) ) {
             if ( ! is_user_logged_in() ) {
                 $message = '<div id="messageinfo" class="messageinfo"></div>';
                 ob_start();
-                $html = '<div class="lr-user-reg-container">' . $message.$LR_Raas_Social_Login->login_script() . $LR_Raas_Social_Login->get_interface() . $LR_Raas_Social_Login->raas_forms('forgotpassword') . '<div id="forgotpassword-container" class="lr-input-style"></div><span class="lr-link"><a href = "' . wp_login_url() . '">Login</a></span><span class="lr-link"><a href = "' . wp_registration_url() . '">Register</a></span></div>';
+                $html = '<div class="lr-user-reg-container">' . $message. $LR_Raas_Social_Login->login_script() . $LR_Raas_Social_Login->raas_forms('forgotpassword') . '<div id="forgotpassword-container" class="lr-input-style"></div><span class="lr-link"><a href = "' . wp_login_url() . '">Login</a></span><span class="lr-link"><a href = "' . wp_registration_url() . '">Register</a></span></div>';
                 return $html . ob_get_clean();
             }
         }
@@ -117,7 +117,7 @@ if ( ! class_exists( 'LR_Raas_Front' ) ) {
                 }
                 $message = '<div id="messageinfo" class="messageinfo">' . $db_message . '</div>';
                 ob_start();
-                $html = '<div class="lr-user-reg-container">' . $message . $LR_Raas_Social_Login->login_script() . $LR_Raas_Social_Login->raas_forms( 'password' ) . '<div id="changepasswordbox" class="lr-input-style" style="display:none;"></div><div id="setpasswordbox" class="lr-input-style" style="display:none;"></div></div>';
+                $html = '<div class="lr-user-reg-container">' . $message . $LR_Raas_Social_Login->login_script() . '<div id="changepasswordbox" class="lr-input-style" style="display:none;"></div><div id="setpasswordbox" class="lr-input-style" style="display:none;"></div></div>';
                 return $html . ob_get_clean();
             }
         }

@@ -19,6 +19,7 @@ if ( ! class_exists( 'LR_Raas_Install' ) ) {
             'lost_password_page_id' => '',
             'popup_forms_enable' => '',
             'v2captcha_site_key' => '',
+            'email_verify_option' => 'enabled',
             'enable_username' => '0'
         );
         private static $sociallogin_option = array(
