@@ -203,7 +203,6 @@ if ( ! class_exists( 'LR_Raas_Popup' ) ) {
                                                 <?php
                                             }
                                         ?>
-    		                            jQuery('#popup-registration-container').html('');
     		                        }, function (errors) {
     		                            if (errors[0].description != null) {
     		                                 handleResponse(false, errors[0].description,'#lr-popup-body-container');
