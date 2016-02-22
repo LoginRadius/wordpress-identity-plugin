@@ -34,7 +34,10 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
                             $( ".lr-option-disabled-hr" ).show();
                         }
                     });
-                    $( '#lr-ci-upload-btn' ).click( function () { ci_upload() });
+                    $( '#lr-ci-upload-btn' ).click( function (event) { 
+                        event.preventDefault();
+                        ci_upload(event); 
+                    });
 
                     var loadPreview = function() {
                         $LRIC.util.ready(function () {
@@ -59,7 +62,7 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
                         };
                     }
 
-                    function ci_upload() {
+                    function ci_upload(event) {
                         event.preventDefault();
 
                         var upload_form = document.getElementById('lr-ci-upload-form');
@@ -155,7 +158,7 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
                 </header>
 
                 <div class="lr-tab-frame lr-active">
-                    <form action="options.php" name="lr-ci-form" id="lr-ci-option-form" method="post">
+                    <form method="POST" enctype="multipart/form-data" action="options.php" name="lr-ci-form" id="lr-ci-option-form" method="post">
                         <div class="lr_options_container" <?php echo $enableStyle; ?> >
                             <?php
                             settings_fields('lr_custom_interface_settings');
