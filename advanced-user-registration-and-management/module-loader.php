@@ -27,18 +27,6 @@ class LR_Modules_Loader {
 
         foreach ( $loadModules as $loadModule ) {
             if( ! empty( $loadModule ) ){
-                // if( in_array( $loadModule->name , array(    
-                //         'lr-raas',
-                //         'lr-disqus-sso',
-                //         'lr-commenting',
-                //         'lr-social-invite',
-                //         'lr-sso',
-                //         'lr-social-profile-data',
-                //         'lr-mailchimp',
-                //         'lr-raas-popup',
-                //         'lr-dfp' ) ) ){
-                //     continue;
-                // }
                 include_once LR_ROOT_DIR . $loadModule->name . '/' . $loadModule->load;
             }
         }

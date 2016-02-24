@@ -36,6 +36,28 @@ jQuery(function ($) {
         }
     }
 
+    function showAndHideVerifyOption( option ) {
+        $('.ver-opt').hide();
+        $('.ver-opt input').prop('disabled', true);
+        $('.ver-opt textarea').prop('disabled', true);
+
+        if ( 'required' == option ) {
+            $('.ver-opt.ena').show();
+            $('.ver-opt.ena input').prop('disabled', false);
+            $('.ver-opt.ena textarea').prop('disabled', false);
+        }
+        if ( 'optional' == option ) {
+            $('.ver-opt.opt').show();
+            $('.ver-opt.opt input').prop('disabled', false);
+            $('.ver-opt.opt textarea').prop('disabled', false);
+        }
+
+        if ( 'disabled' == option ) {
+            $('.ver-opt.dis').show();
+            $('.ver-opt.dis input').prop('disabled', false);
+        }
+    }
+
     // Hide/Show Options if enabled/disabled on change
     $('#lr-raas-autopage').change(function() {
             hideAndShowElement( $(this), '.lr-custom-page-settings' );
@@ -46,7 +68,13 @@ jQuery(function ($) {
     hideAndShowElement( $('#lr-raas-autopage'), '.lr-custom-page-settings' );
 
     showAndHideElement( $('#lr-v2captcha-enable'), '.lr-v2captcha-key' );
+
+    showAndHideVerifyOption( $('input:radio[name="LR_Raas_Settings[email_verify_option]"]:checked').val() );
+
+    $('input:radio[name="LR_Raas_Settings[email_verify_option]"]').change( function() {
+        showAndHideVerifyOption( $(this).val() );
+    }) 
+
+
 });
 
-//#lr-disable-email-verify
-//#lr-optional-email-verify

@@ -45,7 +45,7 @@ if ( ! class_exists( 'LR_Raas_Install' ) ) {
          * @global type $lr_raas_settings
          */
         public static function set_default_options() {
-            global $wpdb, $loginRadiusSettings, $lr_raas_settings;
+            global $wpdb, $loginRadiusSettings, $lr_raas_settings, $lr_social_profile_data_settings;
 
             if ( ! get_option('LR_Raas_Settings') ) {
                 update_option('LR_Raas_Settings', self::$raas_options);
@@ -62,6 +62,9 @@ if ( ! class_exists( 'LR_Raas_Install' ) ) {
     			`field_title` varchar( 100 ) DEFAULT NULL,
     			`field_value` varchar( 100 ) DEFAULT NULL
     		 )');
+
+            // Disable custom popup if settings remain for Social Login
+            $lr_social_profile_data_settings['enable_custom_popup'] = '';
 
             $lr_raas_settings = get_option('LR_Raas_Settings');
         }

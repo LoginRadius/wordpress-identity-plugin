@@ -87,17 +87,17 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
 
                         <form action="options.php" method="post">
                             <?php
-                            settings_fields('lr_raas_settings');
+                            settings_fields( 'lr_raas_settings' );
                             settings_errors();
                             ?>
 
                             <div class="lr_options_container">
                                 <div class="lr-row">
                                     <h3>
-                                        <?php _e('User Registration Integration', 'lr-plugin-slug'); ?>
+                                        <?php _e( 'User Registration Integration', 'lr-plugin-slug' ); ?>
                                     </h3>
                                     <div>
-                                        <input type="checkbox" class="lr-toggle" id="lr-raas-autopage" name="LR_Raas_Settings[raas_autopage]" value='1' <?php echo ( isset($lr_raas_settings['raas_autopage']) && $lr_raas_settings['raas_autopage'] == '1' ) ? 'checked' : '' ?> />
+                                        <input type="checkbox" class="lr-toggle" id="lr-raas-autopage" name="LR_Raas_Settings[raas_autopage]" value='1' <?php echo ( isset( $lr_raas_settings['raas_autopage'] ) && $lr_raas_settings['raas_autopage'] == '1' ) ? 'checked' : '' ?> />
                                         <label class="lr-show-toggle" for="lr-raas-autopage">
                                             <?php _e('Enable Auto Generate User Registration'); ?>
                                             <span class="lr-tooltip" data-title="<?php _e('Turn on, if you want to enable Auto Generate User Registration pages','lr-plugin-slug'); ?>">
@@ -108,7 +108,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             <div>
                                                 <label>
                                                     <span class="lr_property_title">
-                                                        <?php _e('Login Page', 'lr-plugin-slug'); ?>
+                                                        <?php _e( 'Login Page', 'lr-plugin-slug' ); ?>
                                                         <span class="lr-tooltip" data-title="<?php _e('Add Login page Short Code from Advance Setting tab in selected page.','lr-plugin-slug');?>">
                                                             <span class="dashicons dashicons-editor-help"></span>
                                                         </span>
@@ -119,7 +119,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             <div>
                                                 <label>
                                                     <span class="lr_property_title">
-                                                        <?php _e('Registration Page', 'lr-plugin-slug'); ?>
+                                                        <?php _e( 'Registration Page', 'lr-plugin-slug' ); ?>
                                                         <span class="lr-tooltip" data-title="<?php _e('Add Registration page Short Code from Advance Setting tab in selected page.','lr-plugin-slug');?>">
                                                             <span class="dashicons dashicons-editor-help"></span>
                                                         </span>
@@ -130,7 +130,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             <div>
                                                 <label>
                                                     <span class="lr_property_title">
-                                                        <?php _e('Change Password Page', 'lr-plugin-slug'); ?>
+                                                        <?php _e( 'Change Password Page', 'lr-plugin-slug' ); ?>
                                                         <span class="lr-tooltip" data-title="<?php _e('Add Change Password page Short Code from Advance Setting tab in selected page.','lr-plugin-slug');?>">
                                                             <span class="dashicons dashicons-editor-help"></span>
                                                         </span>
@@ -141,19 +141,19 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             <div>
                                                 <label>
                                                     <span class="lr_property_title">
-                                                        <?php _e('Forgot Password Page', 'lr-plugin-slug'); ?>
+                                                        <?php _e( 'Forgot Password Page', 'lr-plugin-slug' ); ?>
                                                         <span class="lr-tooltip" data-title="<?php _e('Add Forgot Password page Short Code from Advance Setting tab in selected page.','lr-plugin-slug');?>">
                                                             <span class="dashicons dashicons-editor-help"></span>
                                                         </span>
                                                     </span>
-                                                    <?php echo self::select_field($pages, $lr_raas_settings, 'lost_password_page_id'); ?>
+                                                    <?php echo self::select_field( $pages, $lr_raas_settings, 'lost_password_page_id' ); ?>
                                                 </label>
                                             </div>
                                         </div>
                                         <?php
                                             if ( is_multisite() && is_main_site() ) {
                                                 ?>
-                                        <div class="lr-warning-box"><?php _e('NOTE :- Changes done on user registration integration will not reflect on other sites, need to save it.','lr-plugin-slug');?></div>
+                                        <div class="lr-warning-box"><?php _e( 'NOTE :- Changes done on user registration integration will not reflect on other sites, need to save it.','lr-plugin-slug');?></div>
                                             <?php }?>
                                     </div>
                                 </div>
@@ -180,21 +180,21 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             <span><?php _e('Redirect to the user\'s account dashboard', 'lr-plugin-slug'); ?></span>
                                         </label>
                                         <?php
-                                        if (isset($loginRadiusLoginIsBpActive) && $loginRadiusLoginIsBpActive) {
+                                        if ( isset( $loginRadiusLoginIsBpActive ) && $loginRadiusLoginIsBpActive ) {
                                             ?>
                                             <label>
                                                 <input type="radio" class="loginRedirectionRadio" name="LR_Raas_Settings[LoginRadius_redirect]" value="bp" <?php echo Admin_Helper:: is_radio_checked('login', 'bp'); ?> />
-                                                <span><?php _e('Redirect to Buddypress profile page', 'lr-plugin-slug'); ?></span>
+                                                <span><?php _e( 'Redirect to Buddypress profile page', 'lr-plugin-slug' ); ?></span>
                                             </label>
                                             <?php
                                         }
                                         ?>
                                         <label>
                                             <input type="radio" class="loginRedirectionRadio custom" name="LR_Raas_Settings[LoginRadius_redirect]" value="custom" <?php echo Admin_Helper:: is_radio_checked('login', 'custom'); ?> />
-                                            <span><?php _e('Redirect to a custom URL'); ?></span>
+                                            <span><?php _e( 'Redirect to a custom URL' ); ?></span>
                                             <?php
-                                            if (isset($loginRadiusSettings['LoginRadius_redirect']) && $loginRadiusSettings['LoginRadius_redirect'] == 'custom') {
-                                                $inputBoxValue = htmlspecialchars($loginRadiusSettings['custom_redirect']);
+                                            if ( isset( $loginRadiusSettings['LoginRadius_redirect'] ) && $loginRadiusSettings['LoginRadius_redirect'] == 'custom') {
+                                                $inputBoxValue = htmlspecialchars( $loginRadiusSettings['custom_redirect'] );
                                             } else {
                                                 $inputBoxValue = site_url();
                                             }
@@ -400,7 +400,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                     </label>
                                 </div>
                                 <div class="lr-row">
-                                    <div>
+                                    <div class="ver-opt ena opt">
                                         <h4>
                                             <?php _e( 'Login Upon Email Verification', 'lr-plugin-slug' ); ?> 
                                         </h4>
@@ -412,7 +412,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             </span>
                                         </label>
                                     </div>
-                                    <div>
+                                    <div class="ver-opt ena opt">
                                         <h4>
                                             <?php _e( 'Request Email For Unverified Users', 'lr-plugin-slug' ); ?> 
                                         </h4>
@@ -424,7 +424,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             </span>
                                         </label>
                                     </div>
-                                    <div>
+                                    <div class="ver-opt ena">
                                         <h4>
                                             <?php _e( 'Enable User Name Login', 'lr-plugin-slug' ); ?> 
                                         </h4>
@@ -436,7 +436,7 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             </span>
                                         </label>
                                     </div>
-                                    <div>
+                                    <div class="ver-opt ena">
                                         <h4>
                                             <?php _e( 'Prompt Password On Social Login', 'lr-plugin-slug' ); ?> 
                                         </h4>
@@ -448,16 +448,16 @@ if ( ! class_exists( 'LR_Raas_Admin_Settings' ) ) {
                                             </span>
                                         </label>
                                     </div>
-                                    <div>
+                                    <div class="ver-opt ena opt">
                                         <h4>
                                             <?php _e( 'Email Verification Template', 'lr-plugin-slug' ); ?>
                                             <span class="lr-tooltip" data-title="<?php _e( 'Enter the email verification template.', 'lr-plugin-slug' ); ?>">
                                                 <span class="dashicons dashicons-editor-help"></span>
                                             </span>
                                         </h4>
-                                        <textarea id="lr-forgot-template" name="LR_Raas_Settings[email_verify_template]"><?php echo ! empty( $lr_raas_settings['email_verify_template'] ) ? $lr_raas_settings['email_verify_template'] : ''; ?></textarea>
+                                        <textarea id="lr-email-verify-template" name="LR_Raas_Settings[email_verify_template]"><?php echo ! empty( $lr_raas_settings['email_verify_template'] ) ? $lr_raas_settings['email_verify_template'] : ''; ?></textarea>
                                     </div>
-                                    <div>
+                                    <div class="ver-opt ena opt">
                                         <h4>
                                             <?php _e( 'Forgot Password Email Template', 'lr-plugin-slug' ); ?>
                                             <span class="lr-tooltip" data-title="<?php _e( 'Enter the forgot password email template.', 'lr-plugin-slug' ); ?>">

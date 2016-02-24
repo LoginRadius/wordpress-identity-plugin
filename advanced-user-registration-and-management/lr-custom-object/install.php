@@ -27,10 +27,12 @@ if ( ! class_exists( 'LR_Custom_Obj_Install' ) ) {
         public static function custom_obj_options() {
             global $lr_Custom_Obj_Fields;
             $custom_object_settings = array( 'enable_custom_obj' => '', 'custom_obj_id' => '' );
-            foreach ($lr_Custom_Obj_Fields as $field) {
-                $custom_object_settings['show_custom_' . $field] = '';
-                $custom_object_settings['custom_' . $field . '_required'] = '';
-                $custom_object_settings['custom_' . $field . '_title'] = '';
+            if( $lr_Custom_Obj_Fields ) {
+                foreach ( $lr_Custom_Obj_Fields as $field ) {
+                    $custom_object_settings['show_custom_' . $field] = '';
+                    $custom_object_settings['custom_' . $field . '_required'] = '';
+                    $custom_object_settings['custom_' . $field . '_title'] = '';
+                }
             }
             return $custom_object_settings;
         }

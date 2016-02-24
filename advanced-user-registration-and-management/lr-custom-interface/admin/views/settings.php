@@ -36,7 +36,7 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
                     });
                     $( '#lr-ci-upload-btn' ).click( function (event) { 
                         event.preventDefault();
-                        ci_upload(event); 
+                        ci_upload(event);
                     });
 
                     var loadPreview = function() {

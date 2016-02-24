@@ -1,8 +1,8 @@
 
 jQuery(document).ready(function ($) {
     
-    LoginRadiusSSO.init(lrSsoOptions.sitename);
-    if(lrSsoOptions.raasenable){
+    LoginRadiusSSO.init( lrSsoOptions.sitename );
+    if( lrSsoOptions.raasenable ){
         if (!LoginRadiusRaaS.loginradiushtml5passToken) {
             LoginRadiusRaaS.loginradiushtml5passToken = function (token) {
                 if (token) {
@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
         });
     }
     
-    if(!lrSsoOptions.istoken && !lrSsoOptions.islogin){
+    if( ! lrSsoOptions.istoken && !lrSsoOptions.islogin ){
         LoginRadiusSSO.login(window.location.href);
     }
     
@@ -28,7 +28,7 @@ jQuery(document).ready(function ($) {
 
     $('#wp-admin-bar-logout').click(function (e) {
         e.preventDefault();
-        ssoLogout(href);
+        logout(href);
     });
 
     if ($('a[href*="logout"]').length > 0) {
@@ -37,12 +37,12 @@ jQuery(document).ready(function ($) {
         $('a[href*="logout"]').css({"cursor": "pointer"});
         $('a[href*="logout"]').removeAttr('href');
         $('a[data-action="lr-sso-logout"]').click(function () {
-            ssoLogout(href);
+            logout(href);
         });
     }
     return false;
 });
 
-function ssoLogout(href) {
-    LoginRadiusSSO.ssoLogout(href);
+function logout(href) {
+    LoginRadiusSSO.logout(href);
 }

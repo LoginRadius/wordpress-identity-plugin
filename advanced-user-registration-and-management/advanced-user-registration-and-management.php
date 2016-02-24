@@ -13,7 +13,7 @@
 // If this file is called directly, abort.
 defined( 'ABSPATH' ) or die();
 
-define( 'LR_PLUGIN_VERSION', 2.4 );
+define( 'LR_PLUGIN_VERSION', 2.5 );
 define( 'LR_MIN_WP_VERSION', '3.5' );
 
 // Type of Plugin ADV, SL, SS
