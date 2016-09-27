@@ -1,0 +1,24 @@
+.wrap.lr-wrap input[type="checkbox"]:checked ~ span.custom_option {
+    display: block;
+}
+
+.wrap.lr-wrap input[type="checkbox"] ~ span.custom_option {
+    display: none;
+}
+
+.custom_option .required_option {
+    display: inline-block;
+}
+
+.lr-custom-page-settings{
+    display: none;
+}
+
+.lr-ur-shortcodes > div {
+	display: inline-block;
+	padding: 0 10px 0 0;
+}
+
+.lr-ur-shortcodes > div textarea {
+	width: 275px;
+}

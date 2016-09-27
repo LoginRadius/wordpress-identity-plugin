@@ -1,0 +1,21 @@
+#custom-object-form label.error {
+    color: #F00F00;
+    font-size: 10px;
+    width: 100%;
+    margin: 0;
+    float: left;
+    padding: 0;
+}
+#custom-object-form input.error{
+    border: 1px solid #F00F00;
+    margin: 0;
+}
+#lr_co_cancel{
+    margin-right: 20px;
+}
+#lr_popup_login_form #custom-object-form{
+    margin: 20px;
+}
+#custom-object-form{
+    margin-top: 20px;
+}

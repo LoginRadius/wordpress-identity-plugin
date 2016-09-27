@@ -1,0 +1,294 @@
+/* CSS Document */
+#share {
+    float: right;
+    margin-top: -264px;
+}
+
+.top_header {
+    z-index: 1000000;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    color: #ffffff;
+    font: normal normal normal 11px Arial, Tahoma, Calibri, Verdana, Geneva, sans-serif;
+    text-align: right;
+    margin-right: 496px;
+}
+
+/* CSS Document */
+.LoginRadius_overlay {
+    background: rgb(127, 127, 127); /* The Fallback */
+    background: none no-repeat scroll 0 0 rgba(127, 127, 127, 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000001;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 0;
+    position: fixed;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=97)";
+    filter: alpha(opacity=97);
+}
+
+.LoginRadius_overlay input[type=text] {
+    padding: 5px;
+    width: auto;
+    min-width: 350px;
+    border-radius: 0px 12px;
+}
+
+#popupouter {
+    border-radius: 0 23px;
+    background: #f3f3f3;
+    left: 50%;
+    margin: -114px auto 0 -250px;
+    overflow: auto;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    width: 500px;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+#popupouter  div{
+    color: #000000;
+}
+
+.lr-popupheading {
+    font-size: 17px;
+    text-align: center;
+    padding: 15px;
+    font-weight: normal;
+}
+
+#outerp {
+    font-size: 17px;
+    line-height: 1.1em !important;
+    margin: 9px !important;
+    text-align: center !important;
+}
+
+#popupinner {
+    overflow: auto;
+    background: #ffffff;
+    padding: 15px 20px;
+}
+
+.footerbox {
+    padding-bottom: 12px;
+    padding-top: 12px;
+}
+
+.footerbox input {
+    display: inline-block;
+}
+
+.emailtext {
+    padding-bottom: 5px;
+    font-family: arial;
+    width: 100%;
+    font-size: 13px;
+}
+
+.spacebox {
+    margin-bottom: 10px;
+    float: left;
+}
+
+.lr-textbox {
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+#innerp {
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1em !important;
+    margin-bottom: 3px;
+    padding: 0;
+    text-align: left !important;
+}
+
+.inputtxt {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #444;
+    font-size: 13px;
+    border: 1px solid #e2efe1;
+    width: 350px;
+    height: 33px;
+    line-height: 33px;
+    margin-bottom: 5px !important;
+    padding-left: 10px;
+    border-radius: 0px 12px;
+    background: #fff;
+}
+
+.lr-error {
+    text-align: left;
+    background-color: rgb(255, 235, 232);
+    margin-bottom: 12px;
+    padding: 12px;
+}
+
+.lr-noerror {
+    text-align: left;
+    background-color: #e1eabc;
+    margin-bottom: 12px;
+    padding: 12px;
+
+}
+
+#vb_login_form input[type="email"]:focus, #vb_login_form input[type="text"]:focus, #vb_login_form input[type="submit"]:focus, #vb_login_form input[type="button"]:focus {
+    border-radius: 0px 12px;
+    outline: none !important;
+}
+
+#vb_login_form input:-webkit-autofill, #vb_login_form textarea:-webkit-autofill, #vb_login_form select:-webkit-autofill {
+    background: #fff;
+
+}
+
+.inputokbutton {
+    margin-top: 10px;
+}
+
+.lr-popupheadingmessage {
+    height: 10px;
+}
+
+.footernewbox {
+    height: 18px;
+}
+
+.inputbutton {
+    border: #dcdcdc 1px solid !important;
+    text-decoration: none !important;
+    color: #6e6e6e !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    background: #f3f3f3 !important;
+    padding: 6px 17px !important;
+    margin-right: 15px;
+    float: left;
+    margin-bottom: 0 !important;
+    border-radius: 0px 11px !important;
+    text-transform: none !important;
+    font-weight: normal !important;
+}
+
+.inputbutton:hover {
+    text-decoration: none !important;
+    cursor: pointer !important;
+    background: #f3f3f3 !important;
+    color: #000 !important;
+
+}
+
+.inputbutton::-moz-focus-inner {
+    border: 0;
+}
+
+#textdivpopup {
+    text-align: right;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #000000;
+    margin-left: 216px;
+}
+
+.spanpopup {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #00ccff;
+}
+
+.span1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+}
+
+@media (max-width: 769px) {
+    #popupouter {
+        border-radius: 0 23px !important;
+        background: none repeat scroll 0 0 #f3f3f3;
+        border-radius: 4px;
+        left: 0;
+        margin: 5% auto 0;
+        overflow: auto;
+        padding: 0;
+        position: static;
+        top: 0;
+        width: 400px;
+    }
+
+    .inputtxt {
+        width: 336px;
+    }
+}
+
+@media (max-width: 480px) {
+    #popupouter {
+        width: 300px;
+        border-radius: 0 23px !important;
+    }
+
+    .inputtxt {
+        width: 236px;
+    }
+}
+
+#popupinner div#loginRadiusError {
+    text-align: left;
+    background-color: #e1eabc;
+    margin-bottom: 12px;
+    padding: 12px;
+}
+.login-panel-lr { 
+    float: right; 
+    background: none repeat scroll 0 0 #FFFFFF; 
+    border: 1px solid #E5E5E5; 
+    box-shadow: 0 4px 10px -1px rgba(200, 200, 200, 0.7); 
+    font-weight: normal; 
+    margin: 20px 0 0 8px; 
+    padding: 26px 24px 46px; 
+    width:345px 
+}
+.login-sep-text { 
+    float: left; 
+    font-size: 16px; 
+    font-weight: bold; 
+    margin: 100px 20px 20px 30px; 
+    padding-left: 10px; 
+}
+.float-left { 
+    float: left; 
+}
+
+#popupinner form > div {
+    margin-bottom: 15px;
+}
+
+.help-block.form-error {
+    display: block;
+    color: red;
+    font-size: 14px;
+}
+.lr_error p{
+    color: red;
+    border: 1px solid red;
+    padding: 0px 5px;
+    background: #F79F81;
+}
+.lr_updated p{
+    color: green;
+    border: 1px solid green;
+    padding: 0px 5px;
+    background: #81F79F;
+}
+

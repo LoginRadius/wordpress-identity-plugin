@@ -1,0 +1,10 @@
+"Providers Not Configured" != phpvar.providers ? ($LRIC.util.ready(function() {
+    var e = {};
+    e.apikey = phpvar.apiKey, e.appname = phpvar.siteName, e.templatename = "commenting_login_interface", e.providers = phpvar.providers, $LRIC.renderInterface("login_interface", e)
+}), $LRIC.util.ready(function() {
+    var e = {};
+    e.apikey = phpvar.apiKey, e.appname = phpvar.siteName, e.templatename = "commenting_required_interface", e.providers = phpvar.providers, $LRIC.renderInterface("required_interface", e)
+}), $LRIC.util.ready(function() {
+    var e = {};
+    e.apikey = phpvar.apiKey, e.appname = phpvar.siteName, e.templatename = "commenting_sharing_interface", e.providers = ["Facebook", "Twitter", "LinkedIn"], $LRIC.renderInterface("lr-share-container", e)
+})) : console.log("Providers Not Configured");
