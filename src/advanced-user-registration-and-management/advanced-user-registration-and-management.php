@@ -3,7 +3,7 @@
  * Plugin Name: Advanced User Registration and Management
  * Plugin URI: http://www.loginradius.com
  * Description: Advanced User Registration and Management
- * Version: 2.3.6
+ * Version: 2.3.7
  * Author: LoginRadius Team
  * Author URI: http://www.loginradius.com
  * Text Domain: advanced-user-registration-and-management
@@ -13,7 +13,7 @@
 // If this file is called directly, abort.
 defined( 'ABSPATH' ) or die();
 
-define( 'LR_PLUGIN_VERSION', '2.3.6' );
+define( 'LR_PLUGIN_VERSION', '2.3.7' );
 define( 'LR_MIN_WP_VERSION', '3.5' );
 
 // Type of Plugin ADV, SL, SS

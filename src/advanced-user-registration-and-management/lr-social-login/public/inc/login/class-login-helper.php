@@ -196,26 +196,52 @@ if (!class_exists('Login_Helper')) {
                     'role' => $role
                 );
                 $user_id = wp_insert_user($userdata);
-
                 // Check if error due to empty user_login
-                if (isset($user_id->errors) && isset($user_id->errors['empty_user_login'])) {
-                    $userdata['user_login'] = strtoupper($profileData['Provider']) . $socialId;
-                    $user_id = wp_insert_user($userdata);
+                if (isset($user_id->errors)) {
+                    $my_error = new WP_Error();
+                    foreach ($user_id->errors as $name => $message) {
+                        if ($name == 'empty_user_login') {
+                            $userdata['user_login'] = strtoupper($profileData['Provider']) . $socialId;
+                            $user_id = wp_insert_user($userdata);
+                        } elseif ($name == 'user_login_too_long') {
+                            $userdata = array(
+                                'user_login' => substr($username, 0, 50),
+                                'user_pass' => $userPassword,
+                                'user_nicename' => sanitize_title(substr($firstName, 0, 50)),
+                                'user_email' => $email,
+                                'display_name' => substr($firstName, 0, 50),
+                                'nickname' => substr($firstName, 0, 50),
+                                'first_name' => substr($firstName, 0, 50),
+                                'last_name' => substr($lastName, 0, 50),
+                                'description' => $bio,
+                                'user_url' => $profileUrl,
+                                'role' => $role
+                            );
+                            $user_id = wp_insert_user($userdata);
+                            add_filter('lr_sso_force_logout_user', '__return_true');
+                        } else {
+                            Login_Helper:: login_radius_notify(__(implode($message, ', '), 'lr-plugin-slug'), $name);
+                            if ($loginRadiusSettings['enable_degugging'] != '0') {
+                                error_log(implode($message, ', '));
+                            }
+                        }
+                    }
                 }
 
-                do_action('lr_save_profile_data', $user_id, $profileData);
 
-
-                do_action('lr_send_profile_data_modification', $user_id);
-
-
-                // Mailchimp, Bluehornet, SailThru etc
-                do_action('lr_create_social_profile_data', $user_id);
-
-                // Delete temporary data.
-                self::login_radius_delete_temporary_data($profileData);
 
                 if (!is_wp_error($user_id)) {
+                    do_action('lr_save_profile_data', $user_id, $profileData);
+
+
+                    do_action('lr_send_profile_data_modification', $user_id);
+
+
+                    // Mailchimp, Bluehornet, SailThru etc
+                    do_action('lr_create_social_profile_data', $user_id);
+
+                    // Delete temporary data.
+                    self::login_radius_delete_temporary_data($profileData);
 
                     // Set loginradius_provider_id usermeta
                     if (!empty($socialId)) {
@@ -300,11 +326,7 @@ if (!class_exists('Login_Helper')) {
                         self::login_user($user_id, $profileData, true, true, false);
                     }
                 } else {
-                    if ($redirect) {
-                        self::login_radius_redirect($user_id, true);
-                    } else {
-                        return 'wp_error';
-                    }
+                    return 'wp_error';
                 }
             }
         }
@@ -315,15 +337,16 @@ if (!class_exists('Login_Helper')) {
         public static function create_another_username_if_already_exists($name) {
             $isUserNameExists = true;
             $index = 0;
+            $userName = $name;
             while ($isUserNameExists == true) {
-                if (username_exists($name) != 0) {
+                if (username_exists($userName) != 0) {
                     $index++;
-                    $name = $name . $index;
+                    $userName = $name . $index;
                 } else {
                     $isUserNameExists = false;
                 }
             }
-            return $name;
+            return $userName;
         }
 
         /**
@@ -371,7 +394,7 @@ if (!class_exists('Login_Helper')) {
          * Store temporary data in database before displaying email popup
          */
         public static function store_temporary_data($profileData) {
-            
+
             $tmpdata = array();
             $tmpdata['tmpsession'] = isset($profileData['UniqueId']) ? $profileData['UniqueId'] : '';
             $tmpdata['tmpid'] = isset($profileData['ID']) ? $profileData['ID'] : '';
@@ -398,7 +421,7 @@ if (!class_exists('Login_Helper')) {
             $tmpdata['tmpCity'] = isset($profileData['City']) ? $profileData['City'] : '';
             $tmpdata['tmpPostalCode'] = isset($profileData['PostalCode']) ? $profileData['PostalCode'] : '';
             $tmpdata['tmpToken'] = isset($_REQUEST['token']) ? $_REQUEST['token'] : '';
-            
+
 
             $uni_id = $tmpdata['tmpsession'];
             $uniqu_id = explode('.', $uni_id);
@@ -459,68 +482,67 @@ if (!class_exists('Login_Helper')) {
             if (empty($user_id)) {
                 $user_id = get_current_user_id();
             }
-
+            
             if ($register) {
-
+                $loginRadiusSettings['LoginRadius_regRedirect'] = isset($loginRadiusSettings['LoginRadius_regRedirect']) ? $loginRadiusSettings['LoginRadius_regRedirect'] : '';
                 $redirect_type = $loginRadiusSettings['LoginRadius_regRedirect'];
                 $custom_url = isset($loginRadiusSettings['custom_regRedirect']) ? trim($loginRadiusSettings['custom_regRedirect']) : '';
             } else {
-
+                $loginRadiusSettings['LoginRadius_redirect'] = isset($loginRadiusSettings['LoginRadius_redirect']) ? $loginRadiusSettings['LoginRadius_redirect'] : '';
                 $redirect_type = $loginRadiusSettings['LoginRadius_redirect'];
                 $custom_url = isset($loginRadiusSettings['custom_redirect']) ? trim($loginRadiusSettings['custom_redirect']) : '';
             }
-             
+
             $redirect_url = site_url();
             if (!empty($_GET['redirect_to'])) {
                 $redirect_url = $_GET['redirect_to'];
             } else {
                 $lastWordUrl = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-                if($lastWordUrl == 'checkout'){
-                    $redirect_url = site_url().'/checkout';
-                }else{
-                if (isset($redirect_type)) {
-                    switch (strtolower($redirect_type)) {
-                        case 'homepage':
+                if ($lastWordUrl == 'checkout') {
+                    $redirect_url = site_url() . '/checkout';
+                } else {
+                    if (isset($redirect_type)) {
+                        switch (strtolower($redirect_type)) {
+                            case 'homepage':
 
-                            $redirect_url = site_url() . '/';
-                            break;
-                        case 'dashboard':
-                            $redirect_url = admin_url();
-                            break;
-                        case 'bp':
-                            if ($loginRadiusLoginIsBpActive) {
-                                if ('wp-login.php' == $pagenow) {
-                                    $redirect_url = site_url() . '/?redirect_to=' . bp_core_get_user_domain($user_id);
+                                $redirect_url = site_url() . '/';
+                                break;
+                            case 'dashboard':
+                                $redirect_url = admin_url();
+                                break;
+                            case 'bp':
+                                if ($loginRadiusLoginIsBpActive) {
+                                    if ('wp-login.php' == $pagenow) {
+                                        $redirect_url = site_url() . '/?redirect_to=' . bp_core_get_user_domain($user_id);
+                                    } else {
+                                        $redirect_url = bp_core_get_user_domain($user_id);
+                                    }
                                 } else {
-                                    $redirect_url = bp_core_get_user_domain($user_id);
+                                    $redirect_url = site_url() . '/?redirect_to=' . admin_url();
                                 }
-                            } else {
-                                $redirect_url = site_url() . '/?redirect_to=' . admin_url();
-                               
-                            }
-                            break;
-                        case 'custom':
-                            if (strlen($custom_url) > 0) {
+                                break;
+                            case 'custom':
+                                if (strlen($custom_url) > 0) {
 
-                                if (strpos($redirect_url, 'http') === false) {
-                                    $redirect_url = 'http://' . $custom_url;
+                                    if (strpos($redirect_url, 'http') === false) {
+                                        $redirect_url = 'http://' . $custom_url;
+                                    } else {
+                                        $redirect_url = $custom_url;
+                                    }
                                 } else {
-                                    $redirect_url = $custom_url;
+                                    $redirect_url = site_url() . '/';
                                 }
-                            } else {
-                                $redirect_url = site_url() . '/';
-                            }
-                            break;
-                        case 'samepage':
-                        default:
-                            if ('wp-login.php' == $pagenow || $register) {
-                                $redirect_url = site_url() . '/';
-                            } else {
-                                $redirect_url = LR_Common:: get_protocol() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                            }
-                            break;
+                                break;
+                            case 'samepage':
+                            default:
+                                if ('wp-login.php' == $pagenow || $register) {
+                                    $redirect_url = site_url() . '/';
+                                } else {
+                                    $redirect_url = LR_Common:: get_protocol() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                }
+                                break;
+                        }
                     }
-                }
                 }
             }
             return $redirect_url;
@@ -672,7 +694,7 @@ if (!class_exists('Login_Helper')) {
          * Add container for Social Login Interface
          */
         public static function get_loginradius_interface_container($isLinkingWidget = false) {
-            
+
             global $loginradius_api_settings;
             $loginRadiusApiKey = isset($loginradius_api_settings['LoginRadius_apikey']) ? trim($loginradius_api_settings['LoginRadius_apikey']) : '';
             $loginRadiusSecret = isset($loginradius_api_settings['LoginRadius_secret']) ? trim($loginradius_api_settings['LoginRadius_secret']) : '';
@@ -942,11 +964,11 @@ if (!class_exists('Login_Helper')) {
 
                         if ($loginRadiusUserId = email_exists($loginRadiusEmail)) {
 
-                           // if (get_user_meta($loginRadiusUserId, 'loginradius_provider', true) == $loginRadiusProvider) {
+                            // if (get_user_meta($loginRadiusUserId, 'loginradius_provider', true) == $loginRadiusProvider) {
                             if (!$loginRadiusUserId) {
 
                                 require_once( getcwd() . '/wp-admin/includes/user.php' );
-                               
+
                                 wp_delete_user($loginRadiusUserId);
 
                                 // New user.
@@ -955,14 +977,14 @@ if (!class_exists('Login_Helper')) {
                                 self::register_user($profileData, true);
                                 return;
                             } else {
-                                     
+
                                 // Email is already registered!
                                 $queryString = '?lrid=' . $profileData['UniqueId'];
                                 wp_redirect(site_url() . $queryString . '&LoginRadiusMessage="emailExists"');
                                 exit();
                             }
                         } else {
-                        
+
                             // New user.
                             $profileData = self:: fetch_temp_data_from_usermeta($loginRadiusTempUserId);
                             self::register_user($profileData, true);
@@ -981,7 +1003,7 @@ if (!class_exists('Login_Helper')) {
          */
 
         public static function fetch_temp_data_from_usermeta($loginRadiusTempUserId) {
-            
+
             $profileData['UniqueId'] = get_user_meta($loginRadiusTempUserId, 'tmpsession', true);
             $profileData['ID'] = get_user_meta($loginRadiusTempUserId, 'tmpid', true);
             $profileData['uid'] = get_user_meta($loginRadiusTempUserId, 'tmpuid', true);

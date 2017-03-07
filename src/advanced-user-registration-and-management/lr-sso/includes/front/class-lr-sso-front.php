@@ -35,11 +35,11 @@ if (!class_exists('LR_SSO_Front')) {
          * @global type $lr_raas_settings
          */
         public static function load_sso_variables() {
-            $ssoRootUrl = function_exists('wp_parse_url') ? wp_parse_url( site_url() ) : parse_url( site_url() );
-            $ssoRootUrl['path'] = isset($ssoRootUrl['path'])?trim(trim($ssoRootUrl['path'],"/")):'';
-            $ssoTempDir = explode("/",$ssoRootUrl['path']);
-            $ssoDir = isset($ssoTempDir[0])?trim($ssoTempDir[0]):'';
-            
+            $ssoRootUrl = function_exists('wp_parse_url') ? wp_parse_url(site_url()) : parse_url(site_url());
+            $ssoRootUrl['path'] = isset($ssoRootUrl['path']) ? trim(trim($ssoRootUrl['path'], "/")) : '';
+            $ssoTempDir = explode("/", $ssoRootUrl['path']);
+            $ssoDir = isset($ssoTempDir[0]) ? trim($ssoTempDir[0]) : '';
+
             global $loginradius_api_settings, $lr_raas_settings;
             ?>
             <script>
@@ -61,12 +61,15 @@ if (!class_exists('LR_SSO_Front')) {
             <?php } else { ?>
                     lrSsoOptions.islogin = false;
             <?php } ?>
-            <?php if (isset($_POST['token'])) { 
-                
-                ?>
+            <?php if (isset($_POST['token'])) { ?>
                     lrSsoOptions.istoken = true;
             <?php } else { ?>
                     lrSsoOptions.istoken = false;
+            <?php } ?>
+            <?php if (apply_filters('lr_sso_force_logout_user', '__return_false') === true) { ?>
+                    lrSsoOptions.isforcelogout = '<?php echo html_entity_decode(wp_logout_url()); ?>';
+            <?php } else { ?>
+                    lrSsoOptions.isforcelogout = false;
             <?php } ?>
             </script>
             <?php

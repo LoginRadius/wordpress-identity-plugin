@@ -1,10 +1,10 @@
-ï»¿=== Advanced User Registration and Management ===
+﻿=== Advanced User Registration and Management ===
 Contributors: loginradius
 Donate link: http://www.loginradius.com/
 Tags: User Registration, User Management, Hosted Registration, Social login, Single Sign-on, Social Profile Data, multisite, loginradius
 Requires at least: 3.5
-Tested up to: 4.6
-Stable tag: 2.3.6
+Tested up to: 4.7
+Stable tag: 2.3.7
 License: GPLv2 or later
 
 Get fully customized hosted user registration with social login using Facebook, Google, Twitter, Vkontakte, QQ and over 25 more!
@@ -102,6 +102,25 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 
 == Changelog ==
 
+= 2.3.7 =
+* Bug Fixing in Single-Sign-on
+* Added new provider line image
+* Bug Resolved variable warning issue.
+
+= 2.3.6 =
+* Bug Fixing
+* Added new Social Sharing Features
+    * Added Email Subject and Message customization option
+    * Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
+    * Added Share Full Url ( Enable this if you want to share your site's full URL)
+    * Added option for Facebook App id for tracking Social sharing on facebook app
+    * Added option to Display Total Share Count
+    * Added option to Open all providers in single window
+    * Added option Custom Popup Window Size
+    * Added option to set usernames to Mention in twitter share
+    * Added option to set Twitter Hash Tag
+    * Added Custom options for sharing
+
 = 2.3.5 =
 * Set V2captcha as default
 * Added new Customer Registration features - User Name Login
@@ -153,13 +172,18 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 = 2.3.6 =
 * Bug Fixing
 * Added new Social Sharing Features
-** Added Email Subject and Message customization option
-** Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
-** Added Share Full Url ( Enable this if you want to share your site's full URL)
-** Added option for Facebook App id for tracking Social sharing on facebook app
-** Added option to Display Total Share Count
-** Added option to Open all providers in single window
-** Added option Custom Popup Window Size
-** Added option to set usernames to Mention in twitter share
-** Added option to set Twitter Hash Tag
-** Added Custom options for sharing
+    * Added Email Subject and Message customization option
+    * Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
+    * Added Share Full Url ( Enable this if you want to share your site's full URL)
+    * Added option for Facebook App id for tracking Social sharing on facebook app
+    * Added option to Display Total Share Count
+    * Added option to Open all providers in single window
+    * Added option Custom Popup Window Size
+    * Added option to set usernames to Mention in twitter share
+    * Added option to set Twitter Hash Tag
+    * Added Custom options for sharing
+	
+= 2.3.7 =
+* Bug Fixing in Single-Sign-on
+* Added new provider line image
+* Bug Resolved variable warning issue.

@@ -28,13 +28,13 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
             global $socialLoginObject, $wpdb, $lr_social_profile_data_settings;
 
             $token = !empty($profileData['Token']) ? $profileData['Token'] : '';
-            
+
             $response = null;
             if (!empty($token)) {
                 try {
                     $response = $socialLoginObject->exchangeAccessToken($token);
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
-                    
+
                     error_log($e->getErrorResponse()->description);
                 }
             }
@@ -54,14 +54,14 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
                     $userProfileObject = $socialLoginObject->getUserProfiledata($response->access_token);
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     $userProfileObject = null;
-                    $message = isset( $e->getErrorResponse()->description ) ? $e->getErrorResponse()->description : $e->getMessage();
+                    $message = isset($e->getErrorResponse()->description) ? $e->getErrorResponse()->description : $e->getMessage();
                     error_log($message);
-                    Login_Helper::login_radius_notify( $message, 'isProfileNotRetrieved' );
-                        return;
+                    Login_Helper::login_radius_notify($message, 'isProfileNotRetrieved');
+                    return;
                 }
 
                 if (isset($lr_social_profile_data_settings['enable_custom_popup']) && $lr_social_profile_data_settings['enable_custom_popup'] == '1') {
-                    
+
                     if (isset($lr_social_profile_data_settings['show_email']) && $lr_social_profile_data_settings['show_email'] == '1') {
                         $userProfileObject->Email = $profileData['Email'];
                     }
@@ -121,7 +121,7 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
                 self::update_extented_user_profile($userId, $profileData, $response->access_token);
             } else {
                 return;
-            }            
+            }
         }
 
         /**
@@ -144,7 +144,7 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
 
             // Insert basic profile data if option is selected 
             if (in_array('basic', $lr_social_profile_data_settings['profiledata'])) {
-                
+
 //                $date = str_replace('/', '-', $profileData['BirthDate']);
 //                $dob =  date('Y-m-d H:m:i', strtotime($date));
                 $data = array();
@@ -168,7 +168,7 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
                 $data = self::check_data($data);
                 if (!$wpdb->update($wpdb->base_prefix . 'lr_basic_profile_data', $data, array('wp_users_id' => $userId))) {
                     if (!$wpdb->get_var($wpdb->prepare('SELECT wp_users_id FROM ' . $wpdb->base_prefix . 'lr_basic_profile_data' . " WHERE wp_users_id = %d", $userId))) {
-                       $wpdb->insert($wpdb->base_prefix . 'lr_basic_profile_data', $data);
+                        $wpdb->insert($wpdb->base_prefix . 'lr_basic_profile_data', $data);
                     }
                 }
 
@@ -562,12 +562,11 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
             }
 
             // Insert Companies if option is selected
-            if (in_array($profileData['Provider'], array('facebook','linkedin')) && in_array('linkedin_companies', $lr_social_profile_data_settings['profiledata'])) {
+            if (in_array($profileData['Provider'], array('facebook', 'linkedin')) && in_array('linkedin_companies', $lr_social_profile_data_settings['profiledata'])) {
                 try {
                     $linkedInCompanies = $socialLoginObject->getFollowedCompanies($access_token);
-
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
-                    
+
                     $linkedInCompanies = null;
                     error_log($profileData['Provider'] . ' failed getting (linkedin_companies) ' . json_encode($e->getErrorResponse()));
                 }
@@ -620,7 +619,6 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
 //                    }
 //                }
 //            }
-
             // Insert mentions if option is selected
             if ($profileData['Provider'] == 'twitter' && in_array('mentions', $lr_social_profile_data_settings['profiledata'])) {
                 try {
@@ -756,7 +754,6 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
             if ($profileData['Provider'] == 'facebook' && in_array('posts', $lr_social_profile_data_settings['profiledata'])) {
                 try {
                     $posts = $socialLoginObject->getPosts($access_token);
-
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     $posts = null;
                     error_log($profileData['Provider'] . ' failed getting (posts) ' . json_encode($e->getErrorResponse()));
@@ -782,7 +779,7 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
                         if (!$wpdb->update($wpdb->base_prefix . 'lr_facebook_posts', $data, array('wp_users_id' => $userId, 'post_ids' => $data['post_ids']))) {
                             //print_r($wpdb->last_query);die;
                             if (!$wpdb->get_var($wpdb->prepare('SELECT wp_users_id FROM ' . $wpdb->base_prefix . 'lr_facebook_posts' . " WHERE wp_users_id = %d and post_ids = %s", $userId, $data['post_ids']))) {
-                                 //print_r($wpdb->last_query);die;
+                                //print_r($wpdb->last_query);die;
                                 $wpdb->insert($wpdb->base_prefix . 'lr_facebook_posts', $data);
                             }
                         }
@@ -831,7 +828,7 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
          */
         public static function validate_profiledata($userProfileObject) {
             global $lr_social_profile_data_settings;
-
+            $lr_social_profile_data_settings['profiledata'] = isset($lr_social_profile_data_settings['profiledata']) ? $lr_social_profile_data_settings['profiledata'] : array();
             if (isset($lr_social_profile_data_settings['enable_custom_popup']) && $lr_social_profile_data_settings['enable_custom_popup'] == '1') {
 
                 if (isset($lr_social_profile_data_settings['show_email']) && $lr_social_profile_data_settings['show_email'] == '1') {
@@ -890,7 +887,7 @@ if (!class_exists('LR_Social_Profile_Data_Function')) {
             // Basic profile data
             if (in_array('basic', $lr_social_profile_data_settings['profiledata'])) {
 
-                
+
                 $profileData['Prefix'] = !empty($userProfileObject->Prefix) && $userProfileObject->Prefix != 'null' ? $userProfileObject->Prefix : '';
                 $profileData['MiddleName'] = !empty($userProfileObject->MiddleName) && $userProfileObject->MiddleName != 'null' ? $userProfileObject->MiddleName : '';
                 $profileData['Suffix'] = !empty($userProfileObject->Suffix) && $userProfileObject->Suffix != 'null' ? $userProfileObject->Suffix : '';

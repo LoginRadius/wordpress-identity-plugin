@@ -49,12 +49,17 @@ class WPHttpClient implements IHttpClient {
         $function = 'wp_remote_' . strtolower($method);
         $argument = array('timeout'     => 50);
         if ($function == 'wp_remote_post') {
-            $argument['headers'] = array('Content-type: application/' . $content_type);
+            $argument['headers'] = array('content-type'=>'application/' . $content_type);
+            if($content_type == 'json'){
+                $data = json_encode($data);
+            }
             $argument['body'] = $data;
         }
+        
         $response = $function($request_url, $argument);
         if (!empty($response)) {
             if(isset($response->errors)){
+                
                 $error = isset($response->errors['http_request_failed'][0])?$response->errors['http_request_failed'][0]:'An error occurred';
                 throw new LoginRadiusException($error, $response);
             }
