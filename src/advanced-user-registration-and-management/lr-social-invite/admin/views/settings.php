@@ -1,24 +1,19 @@
 <?php
 // Exit if called directly
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit();
 }
 
 /**
  * The Social Invite Admin Settings Page.
  */
-if ( ! class_exists( 'LR_Social_Invite_Admin_Settings' ) ) {
+if (!class_exists('LR_Social_Invite_Admin_Settings')) {
 
     class LR_Social_Invite_Admin_Settings {
 
         public static function render_options_page() {
             global $lr_social_invite_settings;
-
-            if (isset($_POST['reset'])) {
-                LR_Social_Invite_Install:: reset_loginradius_social_invite_options();
-                echo '<p style="display:none;" class="lr-alert-box lr-notif">Social Invite settings have been reset and default values loaded</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
+            LR_Social_Invite::reset_options();
             ?>
             <div class="wrap lr-wrap cf">
 
@@ -52,8 +47,8 @@ if ( ! class_exists( 'LR_Social_Invite_Admin_Settings' ) ) {
                         <div class="lr_options_container">
                             <div class="lr-row">
                                 <h3>
-                                    <?php _e('Short Code for Social Invite','lr-plugin-slug'); ?>
-                                    <span class="lr-tooltip tip-bottom" data-title="<?php _e('Copy and paste the following shortcode into a page or post to display the social invite interface','LoginRadius'); ?>">
+                                    <?php _e('Short Code for Social Invite', 'lr-plugin-slug'); ?>
+                                    <span class="lr-tooltip tip-bottom" data-title="<?php _e('Copy and paste the following shortcode into a page or post to display the social invite interface', 'LoginRadius'); ?>">
                                         <span class="dashicons dashicons-editor-help"></span>
                                     </span>
                                 </h3>
@@ -130,7 +125,7 @@ if ( ! class_exists( 'LR_Social_Invite_Admin_Settings' ) ) {
                                     <div>
                                         <label>
                                             <span class="lr_property_title">
-                                                <?php _e( 'Social Invite Message', 'lr-plugin-slug' ); ?>
+                                                <?php _e('Social Invite Message', 'lr-plugin-slug'); ?>
                                                 <span class="lr-tooltip" data-title="Enter the message for all social invites">
                                                     <span class="dashicons dashicons-editor-help"></span>
                                                 </span>
@@ -204,7 +199,7 @@ if ( ! class_exists( 'LR_Social_Invite_Admin_Settings' ) ) {
                             <?php submit_button('Save Options', 'primary', 'submit', false); ?>
                         </p>
                     </form>
-                    <?php do_action( 'lr_reset_admin_ui','Social Invite' ); ?>
+                    <?php do_action('lr_reset_admin_ui', 'Social Invite'); ?>
                 </div>
             </div>
 

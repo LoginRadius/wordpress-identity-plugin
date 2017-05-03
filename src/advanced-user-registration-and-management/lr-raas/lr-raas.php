@@ -21,9 +21,9 @@ if (!class_exists('LR_Raas')) {
                 return;
             }
             // Register Activation hook callback.
-            $this->install();
-            // Declare constants and load dependencies.
-            $this->define_constants();
+            add_action('lr_plugin_activate', array(get_class(), 'install'), 10, 1);
+            add_action('lr_plugin_deactivate', array(get_class(), 'uninstall'), 10, 1);
+            // load dependencies.
             $this->load_dependencies();
 
             add_action('wp_enqueue_scripts', array($this, 'enqueue_front_scripts'));
@@ -48,41 +48,38 @@ if (!class_exists('LR_Raas')) {
         /**
          * Function for setting default options while plugin is activating.
          */
-        public static function install() {
-            global $wpdb;
+        public static function install($blog_id) {
             require_once ( dirname(__FILE__) . '/install.php' );
-            if (function_exists('is_multisite') && is_multisite()) {
-                if (!isset($_GET['page']) || !in_array($_GET['page'], array('LoginRadius', 'SocialLogin', 'User_Registration', 'loginradius_sso', 'loginradius_share', 'loginradius_commenting', 'loginradius_social_profile_data', 'loginradius_social_invite', 'loginradius_customization', 'loginradius_mailchimp', 'lr_google_analitics'))) {
-                    return;
-                }
-                // check if it is a network activation - if so, run the activation function for each blog id
-                $old_blog = $wpdb->blogid;
-                // Get all blog ids
-                $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
-                foreach ($blogids as $blog_id) {
-                    switch_to_blog($blog_id);
-                    LR_Raas_Install:: set_default_options();
-                }
-                switch_to_blog($old_blog);
-                return;
+            LR_Raas_Install::set_default_options($blog_id);
+        }
+
+        public static function uninstall($blog_id) {
+            if ($blog_id) {
+                global $wpdb;
+                delete_option('LR_Raas_Settings');
+                delete_option('LoginRadius_settings');                
+                $wpdb->query('DROP TABLE IF EXISTS `' . $wpdb->base_prefix . 'lr_custom_fields_data`');
             } else {
-                LR_Raas_Install:: set_default_options();
+                delete_option('LR_Raas_Settings');
+                delete_option('LoginRadius_settings');
             }
         }
 
-        /**
-         * Define constants needed across the plug-in.
-         */
-        private function define_constants() {
-            define('LR_RAAS_DIR', plugin_dir_path(__FILE__));
-            define('LR_RAAS_URL', plugin_dir_url(__FILE__));
+        public static function reset_options() {
+            if (isset($_POST['reset'])) {
+                self::uninstall(false);
+                self::install(false);
+                do_action('lr_raas_reset_setting');
+                echo '<p style="display:none;" class="lr-alert-box lr-notif">' . __('User Registration settings have been reset and default values loaded', 'lr-plugin-slug') . '</p>';
+                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
+            }
         }
 
         public static function enqueue_front_scripts() {
             global $lr_js_in_footer;
             wp_register_script('lr-raas', '//cdn.loginradius.com/hub/prod/js/LoginRadiusRaaS.js', array('jquery', 'lr-social-login'), LR_PLUGIN_VERSION, $lr_js_in_footer);
-            wp_register_script('lr-raas-front-script', LR_RAAS_URL . 'assets/js/loginradiusfront.js', array('jquery-ui-datepicker'), LR_PLUGIN_VERSION, $lr_js_in_footer);
-            wp_register_style('lr-raas-style', LR_RAAS_URL . 'assets/css/lr-raas-style.css', array(), LR_PLUGIN_VERSION);
+            wp_register_script('lr-raas-front-script', LR_ROOT_URL . 'lr-raas/assets/js/loginradiusfront.js', array('jquery-ui-datepicker'), LR_PLUGIN_VERSION, $lr_js_in_footer);
+            wp_register_style('lr-raas-style', LR_ROOT_URL . 'lr-raas/assets/css/lr-raas-style.css', array(), LR_PLUGIN_VERSION);
         }
 
         /**
@@ -94,27 +91,27 @@ if (!class_exists('LR_Raas')) {
             // Get LoginRadius commenting settings
             $lr_raas_settings = get_option('LR_Raas_Settings');
             $loginradius_api_settings = get_option('LoginRadius_API_settings');
-            require_once( LR_RAAS_DIR . "public/inc/class-lr-raas-social-login.php" );
+            require_once( LR_ROOT_DIR . "lr-raas/public/inc/class-lr-raas-social-login.php" );
             $LR_Raas_Social_Login = new LR_Raas_Social_Login;
             $apikey = isset($loginradius_api_settings['LoginRadius_apikey']) ? trim($loginradius_api_settings['LoginRadius_apikey']) : '';
             $secret = isset($loginradius_api_settings['LoginRadius_secret']) ? trim($loginradius_api_settings['LoginRadius_secret']) : '';
-            try{
+            try {
                 $accountAPIObject = new \LoginRadiusSDK\CustomerRegistration\AccountAPI($apikey, $secret, array('authentication' => true, 'output_format' => 'json'));
-            }  catch (\LoginRadiusSDK\LoginRadiusException $e){
+            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                 
             }
-            try{
+            try {
                 $userAPIObject = new \LoginRadiusSDK\CustomerRegistration\UserAPI($apikey, $secret, array('authentication' => true, 'output_format' => 'json'));
-            }  catch (\LoginRadiusSDK\LoginRadiusException $e){
+            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                 
-            }            
+            }
 
             // Init ShortCodes
-            require_once( LR_RAAS_DIR . "includes/front/class-lr-raas-wp-default-login.php" );
-            require_once( LR_RAAS_DIR . "includes/front/class-lr-raas-function.php" );
+            require_once( LR_ROOT_DIR . "lr-raas/includes/front/class-lr-raas-wp-default-login.php" );
+            require_once( LR_ROOT_DIR . "lr-raas/includes/front/class-lr-raas-function.php" );
 
             // Load required files.
-            require_once( LR_RAAS_DIR . "admin/class-lr-raas-admin.php" );
+            require_once( LR_ROOT_DIR . "lr-raas/admin/class-lr-raas-admin.php" );
         }
 
     }

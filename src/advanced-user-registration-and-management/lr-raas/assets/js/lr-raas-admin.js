@@ -1,4 +1,10 @@
 jQuery(document).ready(function ($) {
+    
+enableHostedPage();
+ $('#lr-hosted-enable').change(function() {
+            enableHostedPage();
+    });
+
 
     //tabs
     $('.lr-options-tab-btns li').click(function () {
@@ -105,4 +111,17 @@ function lrCheckValidJson() {
             jQuery('#lr-custom-options').css("border","1px solid green");
         }
     });
+}
+
+
+function enableHostedPage(){
+    
+    var hostedpage = jQuery('#lr-hosted-enable').is(':checked');
+
+if(hostedpage === true){
+    jQuery('#userRegistration,#email-options,#enable-linking').hide();
+    } else {
+      jQuery('#userRegistration,#email-options,#enable-linking').show();
+    }
+
 }

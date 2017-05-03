@@ -29,8 +29,8 @@ if ( ! class_exists( 'LR_Commenting_Admin' ) ) {
                 return;
             }
             global $lr_js_in_footer;
-            wp_enqueue_script('lr_commenting_admin_script', LR_COMMENTS_URL . 'assets/js/lr-commenting-admin.min.js', array('jquery'), '1.0', $lr_js_in_footer);
-            wp_enqueue_script('lr_commenting_custom_script', LR_COMMENTS_URL . 'assets/js/lr-commenting-admin.js', array('jquery'), '1.0', $lr_js_in_footer);
+            wp_enqueue_script('lr_commenting_admin_script', LR_ROOT_URL . 'lr-commenting/assets/js/lr-commenting-admin.min.js', array('jquery'), '1.0', $lr_js_in_footer);
+            wp_enqueue_script('lr_commenting_custom_script', LR_ROOT_URL . 'lr-commenting/assets/js/lr-commenting-admin.js', array('jquery'), '1.0', $lr_js_in_footer);
         }
 
         /**
@@ -43,7 +43,6 @@ if ( ! class_exists( 'LR_Commenting_Admin' ) ) {
             //replicate Social Commenting configuration to the subblogs in the multisite network
             if (is_multisite() && is_main_site()) {
                 add_action('wpmu_new_blog', array($this, 'replicate_loginradius_settings_to_new_blog'));
-                add_action('update_option_LR_Commenting_Settings', array($this, 'login_radius_update_old_blogs'));
             }
         }
 
@@ -53,17 +52,6 @@ if ( ! class_exists( 'LR_Commenting_Admin' ) ) {
             add_blog_option($blogId, 'LR_Commenting_Settings', $lr_commenting_settings);
         }
 
-        // Update the social commenting options in all the old blogs
-        public function login_radius_update_old_blogs( $oldConfig ) {
-            global $loginradius_api_settings;
-            if (isset($loginradius_api_settings['multisite_config']) && $loginradius_api_settings['multisite_config'] == '1') {
-                $settings = get_option('LR_Commenting_Settings');
-                $blogs = wp_get_sites();
-                foreach ($blogs as $blog) {
-                    update_blog_option($blog['blog_id'], 'LR_Commenting_Settings', $settings);
-                }
-            }
-        }
 
         /*
          * Callback for add_submenu_page,
@@ -74,7 +62,6 @@ if ( ! class_exists( 'LR_Commenting_Admin' ) ) {
             include_once "views/settings.php";
             LR_Commenting_Admin_Settings::render_options_page();
         }
-
     }
 new LR_Commenting_Admin();
 }

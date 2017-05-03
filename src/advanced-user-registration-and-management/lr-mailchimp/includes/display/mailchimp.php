@@ -50,7 +50,7 @@ function get_data_for_mailchimp( $user_id ) {
                             break;
                     }
                 } else /* native wordpress profile fields */ {
-                    include_once( ABSPATH . 'wp-includes/pluggable.php');
+                    require_once( ABSPATH . 'wp-includes/pluggable.php');
 
                     // Get data according to the value.
                     switch ($tempParts[0]) {

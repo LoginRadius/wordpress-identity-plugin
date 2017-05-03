@@ -18,13 +18,17 @@ if (!class_exists('Login_Helper')) {
         public static function verify_user_after_email_confirmation() {
             global $wpdb, $loginRadiusSettings;
             $verificationKey = esc_sql(trim($_GET['loginRadiusVk']));
+             
             if (isset($_GET['loginRadiusProvider']) && trim($_GET['loginRadiusProvider']) != '') {
                 $provider = esc_sql(trim($_GET['loginRadiusProvider']));
                 $userId = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM " . $wpdb->usermeta . " WHERE meta_key = '" . $provider . "LoginRadiusVkey' and meta_value = %s", $verificationKey));
+                
                 if (!empty($userId)) {
+                    
                     update_user_meta($userId, $provider . 'LrVerified', '1');
                     delete_user_meta($userId, $provider . 'LoginRadiusVkey', $verificationKey);
                 } else {
+                    
                     wp_redirect(site_url());
                     exit();
                 }
@@ -176,7 +180,8 @@ if (!class_exists('Login_Helper')) {
                     "space" => ' '
                 );
                 if (isset($loginRadiusSettings['username_separator'])) {
-                    $userName = str_replace(' ', $seperator[$loginRadiusSettings['username_separator']], $userName);
+                    $seperatorUserName = isset($seperator[$loginRadiusSettings['username_separator']])?trim($seperator[$loginRadiusSettings['username_separator']]):'';
+                    $userName = str_replace(' ', $seperatorUserName, $userName);
                 } else {
                     $userName = str_replace(' ', '-', $userName);
                 }
@@ -482,7 +487,7 @@ if (!class_exists('Login_Helper')) {
             if (empty($user_id)) {
                 $user_id = get_current_user_id();
             }
-            
+
             if ($register) {
                 $loginRadiusSettings['LoginRadius_regRedirect'] = isset($loginRadiusSettings['LoginRadius_regRedirect']) ? $loginRadiusSettings['LoginRadius_regRedirect'] : '';
                 $redirect_type = $loginRadiusSettings['LoginRadius_regRedirect'];
@@ -538,7 +543,16 @@ if (!class_exists('Login_Helper')) {
                                 if ('wp-login.php' == $pagenow || $register) {
                                     $redirect_url = site_url() . '/';
                                 } else {
-                                    $redirect_url = LR_Common:: get_protocol() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                    $string = '';
+                                    $redirectionUrl = LR_Common:: get_protocol() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                    $parsed = parse_url($redirectionUrl);
+                                    $query = isset($parsed['query']) ? $parsed['query'] : '';
+                                    if (!empty($query)) {
+                                        parse_str($query, $params);
+                                        unset($params['token']);
+                                        $string = http_build_query($params);
+                                    }
+                                    $redirectionUrl = LR_Common:: get_protocol() . $_SERVER['HTTP_HOST'] . $parsed['path'] . $string;
                                 }
                                 break;
                         }

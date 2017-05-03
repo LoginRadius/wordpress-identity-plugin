@@ -27,7 +27,7 @@ class LR_Modules_Loader {
 
         foreach ( $loadModules as $loadModule ) {
             if( ! empty( $loadModule ) ){
-                include_once LR_ROOT_DIR . $loadModule->name . '/' . $loadModule->load;
+                require_once LR_ROOT_DIR . $loadModule->name . '/' . $loadModule->load;
             }
         }
     }

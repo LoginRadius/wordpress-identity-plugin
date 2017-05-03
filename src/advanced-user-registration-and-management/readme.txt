@@ -1,10 +1,10 @@
-﻿=== Advanced User Registration and Management ===
+=== Advanced User Registration and Management ===
 Contributors: loginradius
 Donate link: http://www.loginradius.com/
 Tags: User Registration, User Management, Hosted Registration, Social login, Single Sign-on, Social Profile Data, multisite, loginradius
 Requires at least: 3.5
 Tested up to: 4.7
-Stable tag: 2.3.7
+Stable tag: 2.4.0
 License: GPLv2 or later
 
 Get fully customized hosted user registration with social login using Facebook, Google, Twitter, Vkontakte, QQ and over 25 more!
@@ -12,13 +12,13 @@ Get fully customized hosted user registration with social login using Facebook, 
 == Description ==
 <b>Note:This is a paid subscription plugin offered by <a href="http://www.loginradius.com/">LoginRadius</a> with a 30-day free trial period.</b>
 
-This plugin enables User Registration and Management for your WordPress website. Along with that it also captures usersâ€™ profile data, with their permission of course, and automatically creates a profile. The plugin can also feed the data into your existing email software such as MailChimp or any other marketing, sales or analytics software.
+This plugin enables User Registration and Management for your WordPress website. Along with that it also captures usersÃ¢â‚¬â„¢ profile data, with their permission of course, and automatically creates a profile. The plugin can also feed the data into your existing email software such as MailChimp or any other marketing, sales or analytics software.
 
 Product Overview:
-= 1. <a href="http://www.loginradius.com/customer-registration-service">User Registration</a> = As a fully managed Customer Registration Service, LoginRadius takes care of the entire authentication process, including everything from password resets and profile creation, to email verification and account linkingâ€”saving you significant resources.
+= 1. <a href="http://www.loginradius.com/customer-registration-service">User Registration</a> = As a fully managed Customer Registration Service, LoginRadius takes care of the entire authentication process, including everything from password resets and profile creation, to email verification and account linkingÃ¢â‚¬â€�saving you significant resources.
 = 2. <a href="http://www.loginradius.com/social-login">Social Login</a> = Social login reduces the barriers users face when attempting to register on your website by allowing them to log in with their existing social accounts, including Facebook, LinkedIn, Twitter, Google and <a href="http://support.loginradius.com/hc/en-us/articles/202078178-List-of-ID-providers-that-can-be-integrated-via-LoginRadius-API">30 other networks</a>. This eliminates the need to create yet another username and password.
-= 3. <a href="http://www.loginradius.com/social-sharing">Social Sharing</a> = Make your users your brand ambassadors and drive high quality referrals to your website - 82% of users consider buying or trying products and services based on their friendsâ€™ recommendations. With social share, you give users the tools to share your content, product details and other information with their own networks.
-= 4. <a href="http://www.loginradius.com/profile-data">User Profile Data</a> = Our solution allows websites to <a href="http://www.loginradius.com/datapoints">collect more than 200 user data points</a> - such as demographics, name, education, verified email address and many more - in order to better understand users. This enables businesses to personalize usersâ€™ web experiences and then build long-term relationships with them.
+= 3. <a href="http://www.loginradius.com/social-sharing">Social Sharing</a> = Make your users your brand ambassadors and drive high quality referrals to your website - 82% of users consider buying or trying products and services based on their friendsÃ¢â‚¬â„¢ recommendations. With social share, you give users the tools to share your content, product details and other information with their own networks.
+= 4. <a href="http://www.loginradius.com/profile-data">User Profile Data</a> = Our solution allows websites to <a href="http://www.loginradius.com/datapoints">collect more than 200 user data points</a> - such as demographics, name, education, verified email address and many more - in order to better understand users. This enables businesses to personalize usersÃ¢â‚¬â„¢ web experiences and then build long-term relationships with them.
 = 5. <a href="http://www.loginradius.com/social-data-integration">Social Data Integration</a> = Our solution can auto integrate social data into your existing softwares such as mailchimp, hubspot, salesforce, google analytics, etc.
 = 6. <a href="http://www.loginradius.com/single-sign-on">Single sign-on</a> = Single Sign-On creates a single authentication system for multiple web properties allowing users to navigate websites with a single account.
 
@@ -102,6 +102,14 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 
 == Changelog ==
 
+= 2.4.0 =
+* Implemented Hosted Page Functionality
+* Updated amazon and facebook images for custom interface
+* Fixed SSO Issue
+* Updated Multisite Function
+* Clean Installation Process on Activation Hook
+* Implement Un-installation Process on De-activation Hook
+
 = 2.3.7 =
 * Bug Fixing in Single-Sign-on
 * Added new provider line image
@@ -110,16 +118,16 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 = 2.3.6 =
 * Bug Fixing
 * Added new Social Sharing Features
-    * Added Email Subject and Message customization option
-    * Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
-    * Added Share Full Url ( Enable this if you want to share your site's full URL)
-    * Added option for Facebook App id for tracking Social sharing on facebook app
-    * Added option to Display Total Share Count
-    * Added option to Open all providers in single window
-    * Added option Custom Popup Window Size
-    * Added option to set usernames to Mention in twitter share
-    * Added option to set Twitter Hash Tag
-    * Added Custom options for sharing
+** Added Email Subject and Message customization option
+** Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
+** Added Share Full Url ( Enable this if you want to share your site's full URL)
+** Added option for Facebook App id for tracking Social sharing on facebook app
+** Added option to Display Total Share Count
+** Added option to Open all providers in single window
+** Added option Custom Popup Window Size
+** Added option to set usernames to Mention in twitter share
+** Added option to set Twitter Hash Tag
+** Added Custom options for sharing
 
 = 2.3.5 =
 * Set V2captcha as default
@@ -172,18 +180,24 @@ Yes, the LoginRadius Team can assist you with implementing these social features
 = 2.3.6 =
 * Bug Fixing
 * Added new Social Sharing Features
-    * Added Email Subject and Message customization option
-    * Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
-    * Added Share Full Url ( Enable this if you want to share your site's full URL)
-    * Added option for Facebook App id for tracking Social sharing on facebook app
-    * Added option to Display Total Share Count
-    * Added option to Open all providers in single window
-    * Added option Custom Popup Window Size
-    * Added option to set usernames to Mention in twitter share
-    * Added option to set Twitter Hash Tag
-    * Added Custom options for sharing
-	
+** Added Email Subject and Message customization option
+** Added Email Content Readonly ( Your readers wont be able to change the Email Content if its read only)
+** Added Share Full Url ( Enable this if you want to share your site's full URL)
+** Added option for Facebook App id for tracking Social sharing on facebook app
+** Added option to Display Total Share Count
+** Added option to Open all providers in single window
+** Added option Custom Popup Window Size
+** Added option to set usernames to Mention in twitter share
+** Added option to set Twitter Hash Tag
+** Added Custom options for sharing
+
 = 2.3.7 =
 * Bug Fixing in Single-Sign-on
 * Added new provider line image
 * Bug Resolved variable warning issue.
+
+= 2.4.0 =
+* Implemented Hosted Page Functionality
+* Updated amazon and facebook images for custom interface
+* Fixed SSO Issue
+* Updated Multisite Function

@@ -45,9 +45,9 @@ if (!class_exists('Login_Radius_Front')) {
          * Constructor which loads required files at front
          */
         private function __construct() {
-            require_once LOGINRADIUS_PLUGIN_DIR."public/inc/login/class-social-login.php";
-            require_once LOGINRADIUS_PLUGIN_DIR."public/inc/commenting/class-social-commenting.php";
-            require_once LOGINRADIUS_PLUGIN_DIR."public/inc/shortcodes/class-shortcode.php";
+            require_once LR_ROOT_DIR . "lr-social-login/public/inc/login/class-social-login.php";
+            require_once LR_ROOT_DIR . "lr-social-login/public/inc/commenting/class-social-commenting.php";
+            require_once LR_ROOT_DIR . "lr-social-login/public/inc/shortcodes/class-shortcode.php";
             Social_Login::get_instance();
             Social_Commenting::get_instance();
             Login_Radius_Shortcode::get_instance();

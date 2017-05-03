@@ -61,8 +61,8 @@ class LoginRadius_Display {
 
     static function load_commenting_scripts() {
         global $loginradius_api_settings, $loginRadiusSettings, $lr_commenting_settings, $lr_custom_interface_settings, $lr_js_in_footer;
-        wp_enqueue_style( 'lr-form-style', LR_CORE_URL . 'assets/css/lr-form-style.min.css', array(), LR_PLUGIN_VERSION );
-        wp_enqueue_style("loginradius-comments-css", LR_COMMENTS_URL . 'assets/css/lr-comments.min.css', array(), LR_PLUGIN_VERSION);
+        wp_enqueue_style( 'lr-form-style', LR_ROOT_URL . 'lr-core/assets/css/lr-form-style.min.css', array(), LR_PLUGIN_VERSION );
+        wp_enqueue_style("loginradius-comments-css", LR_ROOT_URL . 'lr-commenting/assets/css/lr-comments.min.css', array(), LR_PLUGIN_VERSION);
 
         add_thickbox();
         wp_enqueue_script('lr-sdk');
@@ -73,8 +73,8 @@ class LoginRadius_Display {
             'providers' => isset($lr_custom_interface_settings['selected_providers']) ? $lr_custom_interface_settings['selected_providers'] : ''
         );
 
-        wp_register_script('loginradius-interface-loader', LR_COMMENTS_URL . 'assets/js/lr-interface-loader.min.js', array(), '1.0', $lr_js_in_footer);
-        wp_register_script('loginradius-comments', LR_COMMENTS_URL . 'assets/js/lr-comments.min.js', array('jquery', 'jquery-text-editor', 'lr-sdk'), '1.0', $lr_js_in_footer);
+        wp_register_script('loginradius-interface-loader', LR_ROOT_URL . 'lr-commenting/assets/js/lr-interface-loader.min.js', array(), '1.0', $lr_js_in_footer);
+        wp_register_script('loginradius-comments', LR_ROOT_URL . 'lr-commenting/assets/js/lr-comments.min.js', array('jquery', 'jquery-text-editor', 'lr-sdk'), '1.0', $lr_js_in_footer);
 
         wp_localize_script('loginradius-interface-loader', 'phpvar', $args);
 
@@ -117,7 +117,7 @@ class LoginRadius_Display {
         <?php
         wp_enqueue_script('loginradius-interface-loader');
 
-        wp_enqueue_script("jquery-text-editor", LR_COMMENTS_URL . 'assets/js/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js', array('jquery'), '1.4.0', $lr_js_in_footer);
+        wp_enqueue_script("jquery-text-editor", LR_ROOT_URL . 'lr-commenting/assets/js/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js', array('jquery'), '1.4.0', $lr_js_in_footer);
         wp_enqueue_script('loginradius-comments');
     }
 

@@ -1,10 +1,10 @@
 <?php
 
 // Exit if called directly
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit();
 }
-if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
+if (!class_exists('LR_Social_Profile_Data_Install')) {
 
     /**
      * class responsible for setting default settings for social invite.
@@ -33,26 +33,26 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
             'custom_five_title' => '',
             'custom_five_type' => 'text'
         );
-        
-        /**
-         * Constructor
-         */
-        public function __construct() {
-            add_action( 'deleted_user', array( $this, 'delete_social_profile_data' ) );
-        }
 
         /**
          * Function for adding default social_profile_data settings at activation.
          */
-        public static function set_default_options() {
+        public static function set_default_options($blog_id) {
             global $wpdb, $lr_social_profile_data_settings;
-
-            if ( ! get_option( 'LoginRadius_Social_Profile_Data_settings' ) ) {
-                update_option( 'LoginRadius_Social_Profile_Data_settings', self::$options );
-                $lr_social_profile_data_settings = get_option( 'LoginRadius_Social_Profile_Data_settings' );
+            if ($blog_id) {
+                if (!get_blog_option($blog_id, 'LoginRadius_Social_Profile_Data_settings')) {
+                    update_blog_option($blog_id, 'LoginRadius_Social_Profile_Data_settings', self::$options);
+                    $lr_social_profile_data_settings = get_blog_option($blog_id, 'LoginRadius_Social_Profile_Data_settings');
+                }
+            } else {
+                if (!get_option('LoginRadius_Social_Profile_Data_settings')) {
+                    update_option('LoginRadius_Social_Profile_Data_settings', self::$options);
+                    $lr_social_profile_data_settings = get_option('LoginRadius_Social_Profile_Data_settings');
+                }
             }
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_basic_profile_data` ( 
+
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_basic_profile_data` ( 
                 `id` int( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `social_id` varchar( 150 ) NOT NULL,
@@ -71,17 +71,17 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `thumbnail_image_url` varchar( 300 ) DEFAULT NULL,
                 `image_url` varchar( 300 ) DEFAULT NULL
             )');
-            
- $wpdb->query( 'ALTER TABLE `' . $wpdb->base_prefix . 'lr_basic_profile_data` MODIFY `birth_date` varchar(50)' );
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_emails` ( 
+            $wpdb->query('ALTER TABLE `' . $wpdb->base_prefix . 'lr_basic_profile_data` MODIFY `birth_date` varchar(50)');
+
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_emails` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `email_type` varchar( 15 ) DEFAULT NULL,
                 `email` varchar( 100 ) DEFAULT NULL
             )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_extended_location_data` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_extended_location_data` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `address_line_1` varchar( 300 ) DEFAULT NULL,
@@ -100,7 +100,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `profile_country` varchar( 50 ) DEFAULT NULL
             )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_extended_profile_data` (
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_extended_profile_data` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `website` varchar( 300 ) DEFAULT NULL,
@@ -131,7 +131,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `professional_headline` varchar( 300 ) DEFAULT NULL
             )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_positions` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_positions` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `position` varchar( 100 ) DEFAULT NULL,
@@ -141,17 +141,17 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `is_current` enum( \'0\',\'1\' ) DEFAULT NULL,
                 `company` int( 11 ) DEFAULT NULL,
                 `location` varchar( 255 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_companies` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_companies` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `company_name` varchar( 100 ) DEFAULT NULL,
                 `company_type` varchar( 50 ) DEFAULT NULL,
                 `industry` varchar( 150 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_education` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_education` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `school` varchar( 100 ) DEFAULT NULL,
@@ -163,23 +163,23 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `field_of_study` varchar( 100 ) DEFAULT NULL,
                 `start_date` varchar( 50 ) DEFAULT NULL,
                 `end_date` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_phone_numbers` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_phone_numbers` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `number_type` varchar( 20 ) DEFAULT NULL,
                 `phone_number` varchar( 20 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_imaccounts` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_imaccounts` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `account_type` varchar( 20 ) DEFAULT NULL,
                 `account_username` varchar( 100 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_addresses` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_addresses` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `type` varchar( 20 ) DEFAULT NULL,
@@ -189,39 +189,39 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `state` varchar( 100 ) DEFAULT NULL,
                 `postal_code` varchar( 20 ) DEFAULT NULL,
                 `region` varchar( 100 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_sports` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_sports` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `sport_id` varchar( 20 ) DEFAULT NULL,
                 `sport` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_inspirational_people` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_inspirational_people` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `social_id` varchar( 20 ) DEFAULT NULL,
                 `name` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_skills` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_skills` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `skill_id` varchar( 20 ) DEFAULT NULL,
                 `name` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_current_status` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_current_status` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `status_id` varchar( 30 ) DEFAULT NULL,
                 `status` varchar( 1500 ) DEFAULT NULL,
                 `source` varchar( 500 ) DEFAULT NULL,
                 `created_date` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_certifications` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_certifications` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `certification_id` varchar( 30 ) DEFAULT NULL,
@@ -230,58 +230,58 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `license_number` varchar( 50 ) DEFAULT NULL,
                 `start_date` varchar( 50 ) DEFAULT NULL,
                 `end_date` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_courses` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_courses` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `course_id` varchar( 30 ) DEFAULT NULL,
                 `course` varchar( 100 ) DEFAULT NULL,
                 `course_number` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_volunteer` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_volunteer` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `volunteer_id` varchar( 30 ) DEFAULT NULL,
                 `role` varchar( 50 ) DEFAULT NULL,
                 `organization` varchar( 50 ) DEFAULT NULL,
                 `cause` varchar( 100 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_recommendations_received` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_recommendations_received` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `recommendation_id` varchar( 30 ) DEFAULT NULL,
                 `recommendation_type` varchar( 100 ) DEFAULT NULL,
                 `recommendation_text` varchar( 1500 ) DEFAULT NULL,
                 `recommender` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_languages` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_languages` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `language_id` varchar( 30 ) DEFAULT NULL,
                 `language` varchar( 30 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_patents` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_patents` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `patent_id` varchar( 30 ) DEFAULT NULL,
                 `title` varchar( 100 ) DEFAULT NULL,
                 `date` varchar( 30 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_favorites` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_favorites` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `social_id` varchar( 30 ) DEFAULT NULL,
                 `name` varchar( 100 ) DEFAULT NULL,
                 `type` varchar( 50 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_facebook_likes` (
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_facebook_likes` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `like_id` varchar( 40 ) DEFAULT NULL,
@@ -292,7 +292,7 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `description` varchar( 1500 ) DEFAULT NULL
             )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_facebook_events` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_facebook_events` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `event_id` varchar( 30 ) NOT NULL,
@@ -306,9 +306,9 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `owner_id` varchar( 100 ),
                 `owner_name` varchar( 300 ),
                 `updated_date` datetime
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_facebook_posts` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_facebook_posts` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `post_id` varchar( 50 ) NOT NULL,
@@ -322,15 +322,15 @@ if ( ! class_exists( 'LR_Social_Profile_Data_Install' ) ) {
                 `likes` int( 8 ) DEFAULT NULL,
                 `shares` int( 8 ) DEFAULT NULL,
                 `type` varchar( 50 ) DEFAULT NULL
-            )' );
-            
+            )');
 
-            
-if(in_array('post_id', $wpdb->get_col( "DESC " . $wpdb->prefix . 'lr_facebook_posts', 0 ))){
-    $wpdb->query( 'ALTER TABLE `' . $wpdb->base_prefix . 'lr_facebook_posts` CHANGE `post_id` `post_ids` varchar(50)' );
-}
-            
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_albums` (
+
+
+            if (in_array('post_id', $wpdb->get_col("DESC " . $wpdb->prefix . 'lr_facebook_posts', 0))) {
+                $wpdb->query('ALTER TABLE `' . $wpdb->base_prefix . 'lr_facebook_posts` CHANGE `post_id` `post_ids` varchar(50)');
+            }
+
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_albums` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `album_id` varchar( 40 ) DEFAULT NULL,
@@ -346,7 +346,7 @@ if(in_array('post_id', $wpdb->get_col( "DESC " . $wpdb->prefix . 'lr_facebook_po
                 `directory_url` varchar( 300 ) DEFAULT NULL
             )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_contacts`( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_contacts`( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `social_id` varchar( 255 ) DEFAULT NULL,
@@ -360,9 +360,9 @@ if(in_array('post_id', $wpdb->get_col( "DESC " . $wpdb->prefix . 'lr_facebook_po
                 `industry` varchar( 50 ) DEFAULT NULL,
                 `country` varchar( 20 ) DEFAULT NULL,
                 `gender` varchar( 10 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_groups`( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_groups`( 
                 `id` int( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `provider` varchar( 30 ) NOT NULL,
@@ -376,9 +376,9 @@ if(in_array('post_id', $wpdb->get_col( "DESC " . $wpdb->prefix . 'lr_facebook_po
                 `name` varchar( 100 ) DEFAULT NULL,
                 `postal_code` varchar ( 50 ),
                 `type` varchar ( 100 )        
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_status` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_status` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `provider` varchar( 20 ) NOT NULL,
@@ -390,9 +390,9 @@ if(in_array('post_id', $wpdb->get_col( "DESC " . $wpdb->prefix . 'lr_facebook_po
                 `source` varchar( 500 ) DEFAULT NULL,
                 `image_url` varchar( 1000 ) DEFAULT NULL,
                 `link_url` varchar( 1000 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_twitter_mentions` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_twitter_mentions` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `mention_id` varchar( 30 ) NOT NULL,
@@ -404,95 +404,45 @@ if(in_array('post_id', $wpdb->get_col( "DESC " . $wpdb->prefix . 'lr_facebook_po
                 `image_url` varchar( 1000 ) DEFAULT NULL,
                 `link_url` varchar( 1000 ) DEFAULT NULL,
                 `mentioned_by` varchar( 100 ) DEFAULT NULL
-            )' );
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_linkedin_companies` ( 
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_linkedin_companies` ( 
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `company_id` varchar( 20 ) NOT NULL,
                 `company_name` varchar( 200 ) DEFAULT NULL
-            )' );
+            )');
 
-			$wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_popup_custom_fields_map` (
-				`field_id` int(2) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-				`field_name` varchar( 40 ) DEFAULT NULL,
-				`field_type` varchar( 40 ) DEFAULT NULL,
-				`field_title` varchar( 100 ) DEFAULT NULL
-			)' );
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_popup_custom_fields_map` (
+                `field_id` int(2) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `field_name` varchar( 40 ) DEFAULT NULL,
+                `field_type` varchar( 40 ) DEFAULT NULL,
+                `field_title` varchar( 100 ) DEFAULT NULL
+            )');
 
-			$wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_popup_custom_fields_dropdown` (
-				`field_id` int(2) NOT NULL,
-				`field_value` varchar( 100 ) DEFAULT NULL
-			)' );
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_popup_custom_fields_dropdown` (
+                `field_id` int(2) NOT NULL,
+                `field_value` varchar( 100 ) DEFAULT NULL
+            )');
 
-            $wpdb->query( 'CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_popup_custom_fields_data` (
+            $wpdb->query('CREATE TABLE IF NOT EXISTS `' . $wpdb->base_prefix . 'lr_popup_custom_fields_data` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wp_users_id` int( 11 ) NOT NULL,
                 `field_title` varchar( 100 ) DEFAULT NULL,
                 `field_value` varchar( 100 ) DEFAULT NULL
-			)');
+            )');
 
             // Count number of rows in lr_popup_custom_fields_map table, create 5 new records if count is 0
-            $num_custom_fields_map_rows = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->base_prefix . 'lr_popup_custom_fields_map' );
-            if ( $num_custom_fields_map_rows == 0) {
-                for ( $i = 0; $i < 5; $i++ ) {
+            $num_custom_fields_map_rows = $wpdb->get_var('SELECT COUNT(*) FROM ' . $wpdb->base_prefix . 'lr_popup_custom_fields_map');
+            if ($num_custom_fields_map_rows == 0) {
+                for ($i = 0; $i < 5; $i++) {
                     $row_num = $i + 1;
-                    $wpdb->insert( $wpdb->base_prefix . 'lr_popup_custom_fields_map', array( 'field_name' => 'field_' . $row_num . '', 'field_type' => 'text', 'field_title' => '' ) );
+                    $wpdb->insert($wpdb->base_prefix . 'lr_popup_custom_fields_map', array('field_name' => 'field_' . $row_num . '', 'field_type' => 'text', 'field_title' => ''));
                 }
             }
         }
 
-        /**
-         * Function to reset Social_Profile_Data options to default.
-         */
-        public static function reset_options() {
-            global $lr_social_profile_data_settings;
-
-            do_action( 'lr_reset_admin_action','LoginRadius_Social_Profile_Data_settings', self::$options );
-            // Get social_profile_data settings
-            $lr_social_profile_data_settings = get_option( 'LoginRadius_Social_Profile_Data_settings' );
-        }
-
-        /**
-         * Deletes Social Profile Data after deleting a user
-         */
-        function delete_social_profile_data( $id ) {
-            global $wpdb;
-
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_basic_profile_data WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_emails WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_extended_location_data WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_extended_profile_data WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_positions WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_companies WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_education WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_phone_numbers WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_imaccounts WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_addresses WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_sports WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_inspirational_people WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_skills WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_current_status WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_certifications WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_courses WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_volunteer WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_recommendations_received WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_languages WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_patents WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_favorites WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_facebook_likes WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_facebook_events WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_facebook_posts WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_albums WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_contacts WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_contacts WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_groups WHERE wp_users_id = %d", $id ) );
-            //$wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_status WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_twitter_mentions WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_linkedin_companies WHERE wp_users_id = %d", $id ) );
-            $wpdb->query($wpdb->prepare( "DELETE FROM " . $wpdb->base_prefix . "lr_popup_custom_fields_data WHERE wp_users_id = %d", $id ) );
-        }
-
     }
+
     new LR_Social_Profile_Data_Install();
 }

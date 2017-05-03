@@ -1,5 +1,4 @@
 <?php
-
 // Exit if called directly
 if (!defined('ABSPATH')) {
     exit();
@@ -34,14 +33,13 @@ if (!class_exists('LR_Raas_Admin')) {
          * Register LR_Raas_Settings and its sanitization callback. Replicate loginradius settings on multisites.
          */
         public function admin_init() {
-            
+
             register_setting('lr_raas_settings', 'LR_Raas_Settings', array($this, 'validate_options'));
             add_action('lr_raas_social_linking', array($this, 'get_raas_account_linking'));
 
             // Replicate Raas configuration to the subblogs in the multisite network
             if (is_multisite() && is_main_site()) {
                 add_action('wpmu_new_blog', array($this, 'replicate_settings_to_new_blog'));
-                add_action('update_option_LR_Raas_Settings', array($this, 'update_old_blogs'));
             }
         }
 
@@ -51,7 +49,7 @@ if (!class_exists('LR_Raas_Admin')) {
          * @param type $user_id
          */
         public function delete_user($user_id) {
-            
+
             global $accountAPIObject;
             $raas_uid = get_user_meta($user_id, 'lr_raas_uid', true);
             if (!empty($raas_uid)) {
@@ -74,8 +72,8 @@ if (!class_exists('LR_Raas_Admin')) {
                 return;
             }
             global $lr_js_in_footer;
-            wp_enqueue_style('lr-raas-admin-style', LR_RAAS_URL . 'assets/css/lr-raas-style-admin.css');
-            wp_enqueue_script('lr-raas-admin-js', LR_RAAS_URL . 'assets/js/lr-raas-admin.js', array('jquery'), LR_PLUGIN_VERSION, $lr_js_in_footer);
+            wp_enqueue_style('lr-raas-admin-style', LR_ROOT_URL . 'lr-raas/assets/css/lr-raas-style-admin.css');
+            wp_enqueue_script('lr-raas-admin-js', LR_ROOT_URL . 'lr-raas/assets/js/lr-raas-admin.js', array('jquery'), LR_PLUGIN_VERSION, $lr_js_in_footer);
         }
 
         /**
@@ -91,23 +89,22 @@ if (!class_exists('LR_Raas_Admin')) {
                 return;
             }
 
-            if (is_user_logged_in()) {                
-                
+            if (is_user_logged_in()) {
+
                 $user_id = get_current_user_id();
                 $uid = get_user_meta($user_id, 'lr_raas_uid', true);
-                
+
                 if (empty($uid)) {
                     printf('<div class="error notice"><p>' . __('Please verify your account to get account linking service.', 'lr-plugin-slug') . '</p></div>');
                     return;
                 }
                 global $socialLoginObject, $accountAPIObject, $wpdb;
                 $emailVerified = $accountAPIObject->getAccounts($uid);
-                
-                if(empty($emailVerified[0]->EmailVerified)){
+
+                if (empty($emailVerified[0]->EmailVerified)) {
                     printf('<div class="error notice"><p>' . __('Please verify your account to get account linking service.', 'lr-plugin-slug') . '</p></div>');
                     return;
                 }
-                
                 ?>
                 <div class="metabox-holder columns-2" id="post-body">
                     <div class="stuffbox wrap">
@@ -143,32 +140,31 @@ if (!class_exists('LR_Raas_Admin')) {
                                             }
                                             printf('<div class="' . $type . ' lr_' . $type . '"><p>' . $message . '</p></div>');
                                         } elseif (isset($_POST['token']) && !empty($_POST['token']) && is_user_logged_in()) {
-                                            try{
+                                            try {
                                                 $userProfileObject = $socialLoginObject->getUserProfiledata($_POST['token']);
-                                            } catch( \LoginRadiusSDK\LoginRadiusException $e ) {
-                                                
+                                            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+
                                                 $userProfileObject = null;
                                                 $message = isset($e->getErrorResponse()->description) ? $e->getErrorResponse()->description : $e->getMessage();
-                        error_log($message);
-                        // If debug option is set and Social Profile not retrieved
-                        Login_Helper::login_radius_notify($message, 'isProfileNotRetrieved');
-                        return;
+                                                error_log($message);
+                                                // If debug option is set and Social Profile not retrieved
+                                                Login_Helper::login_radius_notify($message, 'isProfileNotRetrieved');
+                                                return;
                                             }
-                                            
+
                                             if (isset($userProfileObject->Provider) && isset($userProfileObject->ID)) {
                                                 $linkuser = get_users('meta_value=' . $userProfileObject->ID);
 //                                                
 //                                                
-                                                    try {
-                                                       $accountAPIObject->accountLink($uid, $userProfileObject->ID, $userProfileObject->Provider);
-                                                        
-                                                        LR_Common::link_account($user_id, $userProfileObject->ID, $userProfileObject->Provider, $userProfileObject->ThumbnailImageUrl, $userProfileObject->ImageUrl);
-                                                        $type = 'updated settings-error';
-                                                        $message = __('Your account is linked successfully', 'lr-plugin-slug');
-                                                    } catch (\LoginRadiusSDK\LoginRadiusException $e) {
-                                                        $message = isset($e->getErrorResponse()->description) ? $e->getErrorResponse()->description : __('An error has occurred', 'lr-plugin-slug');
-                                                    }
-                                                
+                                                try {
+                                                    $accountAPIObject->accountLink($uid, $userProfileObject->ID, $userProfileObject->Provider);
+
+                                                    LR_Common::link_account($user_id, $userProfileObject->ID, $userProfileObject->Provider, $userProfileObject->ThumbnailImageUrl, $userProfileObject->ImageUrl);
+                                                    $type = 'updated settings-error';
+                                                    $message = __('Your account is linked successfully', 'lr-plugin-slug');
+                                                } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                                                    $message = isset($e->getErrorResponse()->description) ? $e->getErrorResponse()->description : __('An error has occurred', 'lr-plugin-slug');
+                                                }
                                             }
                                             printf('<div class="' . $type . ' lr_' . $type . '"><p>' . $message . '</p></div>');
                                         }
@@ -198,7 +194,7 @@ if (!class_exists('LR_Raas_Admin')) {
                                                     }
                                                     printf(__('with ', 'lr-plugin-slug') . '</span>');
                                                     printf('<span style="margin-right:5px;">');
-                                                    printf('<img src="' . LR_RAAS_URL . 'assets/images/mapping/' . $raas_linked_account[$i]->Provider . '.png">');
+                                                    printf('<img src="' . LR_ROOT_URL . 'lr-raas/assets/images/mapping/' . $raas_linked_account[$i]->Provider . '.png">');
                                                     printf('</span>');
                                                     printf('<button type="submit" class="buttondelete"><span>' . __('Remove', 'lr-plugin-slug') . '</span></button>');
                                                     printf('<input type="hidden" name="provider" value="' . $raas_linked_account[$i]->Provider . '">');
@@ -227,23 +223,6 @@ if (!class_exists('LR_Raas_Admin')) {
         public function replicate_settings_to_new_blog($blogId) {
             global $loginRadiusSettings;
             add_blog_option($blogId, 'LoginRadius_settings', $loginRadiusSettings);
-        }
-
-        /**
-         * Update the raas options in all the old blogs.
-         * 
-         * @global type $loginradius_api_settings
-         * @param type $oldConfig
-         */
-        public function update_old_blogs($oldConfig) {
-            global $loginradius_api_settings;
-            if (isset($loginradius_api_settings['multisite_config']) && $loginradius_api_settings['multisite_config'] == '1') {
-                $loginRadiusSettings = get_option('LoginRadius_settings');
-                $blogs = wp_get_sites();
-                foreach ($blogs as $blog) {
-                    update_blog_option($blog['blog_id'], 'LoginRadius_settings', $loginRadiusSettings);
-                }
-            }
         }
 
         /**
@@ -278,7 +257,7 @@ if (!class_exists('LR_Raas_Admin')) {
             if (isset($settings['raas_autopage']) && $settings['raas_autopage'] == '1') {
                 // Enable Raas.
                 // Create new pages and get array of page ids.
-                $options = LR_Raas_Install::activation($settings);
+                $options = self::create_pages($settings);
                 // Merge new page ids with settings array.
                 $settings = array_merge($settings, $options);
             }
@@ -290,13 +269,89 @@ if (!class_exists('LR_Raas_Admin')) {
             return $settings;
         }
 
+        /**
+         * create RaaS custom pages
+         * 
+         * @param type $settings
+         * @return type
+         */
+        public static function create_pages($settings) {
+
+            // Create Login Page.
+            if (isset($settings['login_page_id']) && $settings['login_page_id'] == '') {
+                $loginPage = array(
+                    'post_title' => 'Login',
+                    'post_content' => '[raas_login_form]',
+                    'post_status' => 'publish',
+                    'post_type' => 'page',
+                    'post_author' => get_current_user_id(),
+                    'comment_status' => 'closed'
+                );
+                $loginPageId = wp_insert_post($loginPage);
+            } else {
+                $loginPageId = $settings['login_page_id'];
+            }
+
+            // Create Registration Page.
+            if (isset($settings['registration_page_id']) && $settings['registration_page_id'] == '') {
+                $registrationPage = array(
+                    'post_title' => 'Registration',
+                    'post_content' => '[raas_registration_form]',
+                    'post_status' => 'publish',
+                    'post_type' => 'page',
+                    'post_author' => get_current_user_id(),
+                    'comment_status' => 'closed'
+                );
+                $registrationPageId = wp_insert_post($registrationPage);
+            } else {
+                $registrationPageId = $settings['registration_page_id'];
+            }
+
+            // Create Change Password Page.
+            if (isset($settings['change_password_page_id']) && $settings['change_password_page_id'] == '') {
+                $changePasswordPage = array(
+                    'post_title' => 'Change Password',
+                    'post_content' => '[raas_password_form]',
+                    'post_status' => 'publish',
+                    'post_type' => 'page',
+                    'post_author' => get_current_user_id(),
+                    'comment_status' => 'closed'
+                );
+                $changePasswordPageId = wp_insert_post($changePasswordPage);
+            } else {
+                $changePasswordPageId = $settings['change_password_page_id'];
+            }
+
+            // Create Lost Password Page.
+            if (isset($settings['lost_password_page_id']) && $settings['lost_password_page_id'] == '') {
+                $lostPasswordPage = array(
+                    'post_title' => 'Lost Password',
+                    'post_content' => '[raas_forgotten_form]',
+                    'post_status' => 'publish',
+                    'post_type' => 'page',
+                    'post_author' => get_current_user_id(),
+                    'comment_status' => 'closed'
+                );
+                $lostPasswordPageId = wp_insert_post($lostPasswordPage);
+            } else {
+                $lostPasswordPageId = $settings['lost_password_page_id'];
+            }
+
+            return array(
+                'login_page_id' => trim($loginPageId),
+                'registration_page_id' => trim($registrationPageId),
+                'change_password_page_id' => trim($changePasswordPageId),
+                'lost_password_page_id' => trim($lostPasswordPageId)
+            );
+        }
+
         /*
          * Callback for add_submenu_page,
          * This is the first function which is called while plugin admin page is requested
          */
 
         public static function options_page() {
-            include_once LR_RAAS_DIR . "admin/views/settings.php";
+            require_once LR_ROOT_DIR . "lr-raas/admin/views/settings.php";
             LR_Raas_Admin_Settings::render_options_page();
         }
 

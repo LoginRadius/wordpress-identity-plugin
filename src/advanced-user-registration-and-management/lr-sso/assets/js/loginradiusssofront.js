@@ -1,12 +1,7 @@
 jQuery(document).ready(function ($) {
     var pathArray = window.location.pathname.split( '/' );
 
-    LoginRadiusSSO.init( lrSsoOptions.sitename, pathArray[1] );
-    if(lrSsoOptions.isforcelogout){
-        LoginRadiusSSO.logout(lrSsoOptions.isforcelogout);
-        return;
-    }
-    
+    LoginRadiusSSO.init( lrSsoOptions.sitename, "/"+pathArray[1] );
     if( lrSsoOptions.raasenable ){
         if (!LoginRadiusRaaS.loginradiushtml5passToken) {
             LoginRadiusRaaS.loginradiushtml5passToken = function (token) {
@@ -22,7 +17,7 @@ jQuery(document).ready(function ($) {
             window.location.href = lrSsoOptions.logouturl;
         });
     }
-        
+    
     if( ! lrSsoOptions.istoken && !lrSsoOptions.islogin ){
         LoginRadiusSSO.login(window.location.href);
     }
@@ -33,7 +28,7 @@ jQuery(document).ready(function ($) {
 
     $('#wp-admin-bar-logout').click(function (e) {
         e.preventDefault();
-        LoginRadiusSSO.logout(href);
+        logout(href);
     });
 
     if ($('a[href*="logout"]').length > 0) {
@@ -42,7 +37,7 @@ jQuery(document).ready(function ($) {
         $('a[href*="logout"]').css({"cursor": "pointer"});
         $('a[href*="logout"]').removeAttr('href');
         $('a[data-action="lr-sso-logout"]').click(function () {
-            LoginRadiusSSO.logout(href);
+            logout(href);
         });
     }
     return false;

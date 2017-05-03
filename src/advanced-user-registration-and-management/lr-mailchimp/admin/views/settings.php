@@ -24,7 +24,7 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
                         jQuery('#mc-apikey-import-message').html('<span style="color:red; width:auto"><?php _e("Please enter a valid Mailchimp API Key", "lr-plugin-slug"); ?></span>');
                         return;
                     }
-                    jQuery('#mc-apikey-import-message').html('<img width="20" height="20" src="<?php echo LR_MAILCHIMP_URL . "assets/images/loading_icon.gif"; ?>" style="float:left;margin-right: 5px;" /><span style="color:blue; width:auto"><?php _e("Importing Mailchimp lists", "lr-plugin-slug"); ?>...</span>');
+                    jQuery('#mc-apikey-import-message').html('<img width="20" height="20" src="<?php echo  LR_ROOT_URL . "lr-mailchimp/assets/images/loading_icon.gif"; ?>" style="float:left;margin-right: 5px;" /><span style="color:blue; width:auto"><?php _e("Importing Mailchimp lists", "lr-plugin-slug"); ?>...</span>');
 
                     jQuery.ajax({
                         type: 'POST',
@@ -96,15 +96,14 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
                                 for (var i = 0; i < data.tags.length; i++) {
                                     mappingHtml += '<div><span class="lr_property_title">' + data.names[i] + '</span></div><select name="LR_Mailchimp_Settings[mailchimp_merge_var_' + data.tags[i] + ']" id = "mailchimp_merge_var_' + data.tags[i] + '" class="lr-row-field" ><option value="">--Select a field--</option>';
                                     mappingHtml += '<?php
-
-                                    $count = 1;
+            $count = 1;
             foreach ($mappingFields as $field) {
-             
-                if ($field != 'User ID') {     
-                      $fieldParts = explode("|", $field);
-                      if(isset($fieldParts[1]) && $fieldParts[1] == 'website'){                       
-                       
-                          if($count == 1){
+
+                if ($field != 'User ID') {
+                    $fieldParts = explode("|", $field);
+                    if (isset($fieldParts[1]) && $fieldParts[1] == 'website') {
+
+                        if ($count == 1) {
                             echo "<option value=\"$field\">";
                             if (isset($fieldParts[1])) {
                                 $fieldParts2 = explode("_", $fieldParts[1]);
@@ -114,21 +113,21 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
                                 echo $fieldParts[0];
                             }
                             echo "</option>";
-                          $count = $count+1;
-                      }}  else {
-                            echo "<option value=\"$field\">";
-                            if (isset($fieldParts[1])) {
-                                $fieldParts2 = explode("_", $fieldParts[1]);
-                                $fieldParts2 = array_map(array('LR_Advanced_Functions', 'login_radius_ucfirst_in_array'), $fieldParts2);
-                                echo implode(' ', $fieldParts2);
-                            } else {
-                                echo $fieldParts[0];
-                            }
-                            echo "</option>";
+                            $count = $count + 1;
                         }
+                    } else {
+                        echo "<option value=\"$field\">";
+                        if (isset($fieldParts[1])) {
+                            $fieldParts2 = explode("_", $fieldParts[1]);
+                            $fieldParts2 = array_map(array('LR_Advanced_Functions', 'login_radius_ucfirst_in_array'), $fieldParts2);
+                            echo implode(' ', $fieldParts2);
+                        } else {
+                            echo $fieldParts[0];
+                        }
+                        echo "</option>";
+                    }
                 }
-                
-            }   
+            }
             ?>';
                                     mappingHtml += '</select></div>';
                                 }
@@ -159,12 +158,7 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
 
         public static function render_options_page() {
             global $lr_mailchimp_settings;
-            if (isset($_POST['reset'])) {
-                LR_Mailchimp_Install::reset_loginradius_mailchimp_options();
-                echo '<p style="display:none;" class="lr-alert-box lr-notif">Mailchimp settings have been reset and default values loaded</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
-
+            LR_Mailchimp::reset_options();
             $lr_mailchimp_settings = get_option('LR_Mailchimp_Settings');
             ?>
 
@@ -237,15 +231,15 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
                                     ?>
                                     <div class="lr-row">
                                         <h3>
-                                    <?php _e('Map your Mailchimp List Merge Fields to the Social Login profile data.', 'lr-plugin-slug'); ?>
-                                         <span class="lr-tooltip" data-title="<?php _e('Enable Social Profile data for mapping the field.', 'lr-plugin-slug'); ?>">
-                                            <span class="dashicons dashicons-editor-help"></span>
-                                        </span>
+                                            <?php _e('Map your Mailchimp List Merge Fields to the Social Login profile data.', 'lr-plugin-slug'); ?>
+                                            <span class="lr-tooltip" data-title="<?php _e('Enable Social Profile data for mapping the field.', 'lr-plugin-slug'); ?>">
+                                                <span class="dashicons dashicons-editor-help"></span>
+                                            </span>
                                         </h3>
                                         <div id="login_radius_mailchimp_mapping">
                                             <div>
                                                 <span class="lr_property_title">
-                <?php _e('Email', 'lr-plugin-slug'); ?>
+                                                    <?php _e('Email', 'lr-plugin-slug'); ?>
                                                 </span>
                                                 <select name="LR_Mailchimp_Settings[mailchimp_lists]" class="lr-row-field">
                                                     <option value=''>--Select a List--</option>
@@ -253,37 +247,37 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
                                             </div>
                                         </div>
                                     </div>
-            <?php } ?>
-<!--                                <div class="lr-row">
-                                    <h3>
-                                <?php //_e('Enable MailChimp Verification', 'lr-plugin-slug'); ?>
-                                    </h3>
-                                    <div>
-                                        <input type="checkbox" class="lr-toggle" id="lr-mailchimp-verification-enable" name="LR_Mailchimp_Settings[enable_email_confirm]" value='1' <?php //echo ( isset($lr_mailchimp_settings['enable_email_confirm']) && $lr_mailchimp_settings['enable_email_confirm'] == '1' ) ? 'checked' : '' ?> />
-                                        <label class="lr-show-toggle" for="lr-mailchimp-verification-enable">
-            <?php //_e('Enable MailChimp Double Opt-In Verification'); ?>
-                                            <span class="lr-tooltip" data-title="<?php //_e('Turn on, if you want Mailchimp to send an email to the user for their permission to be added to the selected list', 'lr-plugin-slug'); ?>">
-                                                <span class="dashicons dashicons-editor-help"></span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>-->
+                                <?php } ?>
+                                <!--                                <div class="lr-row">
+                                                                    <h3>
+                                <?php //_e('Enable MailChimp Verification', 'lr-plugin-slug');  ?>
+                                                                    </h3>
+                                                                    <div>
+                                                                        <input type="checkbox" class="lr-toggle" id="lr-mailchimp-verification-enable" name="LR_Mailchimp_Settings[enable_email_confirm]" value='1' <?php //echo ( isset($lr_mailchimp_settings['enable_email_confirm']) && $lr_mailchimp_settings['enable_email_confirm'] == '1' ) ? 'checked' : ''   ?> />
+                                                                        <label class="lr-show-toggle" for="lr-mailchimp-verification-enable">
+                                <?php //_e('Enable MailChimp Double Opt-In Verification');  ?>
+                                                                            <span class="lr-tooltip" data-title="<?php //_e('Turn on, if you want Mailchimp to send an email to the user for their permission to be added to the selected list', 'lr-plugin-slug');  ?>">
+                                                                                <span class="dashicons dashicons-editor-help"></span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>-->
                             </div>
                         </div>
                         <p class="submit">
-            <?php submit_button('Save Settings', 'primary', 'submit', false); ?>
+                            <?php submit_button('Save Settings', 'primary', 'submit', false); ?>
                         </p>
                     </form>
                 </div>
-                            <?php do_action('lr_reset_admin_ui', 'Mailchimp'); ?>
-            <?php
-            self::mailchimp_script();
+                <?php do_action('lr_reset_admin_ui', 'Mailchimp'); ?>
+                <?php
+                self::mailchimp_script();
 
-            // Populate Mailchimp apikey and lists if saved in database.
-            if (isset($lr_mailchimp_settings['mailchimp_subscribe']) && $lr_mailchimp_settings['mailchimp_subscribe'] == '1' && isset($lr_mailchimp_settings['mailchimp_apikey']) && $lr_mailchimp_settings['mailchimp_apikey'] != '') {
-                global $loginRadiusMailchimp;
-                $loginRadiusMailchimp = new MCAPI(trim($lr_mailchimp_settings['mailchimp_apikey']));
-                ?>
+                // Populate Mailchimp apikey and lists if saved in database.
+                if (isset($lr_mailchimp_settings['mailchimp_subscribe']) && $lr_mailchimp_settings['mailchimp_subscribe'] == '1' && isset($lr_mailchimp_settings['mailchimp_apikey']) && $lr_mailchimp_settings['mailchimp_apikey'] != '') {
+                    global $loginRadiusMailchimp;
+                    $loginRadiusMailchimp = new MCAPI(trim($lr_mailchimp_settings['mailchimp_apikey']));
+                    ?>
                     <script>
                         loginRadiusSaveMCAPIKey('<?php echo trim($lr_mailchimp_settings['mailchimp_apikey']) ?>');
                     </script>
@@ -296,9 +290,9 @@ if (!class_exists('LR_Mailchimp_Admin_Settings')) {
                 }
                 ?>
             </div>
-                <?php
-            }
-
+            <?php
         }
 
     }
+
+}

@@ -112,7 +112,7 @@ if (!class_exists('LR_Raas_Custom_Obj_Front')) {
             // Custom Object Exists - Check Data            
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-validater', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js', array('jquery'), LR_PLUGIN_VERSION, $lr_js_in_footer);
-            wp_enqueue_style('lr_custom_object.css', LR_CUSTOM_OBJECT_URL . 'assets/css/lr_customobject_style.css');
+            wp_enqueue_style('lr_custom_object.css', LR_ROOT_URL . 'lr-custom-object/assets/css/lr_customobject_style.css');
             ?>
 
 

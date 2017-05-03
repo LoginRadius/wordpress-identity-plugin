@@ -83,7 +83,7 @@ if (!class_exists('LR_SSO_Front')) {
             global $lr_js_in_footer;
             LR_Raas::enqueue_front_scripts();
             wp_enqueue_script('lr-sso', '//cdn.loginradius.com/hub/prod/js/LoginRadiusSSO.js', array('jquery', 'lr-raas', 'lr-social-login'), LR_PLUGIN_VERSION, $lr_js_in_footer);
-            wp_enqueue_script('lr-sso-script', LR_SSO_URL . 'assets/js/loginradiusssofront.js', array('lr-sso'), LR_PLUGIN_VERSION, $lr_js_in_footer);
+            wp_enqueue_script('lr-sso-script', LR_ROOT_URL . 'lr-sso/assets/js/loginradiusssofront.js', array('lr-sso'), LR_PLUGIN_VERSION, $lr_js_in_footer);
         }
 
     }

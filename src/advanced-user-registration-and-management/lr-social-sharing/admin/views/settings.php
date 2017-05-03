@@ -68,19 +68,19 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
                         <h3><?php _e('Select the sharing theme', 'lr-plugin-slug'); ?></h3>
                         <div>
                             <input type="radio" id="lr-vertical-32-v" name="LoginRadius_share_settings[vertical_share_interface]" value="32-v" <?php echo (!isset($settings['vertical_share_interface']) || $settings['vertical_share_interface'] == '32-v' ) ? 'checked' : ''; ?> />
-                            <label class="lr_vertical_interface_img" for="lr-vertical-32-v"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/32-v.png" ?>" /></label>
+                            <label class="lr_vertical_interface_img" for="lr-vertical-32-v"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/32-v.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-vertical-16-v" name="LoginRadius_share_settings[vertical_share_interface]" value="16-v" <?php echo ( $settings['vertical_share_interface'] == '16-v' ) ? 'checked' : ''; ?> />
-                            <label class="lr_vertical_interface_img" for="lr-vertical-16-v"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/16-v.png" ?>" /></label>
+                            <label class="lr_vertical_interface_img" for="lr-vertical-16-v"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/16-v.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-vertical-hybrid-v-v" name="LoginRadius_share_settings[vertical_share_interface]" value="hybrid-v-v" <?php echo ( $settings['vertical_share_interface'] == 'hybrid-v-v' ) ? 'checked' : ''; ?> />
-                            <label class="lr_vertical_interface_img" for="lr-vertical-hybrid-v-v"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/hybrid-v-v.png" ?>" /></label>
+                            <label class="lr_vertical_interface_img" for="lr-vertical-hybrid-v-v"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/hybrid-v-v.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-vertical-hybrid-v-h" name="LoginRadius_share_settings[vertical_share_interface]" value="hybrid-v-h" <?php echo ( $settings['vertical_share_interface'] == 'hybrid-v-h' ) ? 'checked' : ''; ?> />
-                            <label class="lr_vertical_interface_img" for="lr-vertical-hybrid-v-h"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/hybrid-v-h.png" ?>" /></label>
+                            <label class="lr_vertical_interface_img" for="lr-vertical-hybrid-v-h"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/hybrid-v-h.png" ?>" /></label>
                         </div>
                     </div>
 
@@ -225,31 +225,31 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
                         <h3><?php _e('Select the sharing theme', 'lr-plugin-slug'); ?></h3>
                         <div>
                             <input type="radio" id="lr-horizontal-responsive" name="LoginRadius_share_settings[horizontal_share_interface]" value="responsive" <?php echo ( ! isset( $settings['horizontal_share_interface'] ) || $settings['horizontal_share_interface'] == 'responsive' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-horizontal-responsive"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/responsive.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-horizontal-responsive"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/responsive.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-horizontal-lrg" name="LoginRadius_share_settings[horizontal_share_interface]" value="32-h" <?php echo ( $settings['horizontal_share_interface'] == '32-h' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-horizontal-lrg"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/32-h.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-horizontal-lrg"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/32-h.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-horizontal-responce" name="LoginRadius_share_settings[horizontal_share_interface]" value="16-h" <?php echo ( $settings['horizontal_share_interface'] == '16-h' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-horizontal-sml"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/16-h.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-horizontal-sml"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/16-h.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-single-lg-h" name="LoginRadius_share_settings[horizontal_share_interface]" value="single-lg-h" <?php echo ( $settings['horizontal_share_interface'] == 'single-lg-h' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-single-lg-h"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/single-lg-h.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-single-lg-h"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/single-lg-h.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-single-sm-h" name="LoginRadius_share_settings[horizontal_share_interface]" value="single-sm-h" <?php echo ( $settings['horizontal_share_interface'] == 'single-sm-h' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-single-sm-h"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/single-sm-h.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-single-sm-h"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/single-sm-h.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-sharing/hybrid-h-h" name="LoginRadius_share_settings[horizontal_share_interface]" value="hybrid-h-h" <?php echo ( $settings['horizontal_share_interface'] == 'hybrid-h-h' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-sharing/hybrid-h-h"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/hybrid-h-h.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-sharing/hybrid-h-h"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/hybrid-h-h.png" ?>" /></label>
                         </div>
                         <div>
                             <input type="radio" id="lr-hybrid-h-v" name="LoginRadius_share_settings[horizontal_share_interface]" value="hybrid-h-v" <?php echo ( $settings['horizontal_share_interface'] == 'hybrid-h-v' ) ? 'checked' : ''; ?> />
-                            <label class="lr_horizontal_interface_img" for="lr-hybrid-h-v"><img src="<?php echo LR_SHARE_PLUGIN_URL . "/assets/images/sharing/hybrid-h-v.png" ?>" /></label>
+                            <label class="lr_horizontal_interface_img" for="lr-hybrid-h-v"><img src="<?php echo LR_ROOT_URL . "lr-social-sharing/assets/images/sharing/hybrid-h-v.png" ?>" /></label>
                         </div>
                     </div>
                     <div id="lr_hz_theme_options" class="lr-row cf">
@@ -558,15 +558,8 @@ if ( ! class_exists('LR_Social_Share_Settings') ) {
          */
         public static function render_options_page() {
             global $loginradius_share_settings;
-            
+            LR_Social_Sharing::reset_options();
             $loginradius_share_settings = get_option('LoginRadius_share_settings');
-            
-            if ( isset( $_POST['reset'] ) ) {
-                LR_Sharing_Install::reset_share_options();
-                echo '<p style="display:none;" class="lr-alert-box lr-notif">Sharing settings have been reset and default values have been applied to the plug-in</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
-            
             ?>
             <!-- LR-wrap -->
             <div class="wrap lr-wrap cf">

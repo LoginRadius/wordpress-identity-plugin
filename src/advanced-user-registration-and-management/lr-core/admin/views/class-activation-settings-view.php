@@ -14,6 +14,7 @@ if ( ! class_exists( 'LR_Activation_Settings' ) ) {
         public static function render_options_page() {
             global $loginradius_api_settings;
             $loginradius_api_settings = get_option( 'LoginRadius_API_settings' );
+            
             ?>
             <!-- LR-wrap -->
             <div class="wrap lr-wrap cf">
@@ -25,7 +26,7 @@ if ( ! class_exists( 'LR_Activation_Settings' ) ) {
                     <div class="cf">
                         <ul class="lr-options-tab-btns">
                             <li class="nav-tab lr-active" data-tab="lr_options_tab-1"><?php _e( 'Activation', 'lr-plugin-slug' ) ?></li>
-                            <li class="nav-tab" data-tab="lr_options_tab-2"><?php _e( 'Advanced Settings', 'lr-plugin-slug' ) ?></li>
+                            <?php if(is_main_site()){?><li class="nav-tab" data-tab="lr_options_tab-2"><?php _e( 'Advanced Settings', 'lr-plugin-slug' ) ?></li><?php }?>
                         </ul>
                         <form action="options.php" method="post">
                         <?php
@@ -97,6 +98,7 @@ if ( ! class_exists( 'LR_Activation_Settings' ) ) {
                                         </span>
                                     </label>
                                 </div><!-- lr-row -->
+                                <?php if(is_main_site()){?>
                                 <div class="lr-row">
                                     <h3><?php _e( 'Plugin deletion options', 'lr-plugin-slug' ); ?></h3>
                                     <div>
@@ -116,32 +118,7 @@ if ( ! class_exists( 'LR_Activation_Settings' ) ) {
                                         </label>
                                     </div>
                                 </div>
-                            <?php
-                                if ( is_multisite() && is_main_site() ) {
-                                    ?>
-                                    <div class="lr-row">
-
-                                        <h3><?php _e( 'Multisite', 'lr-plugin-slug' ); ?></h3>
-                                            <div>
-                                                <h4>
-                                                    <?php _e( 'Do you want to apply the same changes to all blogs when you update the plugin settings in the main blog of a multisite network?', 'lr-plugin-slug' ); ?>
-                                                    <span class="lr-tooltip" data-title="If enabled, it would apply plugin settings of your main site to all other sites under this multisite network.">
-                                                        <span class="dashicons dashicons-editor-help"></span>
-                                                    </span>
-                                                </h4>
-                                                <label>
-                                                    <input type="radio" name="LoginRadius_API_settings[multisite_config]" value='1' <?php echo ( ( ! isset( $loginradius_api_settings['multisite_config'] ) ) || ( isset( $loginradius_api_settings['multisite_config'] ) && $loginradius_api_settings['multisite_config'] == 1 ) ) ? 'checked' : '' ; ?>/>
-                                                    <span><?php _e( 'Yes, apply the same changes to (plugin settings) each blog in the multisite network when I update plugin settings.', 'lr-plugin-slug' ); ?></span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="LoginRadius_API_settings[multisite_config]" value="0" <?php echo ( isset( $loginradius_api_settings['multisite_config'] ) && $loginradius_api_settings['multisite_config'] == 0 ) ? 'checked' : ''; ?>/>
-                                                    <span><?php _e( 'No, do not apply the changes to other blogs when I update plugin settings.', 'lr-plugin-slug' ); ?></span>
-                                                </label>
-                                            </div>
-                                    </div>
-                                    <?php
-                                }
-                            ?>
+                                <?php }?>
                             </div>
                             <p class="submit">
                                 <?php submit_button( 'Save Settings', 'primary', 'submit', false ); ?>

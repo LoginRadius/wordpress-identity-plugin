@@ -13,12 +13,7 @@ if ( ! class_exists( 'LR_Commenting_Admin_Settings' ) ) {
 
         public static function render_options_page() {
             global $lr_commenting_settings;
-
-            if ( isset( $_POST['reset'] ) ) {
-                LR_Commenting_Install:: reset_loginradius_commenting_options();
-                echo '<p style="display:none;" class="lr-alert-box lr-notif">Commenting settings have been reset and default values loaded</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
+            LR_Commenting::reset_options();
             ?>
             <div class="wrap lr-wrap cf">
                 <header>

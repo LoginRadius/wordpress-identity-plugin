@@ -440,7 +440,7 @@ class Ajax_Helper {
             <div class="lr-comment-text">
                 <?php comment_text(); ?>
             </div>
-            <div class="reply">
+            <div class="reply lr-reply-btn">
         <?php comment_reply_link( array_merge( $args, array( 'add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
             </div>
                 <?php if ( 'div' != $args['style'] ) : ?>

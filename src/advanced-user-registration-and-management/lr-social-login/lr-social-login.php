@@ -50,12 +50,11 @@ if (!class_exists('LR_Social_Login')) {
                 return;
             }
 
-            //Declare constants and load dependencies
-            $this->define_constants();
+            //load dependencies
             $this->load_dependencies();
             // Register Activation hook callback.
-            $this->install();
-
+            add_action('lr_plugin_activate', array(get_class(), 'install'), 10, 1);
+            add_action('lr_plugin_deactivate', array(get_class(), 'uninstall'), 10, 1);
             add_action('lr_admin_page', array('LR_Social_Login', 'create_loginradius_menu'), 2);
         }
 
@@ -90,83 +89,77 @@ if (!class_exists('LR_Social_Login')) {
         }
 
         /**
-         * Define constants needed across the plug-in.
-         */
-        private function define_constants() {
-            define('LOGINRADIUS_PLUGIN_DIR', plugin_dir_path(__FILE__));
-            define('LOGINRADIUS_PLUGIN_URL', plugin_dir_url(__FILE__));
-        }
-
-        /**
          * Loads PHP files that required by the plug-in
          *
          * @global loginRadiusSettings, loginRadiusObject
          */
         private function load_dependencies() {
-            global $loginradius_api_settings, $loginRadiusSettings, $socialLoginObject, $loginRadiusLoginIsBpActive,$apiClient_class;
+            global $loginradius_api_settings, $loginRadiusSettings, $socialLoginObject, $loginRadiusLoginIsBpActive, $apiClient_class;
             $apiClient_class = '\LoginRadiusSDK\Clients\WPHttpClient';
             //Load required files.
-            $loginRadiusSDKs = array('LoginRadius','LoginRadiusException',
-                'Clients/IHttpClient','Clients/DefaultHttpClient',
-                'SocialLogin/GetProvidersAPI','SocialLogin/SocialLoginAPI',
-                'CustomerRegistration/AccountAPI','CustomerRegistration/CustomObjectAPI','CustomerRegistration/UserAPI'
-                );
-            foreach($loginRadiusSDKs as $fileName){
-                require_once ( LOGINRADIUS_PLUGIN_DIR . 'lib/LoginRadiusSDK/' . $fileName . '.php' );
+            $loginRadiusSDKs = array('LoginRadius', 'LoginRadiusException',
+                'Clients/IHttpClient', 'Clients/DefaultHttpClient',
+                'SocialLogin/GetProvidersAPI', 'SocialLogin/SocialLoginAPI',
+                'CustomerRegistration/AccountAPI', 'CustomerRegistration/CustomObjectAPI', 'CustomerRegistration/UserAPI'
+            );
+            foreach ($loginRadiusSDKs as $fileName) {
+                require_once ( LR_ROOT_DIR . 'lr-social-login/lib/LoginRadiusSDK/' . $fileName . '.php' );
             }
-            require_once ( LOGINRADIUS_PLUGIN_DIR . 'lib/WPHttpClient.php' );
-            $apikey = isset($loginradius_api_settings['LoginRadius_apikey'])?$loginradius_api_settings['LoginRadius_apikey']:'';
-            $secret = isset($loginradius_api_settings['LoginRadius_secret'])?$loginradius_api_settings['LoginRadius_secret']:'';
-            try{
-                $socialLoginObject = new \LoginRadiusSDK\SocialLogin\SocialLoginAPI ($apikey, $secret, array('authentication'=>false, 'output_format' => 'json'));
-            }  catch (\LoginRadiusSDK\LoginRadiusException $e){
+            require_once ( LR_ROOT_DIR . 'lr-social-login/lib/WPHttpClient.php' );
+            $apikey = isset($loginradius_api_settings['LoginRadius_apikey']) ? $loginradius_api_settings['LoginRadius_apikey'] : '';
+            $secret = isset($loginradius_api_settings['LoginRadius_secret']) ? $loginradius_api_settings['LoginRadius_secret'] : '';
+            try {
+                $socialLoginObject = new \LoginRadiusSDK\SocialLogin\SocialLoginAPI($apikey, $secret, array('authentication' => false, 'output_format' => 'json'));
+            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                 
             }
-            
-            //Load required files.
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'common/class-loginradius-common.php' );
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'common/loginradius-ajax.php' );
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'widgets/lr-social-login-widget.php' );
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'widgets/lr-social-linking-widget.php' );
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'public/inc/login/class-login-helper.php' );
+            if (!empty($apikey) && !empty($secret)) {
 
-            // Get LoginRadius plugin options.
-            $loginRadiusSettings = get_option('LoginRadius_settings');
-            
-            $loginRadiusLoginIsBpActive = false;
+                //Load required files.
+                require_once( LR_ROOT_DIR . 'lr-social-login/common/class-loginradius-common.php' );
+                require_once( LR_ROOT_DIR . 'lr-social-login/common/loginradius-ajax.php' );
+                require_once( LR_ROOT_DIR . 'lr-social-login/widgets/lr-social-login-widget.php' );
+                require_once( LR_ROOT_DIR . 'lr-social-login/widgets/lr-social-linking-widget.php' );
+                require_once( LR_ROOT_DIR . 'lr-social-login/public/inc/login/class-login-helper.php' );
 
-            add_action('bp_include', array('Login_Helper', 'set_budddy_press_status_variable'));
+                // Get LoginRadius plugin options.
+                $loginRadiusSettings = get_option('LoginRadius_settings');
 
-            // Admin Panel
-            // load admin functionality
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'admin/class-loginradius-admin.php' );
+                $loginRadiusLoginIsBpActive = false;
 
-            // Load public functionality
-            require_once( LOGINRADIUS_PLUGIN_DIR . 'public/class-loginradius-front.php' );
+                add_action('bp_include', array('Login_Helper', 'set_budddy_press_status_variable'));
+
+                // Admin Panel
+                // load admin functionality
+                require_once( LR_ROOT_DIR . 'lr-social-login/admin/class-loginradius-admin.php' );
+
+                // Load public functionality
+                require_once( LR_ROOT_DIR . 'lr-social-login/public/class-loginradius-front.php' );
+            }
         }
 
         /**
          * Function for setting default options while plgin is activating.
          */
-        public static function install() {
-            global $wpdb;
+        public static function install($blog_id) {
             require_once ( dirname(__FILE__) . '/install.php' );
-            if (function_exists('is_multisite') && is_multisite()) {
-                if (!isset($_GET['page']) || !in_array($_GET['page'], array('LoginRadius', 'SocialLogin', 'User_Registration', 'loginradius_sso', 'loginradius_share', 'loginradius_commenting', 'loginradius_social_profile_data', 'loginradius_social_invite', 'loginradius_customization', 'loginradius_mailchimp', 'lr_google_analitics'))) {
-                    return;
-                }
-                // check if it is a network activation - if so, run the activation function for each blog id
-                $old_blog = $wpdb->blogid;
-                // Get all blog ids
-                $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
-                foreach ($blogids as $blog_id) {
-                    switch_to_blog($blog_id);
-                    LR_Social_Login_Install::set_default_options();
-                }
-                switch_to_blog($old_blog);
-                return;
+            LR_Social_Login_Install::set_default_options($blog_id);
+        }
+
+        public static function uninstall($blog_id) {
+            if ($blog_id) {
+                delete_blog_option($blog_id, 'LoginRadius_settings');
             } else {
-                LR_Social_Login_Install::set_default_options();
+                delete_option('LoginRadius_settings');
+            }
+        }
+
+        public static function reset_options() {
+            if (isset($_POST['reset'])) {
+                self::uninstall(false);
+                self::install(false);
+                echo '<p style="display:none;" class="lr-alert-box lr-notif">' . __('Login settings have been reset and default values loaded', 'lr-plugin-slug') . '</p>';
+                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
             }
         }
 

@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * populate email asking popup
  */
@@ -312,7 +314,10 @@ function login_radius_email_popup() {
     }
     die;
 }
+
+
 add_action('wp_ajax_nopriv_login_radius_email_popup', 'login_radius_email_popup');
+
 /**
  * Function that displaying notification.
  */

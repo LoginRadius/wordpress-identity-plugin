@@ -36,27 +36,16 @@ if (!class_exists('LR_Activation_Admin')) {
          */
 
         public function __construct() {
-            $this->install();
+            $this->global_variables();
             $this->js_in_footer();
-            // Registering hooks callback for admin section.
-            $this->register_hook_callbacks();
+            // Registering hooks callback for admin section.            
+            add_action('admin_init', array($this, 'admin_init'));
+            add_action('admin_enqueue_scripts', array($this, 'load_scripts'), 5);
         }
 
         // Create Api Options if not already created.
-        public function install() {
+        public function global_variables() {
             global $loginradius_api_settings;
-            if (!get_option('LoginRadius_API_settings')) {
-                $api_options = array(
-                    'LoginRadius_apikey' => '',
-                    'LoginRadius_secret' => '',
-                    'scripts_in_footer' => '1',
-                    'delete_options' => '0',
-                    'sitename' => '',
-                    'multisite_config' => '1',
-                    'raas_enable' => ''
-                );
-                update_option('LoginRadius_API_settings', $api_options);
-            }
             $loginradius_api_settings = get_option('LoginRadius_API_settings');
         }
 
@@ -65,15 +54,6 @@ if (!class_exists('LR_Activation_Admin')) {
 
             // Set js in footer bool.
             $lr_js_in_footer = isset($loginradius_api_settings['scripts_in_footer']) && $loginradius_api_settings['scripts_in_footer'] == '1' ? true : false;
-        }
-
-        /*
-         * Register admin hook callbacks
-         */
-
-        public function register_hook_callbacks() {
-            add_action('admin_init', array($this, 'admin_init'));
-            add_action('admin_enqueue_scripts', array($this, 'load_scripts'), 5);
         }
 
         /**
@@ -87,7 +67,6 @@ if (!class_exists('LR_Activation_Admin')) {
             // Replicate Social Login configuration to the subblogs in the multisite network
             if (is_multisite() && is_main_site()) {
                 add_action('wpmu_new_blog', array($this, 'replicate_settings_to_new_blog'));
-                add_action('update_option_LoginRadius_API_settings', array($this, 'login_radius_update_old_blogs'));
             }
         }
 
@@ -101,7 +80,7 @@ if (!class_exists('LR_Activation_Admin')) {
             if ($hook != 'toplevel_page_LoginRadius') {
                 return;
             }
-            wp_enqueue_script('lr_activation_options', LR_CORE_URL . 'assets/js/lr-activation.js', array('jquery'), LR_PLUGIN_VERSION, $lr_js_in_footer);
+            wp_enqueue_script('lr_activation_options', LR_ROOT_URL . 'lr-core/assets/js/lr-activation.js', array('jquery'), LR_PLUGIN_VERSION, $lr_js_in_footer);
         }
 
         /**
@@ -109,33 +88,33 @@ if (!class_exists('LR_Activation_Admin')) {
          */
         public static function api_validation_response($apiKey, $apiSecret, $string) {
             global $currentErrorCode, $currentErrorResponse;
-            
-            try{
-                $object = new \LoginRadiusSDK\Clients\WPHttpClient($apiKey, $apiSecret, array('authentication'=>false));
-        } catch(\LoginRadiusSDK\LoginRadiusException $e){
-            
-            $currentErrorCode = '0';
+
+            try {
+                $object = new \LoginRadiusSDK\Clients\WPHttpClient($apiKey, $apiSecret, array('authentication' => false));
+            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+
+                $currentErrorCode = '0';
                 $currentErrorResponse = "Something went wrong: " . $e->getMessage();
                 return false;
-        }
-            
-            
-            $options['method'] = 'post';            
+            }
+
+
+            $options['method'] = 'post';
             $options['post_data'] = array('addon' => 'WordPress', 'version' => LR_PLUGIN_VERSION, 'agentstring' => $_SERVER['HTTP_USER_AGENT'], 'clientip' => $_SERVER['REMOTE_ADDR'], 'configuration' => $string);
-            try{
-               
-                $response = json_decode($object->request(LR_VALIDATION_API_URL, array("apikey"=>$apiKey,"apisecret"=>$apiSecret),$options));
-                
-                if(isset($response->Status) && $response->Status){
-                    
+            try {
+
+                $response = json_decode($object->request("https://api.loginradius.com/api/v2/app/validate", array("apikey" => $apiKey, "apisecret" => $apiSecret), $options));
+
+                if (isset($response->Status) && $response->Status) {
+
                     return true;
-                }else{
-                    
+                } else {
+
                     $currentErrorCode = $response->Messages;
                     return false;
                 }
-            } catch ( \LoginRadiusSDK\LoginRadiusException $e ) {
-               
+            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+
                 $currentErrorCode = '0';
                 $currentErrorResponse = "Something went wrong: " . $e->getErrorResponse()->description;
                 return false;
@@ -170,14 +149,18 @@ if (!class_exists('LR_Activation_Admin')) {
             }
 
             if (isset($settings['LoginRadius_apikey']) && isset($settings['LoginRadius_secret'])) {
-                
+
                 $encodeString = 'settings';
 
                 if (self::api_validation_response($settings['LoginRadius_apikey'], $settings['LoginRadius_secret'], $encodeString)) {
-                     
+                    if (!isset($settings['raas_enable']) || ($settings['raas_enable'] == '1')) {
+                        $socialProfileSetting = get_option('LoginRadius_Social_Profile_Data_settings');
+                        $socialProfileSetting['enable_custom_popup'] = '0';
+                        update_option('LoginRadius_Social_Profile_Data_settings', $socialProfileSetting);
+                    }
                     return $settings;
                 } else {
-                   
+
                     // Api or Secret is not valid or something wrong happened while getting response from LoginRadius api
                     $message = 'please check your php.ini settings to enable CURL or FSOCKOPEN';
                     global $currentErrorCode, $currentErrorResponse;
@@ -188,12 +171,12 @@ if (!class_exists('LR_Activation_Admin')) {
                         'API_KEY_NOT_FORMATED' => 'LoginRadius API Key is not formatted correctly.',
                         'API_SECRET_NOT_FORMATED' => 'LoginRadius API Secret is not formatted correctly.',
                     );
-                    
+
                     if ($currentErrorCode[0] == '0') {
                         $message = $currentErrorResponse;
                     } else {
                         if (count($currentErrorCode) > 1) {
-                            
+
                             add_settings_error('LoginRadius_API_settings', esc_attr('settings_updated'), $errorMessage[$currentErrorCode[0]], 'error');
                             add_settings_error('LoginRadius_API_settings', esc_attr('settings_updated'), $errorMessage[$currentErrorCode[1]], 'error');
                             return $settings;
@@ -206,7 +189,7 @@ if (!class_exists('LR_Activation_Admin')) {
                     return $settings;
                 }
             } else {
-                 
+
                 add_settings_error('LoginRadius_API_settings', esc_attr('settings_updated'), 'Settings Updated', 'updated');
                 return $settings;
             }
@@ -218,25 +201,13 @@ if (!class_exists('LR_Activation_Admin')) {
             add_blog_option($blogId, 'LoginRadius_API_settings', $loginradius_api_settings);
         }
 
-        // Update the social login options in all the old blogs
-        public function login_radius_update_old_blogs($oldConfig) {
-            global $loginradius_api_settings;
-            if (isset($loginradius_api_settings['multisite_config']) && $loginradius_api_settings['multisite_config'] == '1') {
-                $settings = get_option('LoginRadius_API_settings');
-                $blogs = wp_get_sites();
-                foreach ($blogs as $blog) {
-                    update_blog_option($blog['blog_id'], 'LoginRadius_API_settings', $settings);
-                }
-            }
-        }
-
         /*
          * Callback for add_menu_page,
          * This is the first function which is called while plugin admin page is requested
          */
 
         public static function options_page() {
-            include_once LR_CORE_DIR . "admin/views/class-activation-settings-view.php";
+            require_once LR_ROOT_DIR . "lr-core/admin/views/class-activation-settings-view.php";
             LR_Activation_Settings::render_options_page();
         }
 

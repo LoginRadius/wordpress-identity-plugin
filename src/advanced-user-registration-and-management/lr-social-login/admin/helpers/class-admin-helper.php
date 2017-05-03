@@ -58,9 +58,9 @@ if ( ! class_exists( 'Admin_Helper' ) ) {
                     }
                     if ( 'loginradius_status' == $columnName ) {
                         if ( $lrStatus == '1' ) {
-                            return '<span id="loginRadiusStatus' . $userId . '"><a alt="Active ( Click to Disable ) " title="Active ( Click to Disable ) " href="javascript:void ( 0 ) " onclick="loginRadiusChangeStatus ( ' . $userId . ', ' . $lrStatus . ' ) " ><img height="20" width="20" src="' . LOGINRADIUS_PLUGIN_URL . 'assets/images/enable.png' . '" /></a></span>';
+                            return '<span id="loginRadiusStatus' . $userId . '"><a alt="Active ( Click to Disable ) " title="Active ( Click to Disable ) " href="javascript:void ( 0 ) " onclick="loginRadiusChangeStatus ( ' . $userId . ', ' . $lrStatus . ' ) " ><img height="20" width="20" src="' . LR_ROOT_URL . 'lr-social-login/assets/images/enable.png' . '" /></a></span>';
                         } else {
-                            return '<span id="loginRadiusStatus' . $userId . '"><a alt="Inactive ( Click to Enable ) " title="Inactive ( Click to Enable ) " href="javascript:void ( 0 ) " onclick="loginRadiusChangeStatus ( ' . $userId . ', ' . $lrStatus . ' ) " ><img height="20" width="20" src="' . LOGINRADIUS_PLUGIN_URL . 'assets/images/disable.png' . '" /></a></span>';
+                            return '<span id="loginRadiusStatus' . $userId . '"><a alt="Inactive ( Click to Enable ) " title="Inactive ( Click to Enable ) " href="javascript:void ( 0 ) " onclick="loginRadiusChangeStatus ( ' . $userId . ', ' . $lrStatus . ' ) " ><img height="20" width="20" src="' . LR_ROOT_URL . 'lr-social-login/assets/images/disable.png' . '" /></a></span>';
                         }
                     }
                 }
@@ -79,7 +79,7 @@ if ( ! class_exists( 'Admin_Helper' ) ) {
                 ?>
                 <script type="text/javascript">
                     function loginRadiusChangeStatus( userId, currentStatus ) {
-                        jQuery( '#loginRadiusStatus' + userId ).html('<img width="20" height="20" title="<?php _e( 'Please wait', 'lr-plugin-slug' ) ?>..." src="<?php echo LOGINRADIUS_PLUGIN_URL . 'assets/images/loading_icon.gif'; ?>" />');
+                        jQuery( '#loginRadiusStatus' + userId ).html('<img width="20" height="20" title="<?php _e( 'Please wait', 'lr-plugin-slug' ) ?>..." src="<?php echo LR_ROOT_URL . 'lr-social-login/assets/images/loading_icon.gif'; ?>" />');
                         jQuery.ajax({
                             type: 'POST',
                             url: '<?php echo get_admin_url() ?>admin-ajax.php',
@@ -91,9 +91,9 @@ if ( ! class_exists( 'Admin_Helper' ) ) {
                             success: function( data ) {
                                 if ( data == 'done' ) {
                                     if ( currentStatus == 0 ) {
-                                        jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 1 ) " ><img width="20" height="20" src="<?php echo LOGINRADIUS_PLUGIN_URL . 'assets/images/enable.png'; ?>" /></a></span>');
+                                        jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 1 ) " ><img width="20" height="20" src="<?php echo LR_ROOT_URL . 'lr-social-login/assets/images/enable.png'; ?>" /></a></span>');
                                     } else if ( currentStatus == 1 ) {
-                                        jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Inactive ( Click to Enable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Inactive ( Click to Enable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 0 ) " ><img width="20" height="20" src="<?php echo LOGINRADIUS_PLUGIN_URL . 'assets/images/disable.png'; ?>" /></a></span>');
+                                        jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Inactive ( Click to Enable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Inactive ( Click to Enable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 0 ) " ><img width="20" height="20" src="<?php echo LR_ROOT_URL . 'lr-social-login/assets/images/disable.png'; ?>" /></a></span>');
                                     }
                                 } else if ( data == 'error' ) {
                                     jQuery( '#loginRadiusStatus' + userId ).html( '<span id="loginRadiusStatus' + userId + '"><a href="javascript:void ( 0 ) " alt="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" title="<?php _e( 'Active ( Click to Disable ) ', 'lr-plugin-slug' ) ?>" onclick="loginRadiusChangeStatus ( ' + userId + ', 1 ) " ><img width="20" height="20" src="<?php echo plugins_url( 'images/enable.png', __FILE__ ) ?>" /></a></span>');

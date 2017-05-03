@@ -127,12 +127,7 @@ if ( ! class_exists( 'LR_Custom_Interface_Admin_Settings' ) ) {
         }
 
         public static function render_options_page() {
-            
-            if ( isset( $_POST['reset'] ) ) {
-                $response = LR_Custom_Interface_Install::reset_lr_custom_interface_options();
-                echo '<p style="display:none;" class="lr-'.$response['isValid'].'-box lr-notif">'.$response['message'].'</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
+            LR_Custom_Interface::reset_options();
             $lr_custom_interface_settings = get_option( 'LR_Custom_Interface_Settings' );
             
             /**

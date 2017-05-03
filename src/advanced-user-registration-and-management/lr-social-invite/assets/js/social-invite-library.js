@@ -530,7 +530,12 @@ $LRSI.util = {};
 	}
 
 	function keyHandler() {
-//var test = document.getElementById("lr-contactlist-shadow");
+            
+var chkLrContact = document.getElementById("lr-contactlist-shadow");
+
+if (chkLrContact != null) {
+    // do stuff
+
 		if ( document.getElementById("lr-contactlist-shadow").style.visibility == "visible" ) {
 			var textfield = object.util.elementById("lr-si-txtautocomplete");
 			if (lr_arrowkey == 13)//key down
@@ -634,7 +639,8 @@ $LRSI.util = {};
 				oldins = -1;
 			}
 		}
-	}
+            }
+        }
 
 	function mouseHandler() {
 		for (var i = 0; i < words.length; ++i) {
@@ -1063,7 +1069,9 @@ $LRSI.util = {};
 							var data = $.parseJSON( data );
 							if( data.error ) {
 								console.log( data.error );
-							}
+							}else{
+                                                            $('.lr_social_invite_results').html( data );
+                                                        }
 						} else {
 							SocialInviteSearchContacts('');
 						}

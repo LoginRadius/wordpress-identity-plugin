@@ -42,3 +42,6 @@ html {
     height:13px !important;
     margin-top: 0px;
 }
+.os-share-counter-widget .twitter-share-button{
+    margin-bottom: 0px !important;
+}

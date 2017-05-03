@@ -64,12 +64,11 @@ if ( ! class_exists( 'LR_Social_Share_Admin' ) ) {
             // Replicate Social Login configuration to the subblogs in the multisite network
             if ( is_multisite() && is_main_site() ) {
                 add_action( 'wpmu_new_blog', array( $this, 'replicate_settings_to_new_blog' ) );
-                add_action( 'update_option_LoginRadius_share_settings', array( $this, 'login_radius_update_old_blogs') );
             }
         }
         
         public static function validate_options( $settings ) {
-            $providerDefault = array('Facebook'=>'Facebook', 'Google'=>'Google', 'LinkedIn'=>'LinkedIn','Pinterest'=>'Pinterest', 'Twitter Tweet'=>'Twitter');
+            $providerDefault = array('Facebook'=>'Facebook', 'Google'=>'Google', 'LinkedIn'=>'LinkedIn','Pinterest'=>'Pinterest', 'Twitter'=>'Twitter');
             $counterProviderDefault = array('Facebook Like'=>'Facebook Like', 'Google+ Share'=>'Google+ Share', 'LinkedIn Share'=>'LinkedIn Share','Pinterest Pin it'=>'Pinterest Pin it', 'Twitter Tweet'=>'Twitter Tweet');
             
             /*Horizontal Sharing Provider*/
@@ -94,19 +93,6 @@ if ( ! class_exists( 'LR_Social_Share_Admin' ) ) {
             global $loginradius_share_settings;
             add_blog_option( $blogId, 'LoginRadius_share_settings', $loginradius_share_settings );
         }
-
-        // Update the social login options in all the old blogs
-        public function login_radius_update_old_blogs( $oldConfig ) {
-            global $loginradius_api_settings;
-            if ( isset( $loginradius_api_settings['multisite_config'] ) && $loginradius_api_settings['multisite_config'] == '1' ) {
-                $settings = get_option('LoginRadius_share_settings');
-                $blogs = wp_get_sites();
-                foreach ( $blogs as $blog ) {
-                    update_blog_option( $blog['blog_id'], 'LoginRadius_share_settings', $settings );
-                }
-            }
-        }
-
         /*
          * adding LoginRadius meta box on each page and post
          */
@@ -171,7 +157,7 @@ if ( ! class_exists( 'LR_Social_Share_Admin' ) ) {
          */
         public static function options_page() {
 
-            include_once LR_SHARE_PLUGIN_DIR."admin/views/settings.php";
+            require_once LR_ROOT_DIR."lr-social-sharing/admin/views/settings.php";
             LR_Social_Share_Settings::render_options_page();
         }
 

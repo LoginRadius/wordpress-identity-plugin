@@ -1,11 +1,11 @@
 <?php
 
 // Exit if called directly
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit();
 }
 
-if ( ! class_exists( 'LR_Google_Analytics' ) ) {
+if (!class_exists('LR_Google_Analytics')) {
 
     /**
      * The main class and initialization point of the plugin.
@@ -17,19 +17,19 @@ if ( ! class_exists( 'LR_Google_Analytics' ) ) {
          */
         public function __construct() {
             // Register Activation hook callback.
-            $this->install();
+            add_action('lr_plugin_activate', array(get_class(), 'install'), 10, 1);
+            add_action('lr_plugin_deactivate', array(get_class(), 'uninstall'), 10, 1);
 
-            // Declare constants and load dependencies.
-            $this->define_constants();
+            // load dependencies.
             $this->load_dependencies();
-            add_action( 'lr_admin_page', array( $this, 'create_loginradius_menu' ), 14 );
+            add_action('lr_admin_page', array($this, 'create_loginradius_menu'), 14);
         }
 
         /**
          * Add Submenu in LoginRadius Menu
          */
         function create_loginradius_menu() {
-            add_submenu_page( 'LoginRadius', 'Google Analytics', 'Google Analytics', 'manage_options', 'lr_google_analitics', array( 'LR_Google_Analytics_Admin', 'options_page' ) );
+            add_submenu_page('LoginRadius', 'Google Analytics', 'Google Analytics', 'manage_options', 'lr_google_analytics', array('LR_Google_Analytics_Admin', 'options_page'));
         }
 
         /**
@@ -38,34 +38,26 @@ if ( ! class_exists( 'LR_Google_Analytics' ) ) {
          * @global type $wpdb
          * @return type
          */
-        public static function install() {
-            global $wpdb;
-            require_once( dirname( __FILE__ ) . '/install.php' );
-            if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-                if (!isset($_GET['page']) || !in_array($_GET['page'], array('LoginRadius', 'SocialLogin', 'User_Registration', 'loginradius_sso', 'loginradius_share', 'loginradius_commenting', 'loginradius_social_profile_data', 'loginradius_social_invite', 'loginradius_customization', 'loginradius_mailchimp', 'lr_google_analitics'))) {
-                    return;
-                }
-                // check if it is a network activation - if so, run the activation function for each blog id
-                $old_blog = $wpdb->blogid;
-                // Get all blog ids
-                $blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
-                foreach ($blogids as $blog_id) {
-                    switch_to_blog($blog_id);
-                    LR_Google_Analytics_Install::set_default_options();
-                }
-                switch_to_blog($old_blog);
-                return;
+        public static function install($blog_id) {
+            require_once( dirname(__FILE__) . '/install.php' );
+            LR_Google_Analytics_Install::set_default_options($blog_id);
+        }
+
+        public static function uninstall($blog_id) {
+            if ($blog_id) {
+                delete_blog_option($blog_id, 'LR_Google_Analytics_Settings');
             } else {
-                LR_Google_Analytics_Install::set_default_options();
+                delete_option('LR_Google_Analytics_Settings');
             }
         }
 
-        /**
-         * Define constants needed across the plug-in.
-         */
-        private function define_constants() {
-            define( 'LR_GOOGLE_ANALYTICS_DIR', plugin_dir_path(__FILE__) );
-            define( 'LR_GOOGLE_ANALYTICS_URL', plugin_dir_url(__FILE__) );
+        public static function reset_options() {
+            if (isset($_POST['reset'])) {
+                self::uninstall(false);
+                self::install(false);
+                echo '<p style="display:none;" class="lr-alert-box lr-notif">' . __('Google Analytics settings have been reset and default values loaded', 'lr-plugin-slug') . '</p>';
+                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
+            }
         }
 
         /**
@@ -77,11 +69,11 @@ if ( ! class_exists( 'LR_Google_Analytics' ) ) {
             global $lr_google_analytics_settings;
 
             // Get LoginRadius commenting settings
-            $lr_google_analytics_settings = get_option( 'LR_Google_Analytics_Settings' );
+            $lr_google_analytics_settings = get_option('LR_Google_Analytics_Settings');
 
             // Load required files.
-            require_once( LR_GOOGLE_ANALYTICS_DIR . "admin/class-lr-google-analytics-admin.php" );
-            require_once( LR_GOOGLE_ANALYTICS_DIR . "includes/front/class-lr-google-analytics-front.php" );
+            require_once( LR_ROOT_DIR . "lr-google-analysis/admin/class-lr-google-analytics-admin.php" );
+            require_once( LR_ROOT_DIR . "lr-google-analysis/includes/front/class-lr-google-analytics-front.php" );
         }
 
     }

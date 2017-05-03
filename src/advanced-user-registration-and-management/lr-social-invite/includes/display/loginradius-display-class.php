@@ -29,7 +29,7 @@ class LR_Social_Invite_Display {
 
     public static function enqueue_glob_scripts() {
         
-        wp_enqueue_style( 'lr-social-invite-style', LR_SOCIAL_INVITE_URL . 'assets/css/lr-social-invite.min.css' );
+        wp_enqueue_style( 'lr-social-invite-style', LR_ROOT_URL . 'lr-social-invite/assets/css/lr-social-invite.min.css' );
 
         ?>
             <!-- Custom Share Template -->
@@ -56,14 +56,14 @@ class LR_Social_Invite_Display {
     public static function enqueue_scripts() {
         global $loginradius_api_settings, $loginRadiusSettings, $lr_social_invite_settings;
         
-        wp_register_script( 'lr-social-invite-lib', LR_SOCIAL_INVITE_URL . 'assets/js/social-invite-library.js', array( 'jquery','lr-custom-interface','lr-sdk' ), '1.0' );
+        wp_register_script( 'lr-social-invite-lib', LR_ROOT_URL . 'lr-social-invite/assets/js/social-invite-library.js', array( 'jquery','lr-custom-interface','lr-sdk' ), '1.0' );
 
         $args = array( 
             'ajax_url' => get_admin_url() . 'admin-ajax.php',
             'debugging' => isset( $loginRadiusSettings['enable_degugging'] ) ? 'true' : 'false',
             'is_user_logged_in' => ( is_user_logged_in() === '1' ) ? 'true' : 'false',
             'loginRadiusApiKey' => isset( $loginradius_api_settings['LoginRadius_apikey'] ) ? trim( $loginradius_api_settings['LoginRadius_apikey'] ) : '',
-            'mysteryperson' => LR_SOCIAL_INVITE_URL . 'assets/images/mysteryperson.jpeg',
+            'mysteryperson' => LR_ROOT_URL . 'lr-social-invite/assets/images/mysteryperson.jpeg',
             'facebook_app_id' => isset( $lr_social_invite_settings['fb_id'] ) ? $lr_social_invite_settings['fb_id'] : '',
             'facebook_share_url' => get_permalink()
         );

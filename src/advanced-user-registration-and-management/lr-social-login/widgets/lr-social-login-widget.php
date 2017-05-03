@@ -43,7 +43,7 @@ class LR_Social_Login_Widget extends WP_Widget {
             echo $instance['before_widget_content'];
         }
         if (!class_exists("Login_Radius_Widget_Helper")) {
-            require_once LOGINRADIUS_PLUGIN_DIR.'widgets/class-widgets-helper.php';
+            require_once LR_ROOT_DIR . "lr-social-login/widgets/class-widgets-helper.php";
         }
         Login_Radius_Widget_Helper:: login_radius_widget_connect_button();
 

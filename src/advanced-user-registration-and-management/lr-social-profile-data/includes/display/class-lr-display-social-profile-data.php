@@ -629,7 +629,7 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
                     die;
                 }
             } else {
-                wp_enqueue_style( 'lr_profile_data_front_style', LR_SOCIAL_PROFILE_DATA_URL . 'assets/css/lr_profile_data_front_style.css' );
+                wp_enqueue_style( 'lr_profile_data_front_style', LR_ROOT_URL . 'lr-social-profile-data/assets/css/lr_profile_data_front_style.css' );
                 return self::prepare_profile_data( $userId );
             }
         }
@@ -640,7 +640,7 @@ if ( ! class_exists( 'LR_Display_Social_Profile_Data' ) ) {
         public function user_admin_menu() {
             global $lr_social_profile_data_settings;
             if ( isset( $lr_social_profile_data_settings['display_UserProfileData'] ) && $lr_social_profile_data_settings['display_UserProfileData'] == 1 && ! is_super_admin() ) {
-                add_menu_page( 'LoginRadiusProfile', 'Social Profile Data', 'read', 'loginradius-profile', array( $this, 'get_profile_data' ), LR_CORE_URL . 'assets/images/favicon.ico' );
+                add_menu_page( 'LoginRadiusProfile', 'Social Profile Data', 'read', 'loginradius-profile', array( $this, 'get_profile_data' ), LR_ROOT_URL . 'lr-core/assets/images/favicon.ico' );
             }
         }
 

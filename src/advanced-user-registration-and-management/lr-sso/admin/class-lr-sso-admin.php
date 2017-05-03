@@ -29,7 +29,6 @@ if (!class_exists('LR_SSO_Admin')) {
             // Replicate LoginRadius SSO configuration to the subblogs in the multisite network
             if (is_multisite() && is_main_site()) {
                 add_action('wpmu_new_blog', array($this, 'replicate_settings_to_new_blog'));
-                add_action('update_option_LR_SSO_Settings', array($this, 'update_old_blogs'));
             }
         }
 
@@ -39,25 +38,13 @@ if (!class_exists('LR_SSO_Admin')) {
             add_blog_option($blogId, 'LR_SSO_Settings', $lr_sso_settings);
         }
 
-        // Update the LoginRadius SSO options in all the old blogs
-        public function update_old_blogs($oldConfig) {
-            global $loginradius_api_settings;
-            if (isset($loginradius_api_settings['multisite_config']) && $loginradius_api_settings['multisite_config'] == '1') {
-                $settings = get_option('LR_SSO_Settings');
-                $blogs = wp_get_sites();
-                foreach ($blogs as $blog) {
-                    update_blog_option($blog['blog_id'], 'LR_SSO_Settings', $settings);
-                }
-            }
-        }
-
         /*
          * Callback for add_submenu_page,
          * This is the first function which is called while plugin admin page is requested
          */
 
         public static function options_page() {
-            include_once LR_SSO_DIR."admin/views/settings.php";
+            require_once LR_ROOT_DIR."lr-sso/admin/views/settings.php";
             LR_SSO_Admin_Settings:: render_options_page();
         }
 

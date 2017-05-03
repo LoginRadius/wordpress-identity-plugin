@@ -60,13 +60,7 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                 'post_status' => 'publish'
             );
             $pages = get_pages($args);
-
-
-            if (isset($_POST['reset'])) {
-                LR_Raas_Install::reset_options();
-                echo '<p style="display:none;" class="lr-alert-box lr-notif">' . __('User Registration settings have been reset and default values loaded', 'lr-plugin-slug') . '</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
+            LR_Raas::reset_options();
 
             $lr_raas_settings = get_option('LR_Raas_Settings');
             $loginRadiusSettings = get_option('LoginRadius_settings');
@@ -89,6 +83,7 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                             <?php
                             settings_fields('lr_raas_settings');
                             settings_errors();
+                            do_action('hosted_page', $lr_raas_settings);
                             ?>
 
                             <div class="lr_options_container">
@@ -150,11 +145,6 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                                                 </label>
                                             </div>
                                         </div>
-                                        <?php
-                                        if (is_multisite() && is_main_site()) {
-                                            ?>
-                                            <div class="lr-warning-box"><?php _e('NOTE :- Changes done on user registration integration will not reflect on other sites, need to save it.', 'lr-plugin-slug'); ?></div>
-                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -336,7 +326,7 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                                     </label>
                                 </div>
 
-                                <div>
+                                <div id="enable-linking">
                                     <h4>
                                         <?php _e('Enable account linking', 'lr-plugin-slug'); ?>
                                     </h4>
@@ -367,12 +357,12 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- mail Verification Options -->
-                        <div class="lr_options_container">
 
-                            <div class="lr-row">
-                                
+                        <!-- mail Verification Options -->
+                        <div class="lr_options_container" id="email-options">
+
+                            <div class="lr-row" >
+
                                 <h3><?php _e('Email Verification Options', 'lr-plugin-slug'); ?></h3>
                                 <div>
                                     <input type="radio" name="LR_Raas_Settings[email_verify_option]" class="lr-toggle" id="lr-enable-email-verify" value='required' <?php echo (!isset($lr_raas_settings['email_verify_option']) || $lr_raas_settings['email_verify_option'] == 'required' ) ? 'checked' : '' ?> />
@@ -457,8 +447,8 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                                                 <span class="dashicons dashicons-editor-help"></span>
                                             </span>
                                         </h4>
-                                        <input type="text" name="LR_Raas_Settings[email_verify_template]" id="lr-email-verify-template" value="<?php echo !empty($lr_raas_settings['email_verify_template']) ? $lr_raas_settings['email_verify_template'] : ''; ?>" />
-                                        
+                                        <input type="text" name="LR_Raas_Settings[email_verify_template]" id="lr-email-verify-template" value="<?php echo!empty($lr_raas_settings['email_verify_template']) ? $lr_raas_settings['email_verify_template'] : ''; ?>" />
+
                                     </div>
 
                                 </div>
@@ -469,10 +459,10 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </h4>
-                                     <input type="text" name="LR_Raas_Settings[forgot_template]" id="lr-forgot-template" value="<?php echo !empty($lr_raas_settings['forgot_template']) ? $lr_raas_settings['forgot_template'] : ''; ?>" />
-                                    
+                                    <input type="text" name="LR_Raas_Settings[forgot_template]" id="lr-forgot-template" value="<?php echo!empty($lr_raas_settings['forgot_template']) ? $lr_raas_settings['forgot_template'] : ''; ?>" />
+
                                 </div>
-                                
+
 
                             </div>
                         </div>
@@ -488,13 +478,13 @@ if (!class_exists('LR_Raas_Admin_Settings')) {
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>
                                     </h4>
-                                    
+
                                     <label>
                                         <input name="LR_Raas_Settings[enable_degugging]" type="radio"  value="1" <?php echo ( isset($loginRadiusSettings['enable_degugging']) && $loginRadiusSettings['enable_degugging'] == '1' ) ? 'checked = "checked"' : ''; ?> />
                                         <span><?php _e('Yes', 'lr-plugin-slug'); ?></span>
                                     </label>
                                     <label>
-                                        <input name="LR_Raas_Settings[enable_degugging]" type="radio" value="0" <?php echo (!isset($loginRadiusSettings['enable_degugging']) || $loginRadiusSettings['enable_degugging'] == '0' ) ? 'checked="checked"' : ''; ?> />
+                                        <input name="LR_Raas_Settings[enable_degugging]" type="radio" value="0" <?php echo (!isset($loginRadiusSettings['enable_degugging']) || $loginRadiusSettings['enable_degugging'] == '0' || empty($loginRadiusSettings['enable_degugging']) ) ? 'checked="checked"' : ''; ?> />
                                         <span><?php _e('No', 'lr-plugin-slug'); ?></span>
                                     </label>
                                 </div>

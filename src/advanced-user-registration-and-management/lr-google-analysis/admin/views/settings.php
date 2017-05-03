@@ -18,12 +18,7 @@ if ( ! class_exists( 'LR_Google_Analytics_Admin_Settings' ) ) {
          * Render settings page
          */
         public static function render_options_page() {
-
-            if ( isset( $_POST['reset'] ) ) {
-                LR_Google_Analytics_Install::reset_google_analytics_options();
-                echo '<p style="display:none;" class="lr-alert-box lr-notif">' . __( 'Google Analytics settings have been reset and default values loaded', 'lr-plugin-slug' ) . '</p>';
-                echo '<script type="text/javascript">jQuery(function(){jQuery(".lr-notif").slideDown().delay(3000).slideUp();});</script>';
-            }
+            LR_Google_Analytics::reset_options();
             $lr_google_analytics_settings = get_option('LR_Google_Analytics_Settings');
             ?>
             <div class="wrap lr-wrap cf">

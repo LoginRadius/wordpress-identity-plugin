@@ -22,7 +22,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
          * @global type $wpdb
          */
         public static function init() {
-            global $wpdb;
+            global $wpdb, $lr_raas_settings;
 
             if (get_option('loginradius_version') != self::$loginRadiusVersion) {
                 $wpdb->query("update $wpdb->usermeta set meta_key = 'loginradius_provider_id' where meta_key = 'id'");
@@ -45,6 +45,9 @@ if (!class_exists('LR_Raas_Social_Login')) {
             }
             if (!empty($lr_raas_settings['login_page_id'])) {
                 add_filter('login_url', array(get_class(), 'lr_login_url'), 12, 0);
+            }
+            if (isset($lr_raas_settings['email_verify_option']) && ($lr_raas_settings['email_verify_option'] != 'required')) {
+                add_filter('lr_user_allow_login', '__return_true');
             }
 
             add_action('lr_update_extented_user_profile', array(get_class(), 'lr_save_raas_profile_data'), 10, 2);
@@ -97,9 +100,9 @@ if (!class_exists('LR_Raas_Social_Login')) {
             global $loginRadiusSettings, $lr_js_in_footer;
 
             if (!empty($loginRadiusSettings['LoginRadius_socialLinking'])) {
-                wp_register_script('lr-raas-front-script', LR_RAAS_URL . 'assets/js/loginradiusfront.js', array('jquery-ui-datepicker'), LR_PLUGIN_VERSION, $lr_js_in_footer);
+                wp_register_script('lr-raas-front-script', LR_ROOT_URL . 'lr-raas/assets/js/loginradiusfront.js', array('jquery-ui-datepicker'), LR_PLUGIN_VERSION, $lr_js_in_footer);
                 wp_register_script('lr-raas', '//cdn.loginradius.com/hub/prod/js/LoginRadiusRaaS.js', array('jquery', 'lr-social-login'), LR_PLUGIN_VERSION, $lr_js_in_footer);
-                wp_register_style('lr-raas-style', LR_RAAS_URL . 'assets/css/lr-raas-style.css', array(), LR_PLUGIN_VERSION);
+                wp_register_style('lr-raas-style', LR_ROOT_URL . 'lr-raas/assets/css/lr-raas-style.css', array(), LR_PLUGIN_VERSION);
                 echo '<div id="messageinfo" class="messageinfo"></div><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div>' . self::login_script() . self::raas_forms('accountlinking');
                 echo '<script>jQuery(document).ready( function(){ jQuery(".lr_fade").hide(); } );</script>';
             }
@@ -212,8 +215,8 @@ if (!class_exists('LR_Raas_Social_Login')) {
                 wp_localize_script('lr-raas-front-script', "RaasDetails", $args);
                 wp_enqueue_script('lr-raas-front-script');
 
-                $interface_url = LR_CUSTOM_INTERFACE_URL . 'assets/images/custom_interface/';
-                $interface_url_default = LR_CUSTOM_INTERFACE_URL . 'assets/images/default_interface/';
+                $interface_url = LR_ROOT_URL . 'lr-custom-interface/assets/images/custom_interface/';
+                $interface_url_default = LR_ROOT_URL . 'lr-custom-interface/assets/images/default_interface/';
 
                 if (is_multisite()) {
                     if (file_exists($interface_url . get_current_blog_id() . '/')) {
@@ -233,7 +236,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                     <?php
                 } else {
                     ?>
-<script type="text/html" id="loginradiuscustom_raas_tmpl">                    
+                    <script type="text/html" id="loginradiuscustom_raas_tmpl">                    
                         <li style="padding-bottom:0%;<# if(isLinked) { #>display:none;<# } #>">
                             <a style="cursor: pointer;" class="<#= Name.toLowerCase() #> lrsociallogin" onclick="return $SL.util.openWindow('<#= Endpoint #>&is_access_token=true<?php echo $accountLinking; ?>&callback=<?php echo $redirectTo ?>');">
                                 <img src = "<?php echo $interface_url_default; ?><#= Name.toLowerCase() #>.png" alt="<#= Name #>" title="<#= Name #>" />
@@ -241,7 +244,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                         </li>
                     </script>
                     <?php
-               }
+                }
             }
         }
 
@@ -288,18 +291,18 @@ if (!class_exists('LR_Raas_Social_Login')) {
                         }, function (response) {
                             jQuery('.lr_fade').hide();
                             if (response[0].description != null) {
-                                 
+
                                 handleResponse(false, response[0].description, '.lr-user-reg-container');
                             }
                         }, "interfacecontainerdiv");
                 <?php if ($page == 'password') { ?>
                             LoginRadiusRaaS.passwordHandleForms("setpasswordbox", "changepasswordbox", function (israas) {
                                 if (israas) {
-                                    
+
                                     jQuery("#changepasswordbox").show();
                                 } else {
                                     jQuery("#setpasswordbox").show();
-                                 }
+                                }
                             }, function () {
                                 document.forms["setpassword"].action = "";
                                 document.forms["setpassword"].submit();
@@ -333,14 +336,13 @@ if (!class_exists('LR_Raas_Social_Login')) {
                                 }, 4000)
                     <?php
                 }
-                
                 ?>
 
                             jQuery('#social-registration-container').html('');
                             jQuery('input[type="text"],input[type="password"], select').val('');
                         }, function (errors) {
                             if (errors[0].description != null) {
-                                 
+
                                 handleResponse(false, errors[0].description, '.lr-user-reg-container');
                             }
                         }, "registration-container");
@@ -352,7 +354,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                         }, function (errors) {
                             jQuery('.lr_fade').hide();
                             if (errors[0].description != null) {
-                                
+
                                 handleResponse(false, errors[0].description, '.lr-user-reg-container');
                             }
                         }, "login-container");
@@ -364,7 +366,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                         }, function (errors) {
                             jQuery('.lr_fade').hide();
                             if (errors[0].description != null) {
-                                 
+
                                 handleResponse(false, errors[0].description, '.lr-user-reg-container');
                             }
                         }, "login-container-widget");
@@ -376,7 +378,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                         }, function (errors) {
                             jQuery('.lr_fade').hide();
                             if (errors[0].description != null) {
-                                 
+
                                 handleResponse(false, errors[0].description, '.lr-user-reg-container');
                             }
                         }, "forgotpassword-container");
@@ -399,7 +401,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                         }, function (errors) {
                             jQuery('.lr_fade').hide();
                             if (errors[0].description != null) {
-                                 
+
                                 handleResponse(false, errors[0].description, '.lr-user-reg-container');
                             }
                         }, "social-registration-container");
@@ -465,8 +467,7 @@ if (!class_exists('LR_Raas_Social_Login')) {
                     update_user_meta($user_id, 'lr_country', $_POST['lr_country']);
                 }if (isset($_POST['lr_phone'])) {
                     update_user_meta($user_id, 'lr_phone', $_POST['lr_phone']);
-                }
-                if (isset($_POST['lr_raas_response']->Provider) && !empty($_POST['lr_raas_response']->Provider)) {
+                }if (isset($_POST['lr_raas_response']->Provider) && !empty($_POST['lr_raas_response']->Provider)) {
                     update_user_meta($user_id, 'loginradius_provider', $_POST['lr_raas_response']->Provider);
                 }
                 do_action('lr_update_extented_user_profile', $user_id, LR_Social_Profile_Data_Function::validate_profiledata($_POST['lr_raas_response']));
@@ -728,11 +729,11 @@ if (!class_exists('LR_Raas_Social_Login')) {
          * @param type $data
          */
         public static function change_password($data) {
-            
+
             global $accountAPIObject;
             $user_id = get_current_user_id();
             $uid = get_user_meta($user_id, 'lr_raas_uid', true);
-//            
+           
             try {
                 $accountAPIObject->changeAccountPassword($uid, $data['oldpassword'], $data['newpassword']);
                 $message = '<div style="color:green;">' . __('Password has been updated Successfully.') . '</div>';

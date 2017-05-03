@@ -16,9 +16,9 @@ if (!class_exists('LR_Common')) {
          */
         public static function link_account_if_possible() {
             global $socialLoginObject, $wpdb, $user_ID;
-            
+
             $loginRadiusMappingData = array();
-            
+
             if (isset($_REQUEST['token']) && is_user_logged_in()) {
 
                 try {
@@ -48,14 +48,14 @@ if (!class_exists('LR_Common')) {
                 }
                 $loginRadiusMappingData['pictureUrl'] = (!empty($loginRadiusUserprofile->ImageUrl) ? trim($loginRadiusUserprofile->ImageUrl) : '' );
                 $wp_user_id = $wpdb->get_var($wpdb->prepare('SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key="loginradius_provider_id" AND meta_value = %s', $loginRadiusMappingData['id']));
-                
+
                 $checkCurrentProvider = $wpdb->get_var($wpdb->prepare('SELECT meta_value FROM ' . $wpdb->usermeta . ' WHERE user_id=%s AND  meta_key = "loginradius_provider"', $user_ID));
-                
-               // var_dump($checkCurrentProvider);die;
-                
+
+                // var_dump($checkCurrentProvider);die;
+
 
                 if (!empty($wp_user_id)) {
-                   
+
                     // Check if verified field exist or not.
                     $loginRadiusVfyExist = $wpdb->get_var($wpdb->prepare('SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE user_id = %d AND meta_key = "loginradius_isVerified"', $wp_user_id));
                     if (!empty($loginRadiusVfyExist)) {
@@ -72,39 +72,38 @@ if (!class_exists('LR_Common')) {
                         return '0';
                     }
                 } else {
-                   
-                   
-                       
-                    $checkLinking = $wpdb->get_results('SELECT * FROM ' . $wpdb->usermeta . ' WHERE meta_key="loginradius_'.$loginRadiusUserprofile->Provider.'_id" AND user_id='.$user_ID.'');
-                 
-                    if(isset($checkLinking) && empty($checkLinking[0]->meta_key) && empty($checkLinking[0]->user_id)  && $checkCurrentProvider != $loginRadiusMappingData['provider']){
-                        
-                    //if($checkCurrentProvider != $loginRadiusMappingData['provider']){
-                    
-                    $loginRadiusMappingProvider = $loginRadiusMappingData['provider'];
-                    
-                    $wp_user_lrid = $wpdb->get_var($wpdb->prepare('SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key="' . $loginRadiusMappingProvider . 'Lrid" AND meta_value = %s', $loginRadiusMappingData['id']));
-                   
-                    if (!empty($wp_user_lrid)) {
-                        $lrVerified = get_user_meta($wp_user_lrid, $loginRadiusMappingProvider . 'LrVerified', true);
-                        if ($lrVerified == '1') {
-                            // Check if lrid is the same that verified email.
-                            // account already mapped
-                            return '0';
+
+
+
+                    $checkLinking = $wpdb->get_results('SELECT * FROM ' . $wpdb->usermeta . ' WHERE meta_key="loginradius_' . $loginRadiusUserprofile->Provider . '_id" AND user_id=' . $user_ID . '');
+
+                    if (isset($checkLinking) && empty($checkLinking[0]->meta_key) && empty($checkLinking[0]->user_id) && $checkCurrentProvider != $loginRadiusMappingData['provider']) {
+
+                        //if($checkCurrentProvider != $loginRadiusMappingData['provider']){
+
+                        $loginRadiusMappingProvider = $loginRadiusMappingData['provider'];
+
+                        $wp_user_lrid = $wpdb->get_var($wpdb->prepare('SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key="' . $loginRadiusMappingProvider . 'Lrid" AND meta_value = %s', $loginRadiusMappingData['id']));
+
+                        if (!empty($wp_user_lrid)) {
+                            $lrVerified = get_user_meta($wp_user_lrid, $loginRadiusMappingProvider . 'LrVerified', true);
+                            if ($lrVerified == '1') {
+                                // Check if lrid is the same that verified email.
+                                // account already mapped
+                                return '0';
+                            } else {
+                                // map account
+                                self::link_account($user_ID, $loginRadiusMappingData['id'], $loginRadiusMappingData['provider'], $loginRadiusMappingData['thumbnail'], $loginRadiusMappingData['pictureUrl']);
+                                return '1';
+                            }
                         } else {
                             // map account
                             self::link_account($user_ID, $loginRadiusMappingData['id'], $loginRadiusMappingData['provider'], $loginRadiusMappingData['thumbnail'], $loginRadiusMappingData['pictureUrl']);
                             return '1';
                         }
                     } else {
-                        // map account
-                        self::link_account($user_ID, $loginRadiusMappingData['id'], $loginRadiusMappingData['provider'], $loginRadiusMappingData['thumbnail'], $loginRadiusMappingData['pictureUrl']);
-                         return '1';
-                    }
-                    }else{
                         return '2';
                     }
-              
                 }
             }
         }
@@ -156,11 +155,11 @@ if (!class_exists('LR_Common')) {
 
             $redirectionUrl = LR_Common::get_protocol() . htmlspecialchars($_SERVER['HTTP_HOST']) . remove_query_arg('lrlinked');
             if (strpos($redirectionUrl, '?') !== false) {
-               
+
                 $redirectionUrl .= '&';
-            }else {
-                
-               $redirectionUrl .= '?';
+            } else {
+
+                $redirectionUrl .= '?';
             }
             $redirectionUrl .= 'lrlinked=' . $linked;
             wp_redirect($redirectionUrl);
@@ -177,24 +176,24 @@ if (!class_exists('LR_Common')) {
             }
         }
 
-     /**
+        /**
          * Loading Login Script for loggedin user to provide account linking
          */
         public static function load_login_script($isLinkingWidget = false) {
             global $loginRadiusSettings, $loginradius_api_settings, $lr_custom_interface_settings, $lr_raas_settings;
-            if (! isset($loginradius_api_settings['raas_enable']) || $loginradius_api_settings['raas_enable'] != 1 ) {
+            if (!isset($loginradius_api_settings['raas_enable']) || $loginradius_api_settings['raas_enable'] != 1) {
                 $loginradius_api_settings['LoginRadius_apikey'] = isset($loginradius_api_settings['LoginRadius_apikey']) ? trim($loginradius_api_settings['LoginRadius_apikey']) : '';
                 if (!class_exists('Login_Helper')) {
-                    require_once LOGINRADIUS_PLUGIN_DIR . 'public/inc/login/class-login-helper.php';
+                    require_once LR_ROOT_DIR . 'lr-social-login/public/inc/login/class-login-helper.php';
                 }
                 $register = Login_Helper::is_register_page();
-                
-                $location = urlencode(trim(site_url(), '/')) . '/';//urlencode(Login_Helper::get_redirect_url('', $register));
+
+                $location = urlencode(trim(site_url(), '/')) . '/'; //urlencode(Login_Helper::get_redirect_url('', $register));
                 if (isset($lr_custom_interface_settings['custom_interface']) && $lr_custom_interface_settings['custom_interface'] == '1') {
                     if (isset($lr_custom_interface_settings['selected_providers']) && $lr_custom_interface_settings['selected_providers'] != '') {
                         $selected_providers = implode('\',\'', $lr_custom_interface_settings['selected_providers']);
                     }
-                    $interface_url = LR_CUSTOM_INTERFACE_URL . 'assets/images/custom_interface/';
+                    $interface_url = LR_ROOT_URL . 'lr-custom-interface/assets/images/custom_interface/';
                     if (is_multisite()) {
                         $interface_url .= get_current_blog_id() . '/';
                     }
@@ -282,12 +281,12 @@ if (!class_exists('LR_Common')) {
                     jQuery(document).ready(function () {
                         LoginRadiusSDK.setLoginCallback(function () {
                             var form = document.createElement('form');
-                            <?php if (basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)) == 'profile.php'){ ?>
-                                 form.action = window.location.href;
-                            <?php } else { ?>
-                                 form.action = "<?php echo urldecode($location); ?>";
-                            <?php } ?>
-                           
+                <?php if (basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)) == 'profile.php') { ?>
+                                form.action = window.location.href;
+                <?php } else { ?>
+                                form.action = "<?php echo urldecode($location); ?>";
+                <?php } ?>
+
                             form.method = 'POST';
                             var hiddenToken = document.createElement('input');
                             hiddenToken.type = 'hidden';
@@ -312,22 +311,20 @@ if (!class_exists('LR_Common')) {
                 if ($_GET['lrlinked'] == 1) {
                     $html .= '<div id="loginRadiusSuccess" style="background-color: #FFFFE0; border:1px solid #E6DB55; padding:5px; margin:5px; color: #000">';
                     $html .= __('Account linked successfully', 'lr-plugin-slug');
-                }elseif($_GET['lrlinked'] == 'false'){
+                } elseif ($_GET['lrlinked'] == 'false') {
                     $html .= '<div id="loginRadiusSuccess" style="background-color: #FFFFE0; border:1px solid #E6DB55; padding:5px; margin:5px; color: #000">';
                     $html .= __('Account unlinked successfully', 'lr-plugin-slug');
-                }elseif($_GET['lrlinked'] == '2'){
+                } elseif ($_GET['lrlinked'] == '2') {
                     $html .= '<div id="loginRadiusError" style="background-color: #FFEBE8; border:1px solid #CC0000; padding:5px; margin:5px; color: #000;">';
                     $html .= __('Cannot link same provider', 'lr-plugin-slug');
                 } else {
                     $html .= '<div id="loginRadiusError" style="background-color: #FFEBE8; border:1px solid #CC0000; padding:5px; margin:5px; color: #000;">';
                     $html .= __('This account is already mapped', 'lr-plugin-slug');
                 }
-                
+
                 $html .= '</div>';
                 return $html;
             }
-           
-            
         }
 
         /**
@@ -340,8 +337,8 @@ if (!class_exists('LR_Common')) {
             $loginRadiusMappings = array_unique($loginRadiusMappings);
             $connected = false;
             $loginRadiusLoggedIn = get_user_meta($user_ID, 'loginradius_current_id', true);
-             $totalAccounts = get_user_meta($user_ID, 'loginradius_provider_id');
-            
+            $totalAccounts = get_user_meta($user_ID, 'loginradius_provider_id');
+
             $location = LR_Common::get_protocol() . $_SERVER['HTTP_HOST'] . remove_query_arg(array('lrlinked', 'loginradius_linking', 'loginradius_post', 'loginradius_invite', 'loginRadiusMappingProvider', 'loginRadiusMap', 'loginRadiusMain'));
 
             if (count($loginRadiusMappings) > 0) {
@@ -362,9 +359,9 @@ if (!class_exists('LR_Common')) {
 
                             $html .= '<td>' . $append;
                             $html .= __('Connected with', 'lr-plugin-slug');
-                            $html .= '<strong> ' . ucfirst($map) . '</strong><img src=\'' . LOGINRADIUS_PLUGIN_URL . 'assets/images/linking/' . $map . '.png' . '\' align=\'absmiddle\' style=\'margin-left:5px\' /></td><td>';
+                            $html .= '<strong> ' . ucfirst($map) . '</strong><img src=\'' . LR_ROOT_URL . 'lr-social-login/assets/images/linking/' . $map . '.png' . '\' align=\'absmiddle\' style=\'margin-left:5px\' /></td><td>';
                             if ((count($totalAccounts) > 1) && !$isconnected) {
-                                
+
                                 $html .= '<a href=' . $location . ( strpos($location, '?') !== false ? '&' : '?' ) . 'loginRadiusMap=' . $tempId . '&loginRadiusMappingProvider=' . $map . ' ><input type=\'button\' class=\'button-primary\' value="' . __('Remove', 'lr-plugin-slug') . '" /></a>';
                             }
                             $html .= '</td></tr>';
@@ -377,14 +374,14 @@ if (!class_exists('LR_Common')) {
                 $html .= '<tr>';
                 $isconnected = false;
                 $tempId = $loginRadiusLoggedIn;
-                
-                    $append = !$connected ? '<span style=\'color:green\'>Currently </span>' : '';
-                    
-                
+
+                $append = !$connected ? '<span style=\'color:green\'>Currently </span>' : '';
+
+
                 $html .= '<td>' . $append;
                 $html .= __('Connected with', 'lr-plugin-slug');
-                $html .= '<strong> ' . ucfirst($map) . '</strong> <img src=\'' . LOGINRADIUS_PLUGIN_URL . 'assets/images/linking/' . $map . '.png' . '\' align=\'absmiddle\' style=\'margin-left:5px\' /></td><td>';
-                
+                $html .= '<strong> ' . ucfirst($map) . '</strong> <img src=\'' . LR_ROOT_URL . 'lr-social-login/assets/images/linking/' . $map . '.png' . '\' align=\'absmiddle\' style=\'margin-left:5px\' /></td><td>';
+
                 if (count($totalAccounts) > 1 && $isconnected) {
                     $html .= '<a href=' . $location . ( strpos($location, '?') !== false ? '&' : '?') . 'loginRadiusMain=1&loginRadiusMap=' . $tempId . '&loginRadiusMappingProvider=' . $map . ' ><input type="button" class="button-primary" value="' . __('Remove', 'lr-plugin-slug') . '" /></a>';
                 }
@@ -409,7 +406,7 @@ if (!class_exists('LR_Common')) {
                 $append = '<span style=\'color:green\'>Currently </span>';
                 $html .= '<td>' . $append;
                 $html .= __('Connected with', 'lr-plugin-slug');
-                $html .= '<strong> ' . ucfirst($map) . '</strong> <img src=\'' . LOGINRADIUS_PLUGIN_URL . 'assets/images/linking/' . $map . '.png' . '\' align=\'absmiddle\' style=\'margin-left:5px\' /></td><td>';
+                $html .= '<strong> ' . ucfirst($map) . '</strong> <img src=\'' . LR_ROOT_URL . 'lr-social-login/assets/images/linking/' . $map . '.png' . '\' align=\'absmiddle\' style=\'margin-left:5px\' /></td><td>';
                 if (count($totalAccounts) != 1 && $connected) {
                     $html .= '<a href=' . $location . (strpos($location, '?') !== false ? '&' : '?') . 'loginRadiusMain=1&loginRadiusMap=' . $tempId . '&loginRadiusMappingProvider=' . $map . ' ><input type="button" class="button-primary" value="' . __('Remove', 'lr-plugin-slug') . '" /></a>';
                 }

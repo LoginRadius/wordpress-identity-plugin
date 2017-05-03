@@ -86,7 +86,6 @@ if ( ! class_exists( 'LR_Social_Login_Admin') ) {
             // Replicate Social Login configuration to the subblogs in the multisite network
             if ( is_multisite() && is_main_site() ) {
                 add_action( 'wpmu_new_blog', array( $this, 'replicate_settings_to_new_blog' ) );
-                add_action( 'update_option_LoginRadius_settings', array( $this, 'login_radius_update_old_blogs' ) );
             }
         }
 
@@ -103,8 +102,8 @@ if ( ! class_exists( 'LR_Social_Login_Admin') ) {
                 wp_enqueue_script( 'thickbox' );
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_style( 'wp-color-picker' );
-                wp_enqueue_script( 'LoginRadius_options_page_script', LOGINRADIUS_PLUGIN_URL . 'assets/js/loginradius-options-page.js', array( 'jquery' ), LR_PLUGIN_VERSION, $lr_js_in_footer );
-                wp_enqueue_script( 'LoginRadius_options_page_script2', LOGINRADIUS_PLUGIN_URL . 'assets/js/lr-social-login-admin.js', array( 'jquery', 'wp-color-picker' ), LR_PLUGIN_VERSION, $lr_js_in_footer );
+                wp_enqueue_script( 'LoginRadius_options_page_script', LR_ROOT_URL . 'lr-social-login/assets/js/loginradius-options-page.js', array( 'jquery' ), LR_PLUGIN_VERSION, $lr_js_in_footer );
+                wp_enqueue_script( 'LoginRadius_options_page_script2', LR_ROOT_URL . 'lr-social-login/assets/js/lr-social-login-admin.js', array( 'jquery', 'wp-color-picker' ), LR_PLUGIN_VERSION, $lr_js_in_footer );
             }
 
             if ( $hook == 'profile.php' && isset( $loginRadiusSettings['LoginRadius_socialLinking'] ) && $loginRadiusSettings['LoginRadius_socialLinking'] == '1' ) {
@@ -135,26 +134,13 @@ if ( ! class_exists( 'LR_Social_Login_Admin') ) {
             add_blog_option($blogId, 'LoginRadius_settings', $loginRadiusSettings );
         }
 
-        // Update the social login options in all the old blogs
-        public function login_radius_update_old_blogs( $oldConfig ) {
-            global $loginradius_api_settings;
-
-            if ( isset( $loginradius_api_settings['multisite_config'] ) && $loginradius_api_settings['multisite_config'] == '1' ) {
-                $settings = get_option( 'LoginRadius_settings' );
-                $blogs = wp_get_sites();
-                foreach ( $blogs as $blog ) {
-                    update_blog_option( $blog['blog_id'], 'LoginRadius_settings', $settings );
-                }
-            }
-        }
-
         /*
          * Callback for add_menu_page,
          * This is the first function which is called while plugin admin page is requested
          */
 
         public static function options_page() {
-            include_once LOGINRADIUS_PLUGIN_DIR."admin/views/settings.php";
+            require_once LR_ROOT_DIR . "lr-social-login/admin/views/settings.php";
             LR_Social_Login_Admin_Settings::render_options_page();
         }
 
@@ -175,7 +161,7 @@ if ( ! class_exists( 'LR_Social_Login_Admin') ) {
          * Function to be called when settings save button is clicked on plugin settings page
          */
         public static function validate_options( $loginRadiusSettings ) {
-            require_once LOGINRADIUS_PLUGIN_DIR . 'admin/helpers/class-admin-helper.php';
+            require_once LR_ROOT_DIR . 'lr-social-login/admin/helpers/class-admin-helper.php';
 
             $loginRadiusSettings['LoginRadius_socialavatar'] = ( ( isset( $loginRadiusSettings['LoginRadius_socialavatar'] ) && in_array( $loginRadiusSettings['LoginRadius_socialavatar'], array( 'socialavatar', 'largeavatar', 'defaultavatar' ) ) ) ? $loginRadiusSettings['LoginRadius_socialavatar'] : 'socialavatar' );
             $loginRadiusSettings['LoginRadius_dummyemail'] = ( isset( $loginRadiusSettings['LoginRadius_dummyemail'] ) && $loginRadiusSettings['LoginRadius_dummyemail'] == 'notdummyemail' ) ? 'notdummyemail' : 'dummyemail';
@@ -229,7 +215,7 @@ if ( ! class_exists( 'LR_Social_Login_Admin') ) {
                                         <td colspan="2">
                                             <?php
                                             if ( ! class_exists( "Login_Helper" ) ) {
-                                                require_once LOGINRADIUS_PLUGIN_DIR . 'public/inc/login/class-login-helper.php';
+                                                require_once LR_ROOT_DIR . 'lr-social-login/public/inc/login/class-login-helper.php';
                                             }
                                             Login_Helper::get_loginradius_interface_container();
                                             ?>

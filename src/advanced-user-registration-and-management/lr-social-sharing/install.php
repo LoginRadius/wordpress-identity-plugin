@@ -1,10 +1,10 @@
 <?php
 
 // Exit if called directly
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit();
 }
-if ( ! class_exists( 'LR_Sharing_Install' ) ) {
+if (!class_exists('LR_Sharing_Install')) {
 
     /**
      * class responsible for setting default settings for social invite.
@@ -16,7 +16,6 @@ if ( ! class_exists( 'LR_Sharing_Install' ) ) {
             'vertical_enable' => '',
             'horizontal_share_interface' => 'responsive',
             'vertical_share_interface' => '32-v',
-            
             'horizontal_sharing_providers' => array(
                 'Default' => array(
                     'Facebook' => 'Facebook',
@@ -91,85 +90,36 @@ if ( ! class_exists( 'LR_Sharing_Install' ) ) {
                 'Email',
                 'Print'
             ),
-            'isTotalShare'=>'true',
-            'isOpenSingleWindow'=>'false',
+            'isTotalShare' => 'true',
+            'isOpenSingleWindow' => 'false',
             'mobile_enable' => 'false',
-            'shortenUrl'=>'true',
-            'emailcontent'=>'false',
-            'popupHeightWidth'=>''
+            'shortenUrl' => 'true',
+            'emailcontent' => 'false',
+            'popupHeightWidth' => ''
         );
-
-        /**
-         * Constructor
-         */
-        public function __construct() {
-            global $lr_js_in_footer;
-            $this->set_default_options();
-
-            add_action( 'admin_enqueue_scripts', array( $this, 'share_add_stylesheet' ) );
-            if ($lr_js_in_footer) {
-                add_action('wp_footer', array($this, 'enqueue_share_scripts'), 1);
-                add_action('wp_footer', array($this, 'enqueue_Lrshare_scripts'), 1);
-                add_action('wp_footer', array($this, 'enqueue_Lr_Social_Share_Script'), 1);
-            } else {
-                add_action('wp_enqueue_scripts', array($this, 'enqueue_share_scripts'), 20);
-                add_action('wp_footer', array($this, 'enqueue_Lrshare_scripts'), 1);
-                add_action('wp_footer', array($this, 'enqueue_Lr_Social_Share_Script'), 1);
-            }
-        }
 
         /**
          * Function for adding default social_profile_data settings at activation.
          */
-        public static function set_default_options() {
+        public static function set_default_options($blog_id) {
             global $loginradius_share_settings;
-            if ( ! get_option( 'LoginRadius_share_settings' ) ) {
-                // Adding LoginRadius plugin options if not available.
-                update_option('LoginRadius_share_settings', self::$options);
+            if ($blog_id) {
+                if (!get_blog_option($blog_id, 'LoginRadius_share_settings')) {
+                    // Adding LoginRadius plugin options if not available.
+                    update_blog_option($blog_id, 'LoginRadius_share_settings', self::$options);
+                }
+
+                // Get LoginRadius plugin settings.
+                $loginradius_share_settings = get_blog_option($blog_id, 'LoginRadius_share_settings');
+            } else {
+                if (!get_option('LoginRadius_share_settings')) {
+                    // Adding LoginRadius plugin options if not available.
+                    update_option('LoginRadius_share_settings', self::$options);
+                }
+
+                // Get LoginRadius plugin settings.
+                $loginradius_share_settings = get_option('LoginRadius_share_settings');
             }
-
-            // Get LoginRadius plugin settings.
-            $loginradius_share_settings = get_option('LoginRadius_share_settings');
-        }
-
-        /**
-         * Add stylesheet and JavaScript to admin section.
-         */
-        public function share_add_stylesheet($hook) {
-            global $lr_js_in_footer;
-            if ( $hook != 'loginradius_page_loginradius_share' && $hook != 'toplevel_page_loginradius_share' ) {
-                return;
-            }
-            wp_enqueue_style('loginradius_sharing_style', plugins_url('/assets/css/lr-social-sharing-admin.css', __FILE__));
-            wp_enqueue_script('loginradius_share_admin_javascript', plugins_url('/assets/js/loginradius_sharing_admin.js', __FILE__), array('jquery', 'jquery-ui-sortable', 'jquery-ui-mouse', 'jquery-touch-punch'), false, $lr_js_in_footer);
-        }
-
-        /**
-         * Add stylesheet and JavaScript to client sections
-         */
-        public function enqueue_share_scripts() {
-            wp_enqueue_script('loginradius_javascript_init', plugins_url('/assets/js/loginradius_sharing.js', __FILE__), array('jquery'), '1.0.0');
-            wp_enqueue_script('lr-social-sharing');
-        }
-        
-        public function enqueue_Lrshare_scripts() {
-            wp_enqueue_script('lr_share', 'https://share.lrcontent.com/prod/v2/js/opensocialsharedefaulttheme.js');
-            wp_enqueue_script('lr-social-sharing');
-        }
-        public function enqueue_Lr_Social_Share_Script() {
-            wp_enqueue_script('lr_shares', 'https://share.lrcontent.com/prod/v2/js/opensocialshare.js');
-            wp_enqueue_script('lr-social-sharing');
-        }
-        /**
-         * Reset Sharing Settings.
-         */
-        public static function reset_share_options() {
-            global $loginradius_share_settings;
-            // Load reset options.
-            update_option('LoginRadius_share_settings', self::$options);
-
-            // Get LoginRadius plugin settings.
-            $loginradius_share_settings = get_option('LoginRadius_share_settings');
         }
 
     }
