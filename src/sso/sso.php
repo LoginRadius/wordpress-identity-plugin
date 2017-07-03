@@ -1,0 +1,75 @@
+<?php
+
+// Exit if called directly
+if (!defined('ABSPATH')) {
+    exit();
+}
+
+if (!class_exists('CIAM_SSO')) {
+
+    /**
+     * The main class and initialization point of the plugin.
+     */
+    class CIAM_SSO {
+
+        /**
+         * Constructor
+         */
+        public function __construct() {
+            global $ciam_sso_page_settings, $ciam_credencials;
+            
+            if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){ 
+                 return;   
+             }
+            $ciam_sso_page_settings = get_option('Ciam_Sso_Page_settings');
+            $is_enable = false;
+            if (isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1') {
+                add_action('wp_enqueue_scripts', array($this, 'sso_enqueue_scripts'));
+                $is_enable = true;
+            }
+            $this->load_dependencies($is_enable);
+            add_action('ciam_admin_menu', array($this, 'menu'));
+            
+             /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+        }
+
+        public function menu() {
+            global $ciam_sso_page_settings, $ciam_credencials;
+            
+            if(!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) && empty($ciam_credencials['secret'])){
+                 return;   
+             }
+            add_submenu_page('ciam-activation', 'SSO Page Settings', 'SSO', 'manage_options', 'ciam-sso', array('Sso_Admin', 'options_page'));
+             /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+        }
+
+        /* Load LR V2 Script */
+
+        public function sso_enqueue_scripts() {
+            wp_register_script('ciam-auth-script', '//auth.lrcontent.com/v2/js/LoginRadiusV2.js', array('jquery'), CIAM_PLUGIN_VERSION, false);
+            wp_enqueue_script('ciam-auth-script');
+             /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+        }
+
+        /**
+         * Loads PHP files that required by the plug-in
+         */
+        public function load_dependencies($is_enable) {
+
+            // Load required files.
+            require_once(CIAM_PLUGIN_DIR . "sso/admin/class-sso-admin.php");
+            if ($is_enable) {
+                require_once(CIAM_PLUGIN_DIR . "sso/front/front-sso.php");
+            }
+            
+             /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+        }
+
+    }
+
+    new CIAM_SSO();
+}
