@@ -3,7 +3,7 @@ Contributors: LoginRadius
 Tags: Hosted Registration
 Requires at least: 3.5
 Tested up to: 4.8
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 
 
@@ -12,6 +12,12 @@ License: GPLv2 or later
 * A clean, user friendly WP admin U/I.
 * Users can login via hosted page.
 * Log Generation Functionality
+
+== Change Log ==
+
+= 3.0.1 =
+* Fix a minor bug
+1) Fix registration form button text bug in some cases.
 
 == Change Log ==
 

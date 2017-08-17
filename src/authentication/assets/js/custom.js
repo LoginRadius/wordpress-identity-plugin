@@ -72,7 +72,7 @@ function registration_hook(url) {
         jQuery('input').val('');
         jQuery('textarea').val('');
         jQuery('select').val('');
-       
+        jQuery('#loginradius-submit-register').val('Register');
         LRObject.$hooks.register('endProcess', function (name) { //hide loading gif
             jQuery("#ciam_loading_gif").hide();
         });
@@ -91,7 +91,7 @@ function registration_hook(url) {
         jQuery('input').val('');
         jQuery('textarea').val('');
         jQuery('select').val('');
-         
+        jQuery('#loginradius-submit-register').val('Register'); 
          
         ciamfunctions.message(errors[0].Description, "#registration_message", "error");
 
