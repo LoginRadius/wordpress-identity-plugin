@@ -7,6 +7,7 @@ function forgotpass_hook(redirecturl) {
     forgotpassword_options.onSuccess = function (response) {
         // On Success
           jQuery('input').val('');
+          jQuery('#loginradius-submit-send').val('Send');
         ciamfunctions.message("Password change link sent to your email id", "#forgotpasswordmessage", "success");
 
 
@@ -24,6 +25,7 @@ function forgotpass_hook(redirecturl) {
     forgotpassword_options.onError = function (errors) {
         // On Errors
         jQuery('input').val('');
+        jQuery('#loginradius-submit-send').val('Send');
         ciamfunctions.message(errors[0].Description, "#forgotpasswordmessage", "error");
 
         jQuery("#ciam-forgotpassword-emailid").val("");

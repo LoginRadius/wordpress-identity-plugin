@@ -16,8 +16,8 @@ License: GPLv2 or later
 == Change Log ==
 
 = 3.0.1 =
-* Fix a minor bug
-1) Fix registration form button text bug in some cases.
+* Minor Bug Fix.
+1) Registration page bug fix
 
 == Change Log ==
 
