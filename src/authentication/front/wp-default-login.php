@@ -18,25 +18,21 @@ if ( ! class_exists( 'CIAM_WP_Default_Login' ) ) {
         public function __construct() {
             global $ciam_credencials;
             
-            if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){ 
-                 return;   
-             }
-        	add_shortcode( 'ciam_wp_default_login', array( get_class(), 'ciam_wp_default_login' ) );
+            add_shortcode( 'ciam_wp_default_login', array( $this, 'ciam_wp_default_login' ) );
         	// Allows the use of email logins
-            add_action( 'wp_authenticate', array( get_class(), 'optional_email_address_login' ), 1, 2 );
+            add_action( 'wp_authenticate', array( $this, 'optional_email_address_login' ), 1, 2 );
 
             // Run login_user before headers and cookies are sent
-            add_action( 'after_setup_theme', array( get_class(), 'login_user' ) );
+          
+            add_action( 'after_setup_theme', array( $this, 'login_user' ) );
             
-             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
         }
 
         /**
          * ciam_wp_default_login displays a default wordpress
          * login form as an optional back door option for wordpress users
          */
-        static function ciam_wp_default_login() {
+        function ciam_wp_default_login() {
             
             if ( ! is_user_logged_in() ) {
                 $args = array(
@@ -59,7 +55,7 @@ if ( ! class_exists( 'CIAM_WP_Default_Login' ) ) {
             }
             
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }
 
         /**
@@ -68,7 +64,7 @@ if ( ! class_exists( 'CIAM_WP_Default_Login' ) ) {
          * @param  string &$username username or email
          * @param  string &$password password
          */
-        static function optional_email_address_login( &$username, &$password ) {   
+        function optional_email_address_login( &$username, &$password ) {   
            
             $user = get_user_by( 'email', $username );
             if ( ! empty( $user->user_login ) )
@@ -77,13 +73,13 @@ if ( ! class_exists( 'CIAM_WP_Default_Login' ) ) {
             }
             
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, "Credencials", get_called_class(), "");
+            do_action("ciam_debug", __FUNCTION__, "Credencials", get_class(), "");
         }
 
         /**
          * login_user handles the $_POST array and logs in users
          */
-        static function login_user() {
+        function login_user() {
            
             if ( ! is_user_logged_in() && ! empty( $_POST['log'] ) && ! empty( $_POST['pwd'] ) ) {
                 $creds = array();
@@ -98,7 +94,7 @@ if ( ! class_exists( 'CIAM_WP_Default_Login' ) ) {
             }
             
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         } 
     }
      new CIAM_WP_Default_Login();

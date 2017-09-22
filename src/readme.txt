@@ -1,9 +1,9 @@
 === LoginRadius CIAM ===
 Contributors: LoginRadius
-Tags: Hosted Registration
+Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
 Tested up to: 4.8
-Stable tag: 3.0.1
+Stable tag: 3.1.0
 License: GPLv2 or later
 
 
@@ -15,11 +15,20 @@ License: GPLv2 or later
 
 == Change Log ==
 
+= 3.1.0 =
+* Implemented New Functionality.
+1) Hosted Page
+2) 2 Factor Authentication 
+3) Email Login with required,optional and disable flow.
+4) Phone Login
+5) Customize Email Templates
+6) Customize Phone Templates
+7) Enable Debug Mode
+8) Single Sign-On (SSO)
+
 = 3.0.1 =
 * Minor Bug Fix.
 1) Registration page bug fix
-
-== Change Log ==
 
 = 3.0.0 =
 * This is the upgraded version of the application, in this we have added some new features which are mentioned below.

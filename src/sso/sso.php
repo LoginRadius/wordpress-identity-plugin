@@ -16,42 +16,54 @@ if (!class_exists('CIAM_SSO')) {
          * Constructor
          */
         public function __construct() {
-            global $ciam_sso_page_settings, $ciam_credencials;
-            
-            if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){ 
-                 return;   
-             }
+            global $ciam_credencials;
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+            if (!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])) {
+                return;
+            }
+
+            add_action('init', array($this, 'init'));
+        }
+
+        public function init() {
+            global $ciam_sso_page_settings;
             $ciam_sso_page_settings = get_option('Ciam_Sso_Page_settings');
+
             $is_enable = false;
             if (isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1') {
-                add_action('wp_enqueue_scripts', array($this, 'sso_enqueue_scripts'));
-                $is_enable = true;
+                if (!is_super_admin()) {
+                    $is_enable = true;
+                }
             }
             $this->load_dependencies($is_enable);
             add_action('ciam_admin_menu', array($this, 'menu'));
-            
-             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
+
+        /*
+         * Create menu for the module
+         */
 
         public function menu() {
-            global $ciam_sso_page_settings, $ciam_credencials;
-            
-            if(!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) && empty($ciam_credencials['secret'])){
-                 return;   
-             }
+            global $ciam_credencials;
+
+            if (!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) && empty($ciam_credencials['secret'])) {
+                return;
+            }
             add_submenu_page('ciam-activation', 'SSO Page Settings', 'SSO', 'manage_options', 'ciam-sso', array('Sso_Admin', 'options_page'));
-             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
-        /* Load LR V2 Script */
+        /*
+         *  Load LR V2 Script 
+         */
 
         public function sso_enqueue_scripts() {
             wp_register_script('ciam-auth-script', '//auth.lrcontent.com/v2/js/LoginRadiusV2.js', array('jquery'), CIAM_PLUGIN_VERSION, false);
             wp_enqueue_script('ciam-auth-script');
-             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
         /**
@@ -62,11 +74,12 @@ if (!class_exists('CIAM_SSO')) {
             // Load required files.
             require_once(CIAM_PLUGIN_DIR . "sso/admin/class-sso-admin.php");
             if ($is_enable) {
+                add_action('wp_enqueue_scripts', array($this, 'sso_enqueue_scripts'));
                 require_once(CIAM_PLUGIN_DIR . "sso/front/front-sso.php");
             }
-            
-             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+
+            /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
     }

@@ -9,34 +9,29 @@ if (!class_exists('CIAM_Front_Sso')) {
 
     class CIAM_Front_Sso {
 
+        /*
+         * Constructor
+         */
         function __construct() {
-            global $ciam_sso_page_settings,$ciam_credencials;
+            global $ciam_sso_page_settings, $ciam_setting;
             
-            if(!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) && empty($ciam_credencials['secret'])){
-                 return;   
-             }
-            $ciam_sso_page_settings = get_option('Ciam_Sso_Page_settings');
             if (isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1') {
                 add_action('wp_head', array($this, 'load_sso_variables'));
                 add_action('in_admin_footer', array($this, 'load_sso_variables'));
                 add_action('ciam_sso_logout', array($this, 'ciam_sso_force_logout'));
-                add_action('wp_head', array($this, 'ciam_sso_commonoptions'));
+                if (isset($ciam_setting['enable_hostedpage']) && $ciam_setting['enable_hostedpage'] == 1) {
+                    add_action('wp_head', array($this, 'ciam_sso_commonoptions'));
+                }
             }
             
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
         }
 
-        
-       
-            
-            
-            
-        
-        
+        /*
+         * Adding commom option for Loginradius js
+         */
           public function ciam_sso_commonoptions() { 
               global $ciam_credencials;
-              if(isset($ciam_credencials) && !empty($ciam_credencials['apikey'])){ // checking for the api key and site name is not blank.
+              if(!empty($ciam_credencials['apikey'])){ // checking for the api key and site name is not blank.
               ?>
              <script type="text/javascript">
              var commonOptions = {};
@@ -46,16 +41,22 @@ if (!class_exists('CIAM_Front_Sso')) {
              </script>
               <?php 
               }
+              do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
           }
         
-        
-        public function ciam_sso_force_logout() {  
+        /*
+         * SSO force logout
+         */
+        public function ciam_sso_force_logout() {
             add_action('wp_head', array($this, 'ciam_sso_force_logout_head'));
             
              /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }
         
+        /*
+         * SSO force logout
+         */
         
          public function ciam_sso_force_logout_head() { 
               global $ciam_api_settings;
@@ -76,12 +77,15 @@ if (!class_exists('CIAM_Front_Sso')) {
             <?php
             
              /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }
 
-        public static function load_sso_variables() {
-            global $ciam_api_settings,$ciam_setting;
-            $ciam_api_settings = get_option('Ciam_API_settings');
+        /*
+         * Load SSO variables
+         */
+        public function load_sso_variables() {
+            global $ciam_setting;
+           
             ?>
             <script>
                 jQuery(document).ready(function () {
@@ -114,24 +118,24 @@ if (!class_exists('CIAM_Front_Sso')) {
                         LRObject.util.ready(function () {
                             LRObject.init("ssoLogin", ssologin_options);
                         });
-                 <?php } } else { ?>
+                 <?php } } else {  ?>
                         var check_options = {};
                         check_options.onError = function (response) {
-                            
-                            if(response != ''){
+                           
+                            if(response != ''){ 
                             if("<?php echo get_user_meta(get_current_user_id(), 'accesstoken',true);?>" != response){
                                 // On Error
                             // If user is not log in then this function will execute.
                             window.location.href = "<?php echo html_entity_decode(wp_logout_url(''));?>";
                             }
-                        }else{
+                        }else{ 
                         logout("<?php echo html_entity_decode(wp_logout_url(''));?>");
                         }
                             
                             
                         };
                         check_options.onSuccess = function (response) {
-                          
+                         
                             // On Success
                             // If user is log in then this function will execute.
                         };
@@ -171,7 +175,7 @@ if (!class_exists('CIAM_Front_Sso')) {
             <?php
             
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }
 
     }

@@ -21,9 +21,19 @@ if (!class_exists('CIAM_Hosted')) {
             if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){
                  return;   
              }
+            
+            add_action('init',array($this,'init'));
+        }
+        
+        /*
+         * This function will called with the with the wordpress init function.
+         */
+        public function init(){ 
+            
             $this->load_dependencies();
-          /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            
+            /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
         /**
@@ -36,7 +46,7 @@ if (!class_exists('CIAM_Hosted')) {
             require_once(CIAM_PLUGIN_DIR . "hosted/admin/settings.php");
             
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
     }

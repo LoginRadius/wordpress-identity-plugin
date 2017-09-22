@@ -16,28 +16,17 @@ if (!class_exists('Sso_Admin')) {
          */
 
         public function __construct() {
-            global $ciam_credencials;
-           
-            if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){ 
-                 return;   
-             }
-            add_action('admin_init', array($this, 'admin_init'));
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            add_action('admin_init', array($this, 'init'));
         }
 
-        public function admin_init() {
+        /*
+         * load all required dependencies
+         */
 
-            register_setting('Ciam_Sso_Page_settings', 'Ciam_Sso_Page_settings', array($this,'ciam_sso_page_validation'));
+        public function init() {
+            register_setting('Ciam_Sso_Page_settings', 'Ciam_Sso_Page_settings');
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
-        }
-
-        function ciam_sso_page_validation($settings) {
-            
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), $settings);
-            return $settings;
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
         /*
@@ -47,8 +36,8 @@ if (!class_exists('Sso_Admin')) {
 
         public static function options_page() {
             include_once CIAM_PLUGIN_DIR . "sso/admin/views/settings.php";
-            
-            CIAM_SSO_Settings::render_options_page();
+            $obj_CIAM_SSO_Settings = new CIAM_SSO_Settings;
+            $obj_CIAM_SSO_Settings->render_options_page();
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), "");
         }

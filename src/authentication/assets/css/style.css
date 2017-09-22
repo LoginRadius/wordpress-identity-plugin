@@ -1,306 +1,291 @@
 body[class*="loginradius"] #wpwrap #wpcontent, body[class*="LoginRadius"] #wpwrap #wpcontent {
-	background: url(../images/cloud.png) repeat-x bottom center fixed #f9f9f9;
+    background: url(../images/cloud.png) repeat-x bottom center fixed #f9f9f9;
 }
 
 .cf:before,.cf:after {content: " ";display: table;}.cf:after {clear: both;}.cf {*zoom: 1;}
 
 /*====================
-	Disabled Overlay
+        Disabled Overlay
 =======================*/
 
 .ciam-option-disabled-hr, .lr-option-disabled-vr {
-	background: #fefefe;
-	opacity: .7;
-	position: absolute;
-	z-index: 2;
-	top: 30px;
-	bottom: 0;
-	left: 0;
-	right: 0;
+    background: #fefefe;
+    opacity: .7;
+    position: absolute;
+    z-index: 2;
+    top: 30px;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 /*===============
-	Tabs
+        Tabs
 ================*/
 
 h2.nav-tab-wrapper, h3.nav-tab-wrapper {
-  padding-left: 0px;
+    padding-left: 0px;
 }
 
 /*============================
 Inputs
 ===============================*/
 .ciam-row-field {
-	margin-left: 280px;
-	width: 350px !important;
+    margin-left: 280px;
+    width: 350px !important;
 }
 .ciam-row .ciam-row .ciam-row-field {
-	margin-left: 220px;
-	width: 350px !important;
+    margin-left: 220px;
+    width: 350px !important;
 }
 
 
 
 #lr_options_tabs {
-	float: left;
-	width: 66.12903225806451%;
+    float: left;
+    width: 66.12903225806451%;
 }
 
 .ciam-options-tab-btns {
-	margin: 0;
-	overflow: hidden;
+    margin: 0;
+    overflow: hidden;
 }
 
 .nav-tab {
 
-	margin: -4px 0px -1px 0;
+    margin: -4px 0px -1px 0;
 }
-
-
-
 .ciam-tab-frame {display: none;}
 .ciam-tab-frame.ciam-active {display: block;}
-
-
-
-
 .ciam-row {
-	width: 100%;
-	display: block;
-	padding: 45px 60px;
+    width: 100%;
+    display: block;
+    padding: 5px 15px;
 
-	-moz-box-sizing:border-box;
-	-ms-box-sizing:border-box;
-	-webkit-box-sizing:border-box;
-	box-sizing:border-box;
-
-	border-bottom: 1px solid #f2f2f2;
+    -moz-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 .ciam-row .ciam-row {
-	padding: 10px 0 20px 30px;
-	border: 0;
-	border-left: 3px dotted #eee;
+    padding: 10px 0 20px 30px;
+    border: 0;
+    border-left: 3px dotted #eee;
 }
-
-
-
-
 
 .ciam_options_container{
-	position: relative;
-	z-index: 1;
-	padding:10px;
-	background-color: white;
-	margin-bottom: 15px;
+    position: relative;
+    z-index: 1;
+    padding:10px;
+    background-color: white;
+    margin-bottom: 15px;
 }
-
 
 .ciam_property_title{
-	position: absolute;
-	margin-top: 10px;
+    position: absolute;
+    margin-top: 10px;
 }
 
-
 textarea.ciam-shortcode {
-	font-size: 0.875em;
-	border: 1px solid #eee;
-	border-radius: 0 10px;
-	background: #f9f9f9;
-	padding: 5px 10px;
-	height: auto;
-	min-height: 0;
-	resize: none;
+    font-size: 0.875em;
+    border: 1px solid #eee;
+    border-radius: 0 10px;
+    background: #f9f9f9;
+    padding: 5px 10px;
+    height: auto;
+    min-height: 0;
+    resize: none;
 
-	white-space: pre-wrap;       /* CSS 3 */
-	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-	white-space: -pre-wrap;      /* Opera 4-6 */
-	white-space: -o-pre-wrap;    /* Opera 7 */
-	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 
 
 /*====================
-	Tooltips
+        Tooltips
 =======================*/
 .ciam-tooltip {
-	width: 20px;
-	height: 20px;
-	background-color: #e6e6e6;
-	color: #fff;
-	font-size: 1em;
-	line-height: 1.25em;
-	display: inline-block;
-	vertical-align: middle;
-	border-radius: 100%;
-	cursor: pointer;
-	text-align: center;
-	margin: 0;
-	-webkit-transition:all .2s ease-in-out;
-	transition:all .2s ease-in-out
+    width: 20px;
+    height: 20px;
+    background-color: #e6e6e6;
+    color: #fff;
+    font-size: 1em;
+    line-height: 1.25em;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 100%;
+    cursor: pointer;
+    text-align: center;
+    margin: 0;
+    -webkit-transition:all .2s ease-in-out;
+    transition:all .2s ease-in-out
 }
 
 .ciam-tooltip:hover {
-	background-color: #00649a;
+    background-color: #00649a;
 }
 
 .ciam-tooltip {
-	position: relative;
+    position: relative;
 }
 
 .ciam-tooltip[data-title]:hover:before {
-	border: solid;
-	border-color: #00649a transparent;
-	border-width: 6px 6px 0 6px;
-	content: "";
-	bottom: 29px;
-	left: 50%;
-	margin-left: -6px;
-	position: absolute;
-	z-index: 97;
+    border: solid;
+    border-color: #00649a transparent;
+    border-width: 6px 6px 0 6px;
+    content: "";
+    bottom: 29px;
+    left: 50%;
+    margin-left: -6px;
+    position: absolute;
+    z-index: 97;
 }
 
 .ciam-tooltip[data-title]:hover:after {
-	content: attr(data-title);
-	min-width: 180px;
-	background: #00649a;
-	color: #fff;
-	font-family: "Lato", Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	line-height: 1.4285714286em;
-	padding: 5px 10px;
-	position: absolute;
-	bottom: 35px;
-	left: 50%;
-	margin-left: -100px;
-	z-index: 1000;
-	border-radius: 5px;
-	text-align: left;
+    content: attr(data-title);
+    min-width: 180px;
+    background: #00649a;
+    color: #fff;
+    font-family: "Lato", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.4285714286em;
+    padding: 5px 10px;
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    margin-left: -100px;
+    z-index: 1000;
+    border-radius: 5px;
+    text-align: left;
 }
 
 .ciam-tooltip.tip-bottom[data-title]:hover:before {
-	border-width: 0 6px 6px 6px;
-	bottom: auto;
-	top: 34px;
+    border-width: 0 6px 6px 6px;
+    bottom: auto;
+    top: 34px;
 }
 
 .ciam-tooltip.tip-bottom[data-title]:hover:after {
-	bottom: auto;
-	top: 40px;
+    bottom: auto;
+    top: 40px;
 }
 
 /*====================
-	On Off Toggle checkboxes
+        On Off Toggle checkboxes
 =======================*/
 
 /*hides the ugly-ass checkbox*/
-input.ciam-toggle {display: none;}
+input.ciam-toggle {display: none !important;}
 
 label.ciam-toggle, label.ciam-show-toggle {
-	margin: 10px 0;
-	padding-left: 60px;
-	display: inline-block;
-	position: relative;
+    margin: 10px 0;
+    padding-left: 60px;
+    display: inline-block;
+    position: relative;
 
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .ciam-toggle-name:before, label.ciam-show-toggle:before {
-	content: "\f147 \00a0\00a0\00a0 \f335";
-	font-family: dashicons, "Open Sans", sans-serif;
-	text-align: center;
-	color: #ccc;
-	font-size: 0.75em;
-	line-height: 1.6666666667em;
-	background: #fefefe;
-	position: absolute;
-	left: 0;
-	top: 2px;
+    content: "\f147 \00a0\00a0\00a0 \f335";
+    font-family: dashicons, "Open Sans", sans-serif;
+    text-align: center;
+    color: #ccc;
+    font-size: 0.75em;
+    line-height: 1.6666666667em;
+    background: #fefefe;
+    position: absolute;
+    left: 0;
+    top: 2px;
 
-	width: 50px;
-	height: 20px;
-	border: 1px solid #eee;
-	border-radius: 20px;
-	-webkit-transition:all .4s ease-in-out;
-	transition:all .4s ease-in-out
+    width: 50px;
+    height: 20px;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    -webkit-transition:all .4s ease-in-out;
+    transition:all .4s ease-in-out
 
 }
 
 .ciam-toggle-name:after, label.ciam-show-toggle:after {
-	content: "";
-	background: #fff;
-	position: absolute;
-	left: 2px;
-	top: 3px;
+    content: "";
+    background: #fff;
+    position: absolute;
+    left: 2px;
+    top: 3px;
 
-	width: 18px;
-	height: 18px;
-	border: 1px solid #ccc;
-	border-radius: 50%;
-	-webkit-transition:all .2s ease-in-out;
-	transition:all .2s ease-in-out
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    -webkit-transition:all .2s ease-in-out;
+    transition:all .2s ease-in-out
 }
 
 input.ciam-toggle:checked + .ciam-toggle-name:before, input.ciam-toggle:checked + label.ciam-show-toggle:before {
-	/*content: "";*/
-	color: #fff;
-	background: #1e8cbe;
-	border: 1px solid #1e8cbe;
+    /*content: "";*/
+    color: #fff;
+    background: #1e8cbe;
+    border: 1px solid #1e8cbe;
 }
 
 input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked + label.ciam-show-toggle:after {
-	content: "";
-	left: 31px;
-	border-color: #eee;
-	/*box-shadow: 0px 0px 5px rgba(0,0,0,0.1);*/
+    content: "";
+    left: 31px;
+    border-color: #eee;
+    /*box-shadow: 0px 0px 5px rgba(0,0,0,0.1);*/
 }
 
 
 
 /*====================
-	Responsive
+        Responsive
 =======================*/
 
 @media only screen and (max-width: 782px) {
-	
 
-	.ciam-toggle-name:before, label.ciam-show-toggle:before {
-		left: 0;
-		top: 2px;
 
-		height: 27px;
-		line-height: 1.8em;
+    .ciam-toggle-name:before, label.ciam-show-toggle:before {
+        left: 0;
+        top: 2px;
 
-	}
+        height: 27px;
+        line-height: 1.8em;
 
-	.ciam-toggle-name:after, label.ciam-show-toggle:after {
-		left: 2px;
-		top: 4px;
+    }
 
-		width: 23px;
-		height: 23px;
-	}
+    .ciam-toggle-name:after, label.ciam-show-toggle:after {
+        left: 2px;
+        top: 4px;
 
-	input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked + label.ciam-show-toggle:after {
-		left: 25px;
-	}
+        width: 23px;
+        height: 23px;
+    }
 
-	
+    input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked + label.ciam-show-toggle:after {
+        left: 25px;
+    }
+
+
 
 }
 
 @media only screen and (max-width: 640px) {
-	
-	.ciam-row {
-		padding: 45px 30px;
-	}
 
-	
+    .ciam-row {
+        padding: 45px 30px;
+    }
+
+
 }
 
 
@@ -309,7 +294,7 @@ input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked +
 
 
 #wp-admin-bar-logout a {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 /*General CSS*/
@@ -342,7 +327,7 @@ input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked +
 }
 
 #loginradius-changepassword-confirmnewpassword{
-   
+
     width:30%;
 }
 
@@ -405,13 +390,6 @@ input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked +
     margin-top: -16px;
 }
 
-.interfacecontainerdiv {
-    overflow: hidden;
-    max-width: 500px;
-    margin: 0 auto;
-    margin-top:20px;
-    padding-bottom:10px;
-}
 .interfacecontainerdiv img {
     border-radius: 0;
     box-shadow: none;
@@ -424,7 +402,9 @@ input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked +
     list-style-type: none;
     margin-bottom: 5px;
 }
-
+.interfacecontainerdiv a{
+    border-bottom: 0px !important;
+}
 .messageinfo div {
     padding: 20px 30px;
 }
@@ -440,9 +420,9 @@ input.ciam-toggle:checked + .ciam-toggle-name:after, input.ciam-toggle:checked +
 
 
 span[class*="lr-img-icon-"].user-reg:before {
-    
+
     vertical-align: middle;
-   
+
     font-size: 18px;
 }
 
@@ -487,8 +467,12 @@ span[class*="lr-img-icon-"].user-reg:after {
     box-shadow:none !important;
 }
 .interfacecontainerdiv .ciam-linked .ciam-provider-label {
-    width: 6%;
+    width: 29px;
     clear: both;
+    border-radius: 100%;
+}
+.interfacecontainerdiv .ciam-linked .ciam-provider-label:before{
+    border:0px;
 }
 .interfacecontainerdiv .ciam-linked{
     line-height: 40px;
@@ -615,25 +599,25 @@ span[class*="lr-img-icon-"].user-reg:after {
 .ciam-icon-wordpress:after {content: attr(title);margin-left: 40px;}
 .ciam-icon-yahoo:after {content: attr(title);margin-left: 40px;}
 .ciam-provider-label[class*="ciam-icon-"]::after {
-font-family: Verdana, Lato, Arial, sans-serif;
-margin-left: 42px;
+    font-family: Verdana, Lato, Arial, sans-serif;
+    margin-left: 42px;
 }
 #social-msg{
-   margin-left:395px;
-    
+    margin-left:395px;
+
 }
 
 .loading_circle{
-	position:absolute;
-	 
-	
+    position:absolute;
+
+
 }
 #loginradius-submit-register,loginradius-submit-login,loginradius-submit-send,loginradius-submit-reset-password{
-	margin-top:10px;
+    margin-top:10px;
 }
 
 .btn{
-	margin-left:10px;
+    margin-left:10px;
 }
 
 .overlay {
@@ -645,8 +629,8 @@ margin-left: 42px;
     background: #fff;
     opacity: 0.8;
     filter: alpha(opacity=80);
-   overflow-y: scroll;
-   z-index:999;
+    overflow-y: scroll;
+    z-index:999;
 }
 
 
@@ -656,31 +640,59 @@ margin-left: 42px;
 }
 
 .ciam_forgot{
-	
-	top:160px;
+
+    top:160px;
 }
 
 .ciam_shortcode_div{
-    
+
     width:33%;display:inline-block;
 }
 
 textarea.ciam-shortcode {
     min-height: 0px !important;
 }
-
-a{ cursor: pointer; }
-
 /* 2014 theme css start */
 #changepassword-container .loginradius--form-element-content label {
     width: 100px;
     padding: 5px;
 }
 #login-container .loginradius--form-element-content label {
-    width: 100px;
+    width: 230px;
     float: left;
     padding: 8px;
 }
+#login-container #loginradius-button-sendotp {
+    padding: 14px;
+    margin-left: 4px;
+}
+#loginradius-button-backupcodebutton{
+    margin-top:10px;
+}
+
+#changepassword-container .loginradius-validation-message,
+#changepassword-container .content-loginradius-confirmnewpassword{
+    padding-left: 2px;
+    padding: 5px;
+}
+
+#changepassword-container #validation-loginradius-changepassword-oldpassword,
+#changepassword-container #validation-loginradius-changepassword-newpassword,
+#changepassword-container #validation-loginradius-changepassword-confirmnewpassword{
+    padding-left: 122px;
+}
+#changepassword-container #changepassword-password-strength-meter{
+    width: 489px;
+    padding-left: 124px;
+}
+#changepassword-container #changepassword-password-strength-text{
+    padding-left: 124px;
+}
+#password_msg_success{
+    padding-left:162px;
+}
+
+
 
 #registration-container .loginradius--form-element-content label {
     width: 274px;
@@ -688,7 +700,7 @@ a{ cursor: pointer; }
     padding: 5px;
 }
 #forgotpassword-container .loginradius--form-element-content label {
-    width:64px;
+    width:136px;
     padding :10px;
     float:left;    
 }
@@ -705,34 +717,276 @@ a{ cursor: pointer; }
     width:38%;
 }
 
-.ciam-email-button{
-  
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 8px 6px 6px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
+.ciam-email-button,.ciam-password-button{
+
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 8px 6px 6px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
 
 }
 .loginradius-validation-message{
-    
     color : #FF0000;
 }
 
-#addemail-container label{
-    width:64px;
-   
-    float:left;  
-}
+#addemail-container label,
 .removeemail-container label{
     width:64px;
-   
     float:left;  
 }
-#pass1-text{
-  visibility:hidden !important;  
+#pass1-text, #pass1{
+    visibility:hidden !important;  
+}
+.popup-outer,.popup-outer-password{
+    background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
+    bottom: 0;
+    left: 0;
+    opacity: 1.5;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 90000;
+}
+.remove-popup-outer{
+    background: rgba(0, 0, 0, 0.20) none repeat scroll 0 0;
+    bottom: 0;
+    left: 0;
+    opacity: 1.5;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 90000;
+}
+.popup-inner,.popup-inner-password{
+    background: rgb(255, 255, 255) none repeat scroll 0 0;
+    border: 1px solid rgb(234, 234, 234);
+    height: auto;
+    left: 445px;
+    margin: auto;
+    min-width: 300px;
+    overflow: hidden;
+    position: absolute;
+    top: 200px;
+    width: 500px;
+    z-index: 90000;
+    min-height:190px;
+    height:auto;
+    border-radius:6px;
+}
+.remove-popup-inner{
+    background: rgb(255, 255, 255) none repeat scroll 0 0;
+    border: 1px solid rgb(234, 234, 234);
+    height: auto;
+    left: 445px;
+    margin: auto;
+    min-width: 300px;
+    overflow: hidden;
+    position: absolute;
+    top: 200px;
+    width: 500px;
+    z-index: 90000;
+    min-height:190px;
+    height:auto;
+    border-radius:6px;
+}
+#addemail-container .content-loginradius-emailid, .content-loginradius-type{
+    padding-left:25px;
+    padding-bottom:20px;
+    font-weight: bold;
+}
+
+.removeemail-container .content-loginradius-emailid{
+    padding-left:25px;
+    padding-bottom:20px;
+    font-weight: bold;
+}
+#loginradius-addemail-emailid,#loginradius-addemail-type,#loginradius-removeemail-emailid{
+    width:80%;
+    height:30px;
+    border-radius:5px;
+}
+#loginradius-changepassword-oldpassword,#loginradius-changepassword-newpassword,#loginradius-changepassword-confirmnewpassword{
+    width:74%;
+    height:30px;
+    border-radius:5px;
+}
+#close,#close_password_popup,.close-removepopup{
+    position: absolute;
+
+    right: 0px;
+    left: 475px;
+    cursor: pointer;
+    z-index: 8040;
+}
+
+#close_password_popup{
+    position: absolute !important;
+    margin-top: 181px !important;
+    padding-left: 462px !important;
+}   
+
+#close{
+    position: absolute !important;
+    margin-top: 181px !important;
+    padding-left: 462px !important;
+}   
+
+.popup-txt{
+    text-align: center;
+}
+
+#captchatype,#recaptchasitekey,#custom-otp-template,#custom-oneclick-template,#custom-oneclick-customname,#authenticationtype,#custom-phone-template,#custom-phone-welcome-template{
+    width:40%
+}
+#showcaptcha{
+    display:none;
+}
+#custom_field_obj,#terms_conditions{
+    width:50%;
+    overflow-y:scroll;
+    border-radius:5px;
+}
+#custom-otp-temp{
+    margin:10px;
+}
+#custom-otp-template{
+    float:left;
+}
+#password_msg_success{
+    color : #008000;
+}
+#password_msg_error{
+    color : #FF0000;
+}
+.backupcode-width{
+    width:100%;
+}
+.backupcode-div{
+    float:left;width:25%;padding: 5px 5px 5px 5px;
+}
+.backupcode-error{
+    color:#FF0000;
+}
+#googleauthenticator h3{
+    margin:0 0 0px !important;
+}
+#loginradius-recaptcha_widget{
+    margin-top:10px;
+}
+.loginradius-linksignin{
+    padding:18px !important;
+    margin-left:10px;
+}
+.content-loginradius-stayLogin{
+    padding-bottom:20px;
+}
+.loginradius-stayLogin {
+    float: left;
+    margin: 16px 0px;
+}
+.close-removepopup{
+    position: absolute !important;
+    margin-top: 181px !important;
+    padding-left: 462px !important;
+}
+#googleauthenticator h3{
+    width:216px;
+}
+#loginradius-button-resendotp{
+    padding:14px;
+    margin-left:10px;
+}
+#updatephone-container #loginradius-button-resendotp{
+    padding:4px;
+    margin-left:10px;
+}
+
+.removeemail-container{
+    padding:20px;
+}
+#login-container #loginradius-button-changenumber{
+    padding:14px !important;
+    margin-top:5px;
+}
+#ciam-autopage, #google_authenticator, #backup_code, #ciam-oneclicksignin,#ciam-loginOnEmailVerification,#prompt_password,#ciam-loginOnEmailVerification-optional{
+    display : none !important;
+}
+#resetpassword-container #resetpassword-password-strength-meter{
+    width: 524px;
+}
+#registration-container #registration-password-strength-meter{
+    width: 192px;
+}
+#authdiv_error{
+    color: #FF0000;
+}
+#authdiv_success{
+    color: #008000;
+}
+#loginradius-submit-login,.linksignin-loginradius-Instant{
+    height:50px !important;
+}
+.hostedpage-tooltip[data-title]:hover::after,
+.authenticationtype-tooltip[data-title]:hover::after,
+.oneclick-signin-tooltip[data-title]:hover::after{
+    min-width: 368px !important;
+}
+.customtemplate-tooltip[data-title]:hover::after{
+    min-width: 268px !important;
+}
+#authentication-container #loginradius-button-resendotp{
+    padding:4px !important;
+}
+#copybackupcode{
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 8px 6px 6px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    border-radius:15px;
+}
+#password-limit,
+.copyMessage,
+#hideoneclickdiv,
+#requireflow{
+    display:none;
+}
+
+.loginradius--form-element-content input[type=text],
+.loginradius--form-element-content input[type=password],
+.loginradius--form-element-content textarea{
+    min-width: 350px;
+    margin: 5px 0px;
+}
+.loginradius--form-element-content {
+    width: 100%;
+    clear: both;
+}
+
+/* media query start from here */
+@media (max-device-width: 320px) {
+    .loginradius-linksignin{
+        margin-left:0px;
+        float: left;
+        margin-top: 10px;
+    }
+
+    #loginradius-button-resendotp{
+        padding:14px;
+        margin-left:2px;
+    }
+
+    #loginradius-button-changenumber{
+        padding:14px;
+        margin-top:5px;
+    }
 }

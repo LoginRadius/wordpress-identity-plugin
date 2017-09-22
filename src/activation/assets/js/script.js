@@ -6,17 +6,13 @@ jQuery(document).ready(function ($) {
         $('.active-tab-frame').removeClass('active-active');
         $(this).addClass('active-active');
         $("#" + tab_id).addClass('active-active');
-    });
-});
-
-jQuery(document).ready(function($){
-    
+    });    
     $("#submit").on('click',function(){ 
        
        if(($("#sitename").val() == "") || ($("#apikey").val() == "") || ($("#secret").val() == "")){
            $("#error_msg").css({'color':'#FF0000','margin-left':'400px'}).text('All fields are required!').show().fadeOut(5000);;
-           return false;
-       }
-      
+          return false;
+       }      
     });
 });
+

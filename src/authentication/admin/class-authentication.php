@@ -13,31 +13,33 @@ if (!class_exists('CIAM_Authentication_Admin')) {
 
     class CIAM_Authentication_Admin {
 
+        /*
+         * Class constructor function
+         */
         public function __construct() { 
-            global $ciam_credencials, $ciam_setting;
             
-            $ciam_credencials = get_option('Ciam_API_settings');
-
-            $ciam_setting = get_option('Ciam_Authentication_settings');
-            if (!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])) {
-                return;
-            }
             add_action('admin_init', array($this, 'admin_init'));
-            add_action('admin_enqueue_scripts', array($this, 'load_scripts'), 5);
-
-             
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            
+           
         }
 
-        public function admin_init() {
+       
+        
+        /*
+         * This function will get initiallised when wordpress admin init initialised....
+         */
+        
+        public function admin_init() { 
 
             global $ciam_credencials, $message;
+           
+            add_action('admin_enqueue_scripts', array($this, 'load_scripts'), 5);
             $ciam_message = false;
             $user_id = get_current_user_id();
             $UserAPI = new UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
-            add_user_meta($user_id, 'ciam_message', '$message');
-            
+           
+            $accessToken = get_user_meta($user_id,'accesstoken',true);
+             
             /* checking for the change password form is checked or not */
             
             $passform = isset($_POST['passform']) ? $_POST['passform'] : '';
@@ -45,24 +47,26 @@ if (!class_exists('CIAM_Authentication_Admin')) {
             $oldpassword = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : '';
             $newpassword = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
             $confirmpassword = isset($_POST['confirmnewpassword']) ? $_POST['confirmnewpassword'] : '';
+            
             if (isset($passform) && ($passform == 1)) {
                 if (!empty($oldpassword) && !empty($newpassword)) {
                       
-                    $accessToken = get_user_meta($user_id);
-                    try {
-                        $UserAPI->changeAccountPassword($accessToken['accesstoken'][0], $_POST['oldpassword'], $_POST['newpassword']);
+                    
+                    if($newpassword === $confirmpassword){
+                        
+                       try {
+                        $UserAPI->changeAccountPassword($accessToken, $_POST['oldpassword'], $_POST['newpassword']);
                         
                         // saving wordpress data to lr on profile updation....
                 $metas = array(
-                    'NickName' => $_POST['nickname'],
-                    'FirstName' => $_POST['first_name'],
-                    'LastName' => $_POST['last_name'],
-                    'ImageUrl' => $_POST['url'],
+                    'NickName' => isset($_POST['nickname']) ? $_POST['nickname'] : '',
+                    'FirstName' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
+                    'LastName' => isset($_POST['last_name']) ? $_POST['last_name'] : '',
+                    'ImageUrl' => isset($_POST['url']) ? $_POST['url'] : '',
+                 );
                     
-                );
-                    
-                   $UserAPI->updateProfile($accessToken['accesstoken'][0], json_encode($metas));
-                        
+                   $UserAPI->updateProfile($accessToken, json_encode($metas));
+                     
                         
                     } catch (\LoginRadiusSDK\LoginRadiusException $e) { 
 
@@ -75,29 +79,42 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                         
                       
                     }
+                        
+                        
+                    }else{
+                        
+                        add_user_meta($user_id, 'ciam_pass_error', 'Please make sure that your new and confirm password are same.');
+                        $ciam_message_password = true;
+                        
+                        $_POST = array();
+                        
+                    }
+                    
+                    
+                    
                 }
             }elseif(isset($_POST['first_name']) && !empty($_POST['first_name'])){
-                $accessToken = get_user_meta($user_id);
+              
                 try{
                    
                 // saving wordpress data to lr on profile updation....
                 $metas = array(
-                    'NickName' => $_POST['nickname'],
-                    'FirstName' => $_POST['first_name'],
-                    'LastName' => $_POST['last_name'],
-                    'ImageUrl' => $_POST['url'],
+                    'NickName' => isset($_POST['nickname']) ? $_POST['nickname'] : '',
+                    'FirstName' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
+                    'LastName' => isset($_POST['last_name']) ? $_POST['last_name'] : '',
+                    'ImageUrl' => isset($_POST['url']) ? $_POST['url'] : '',
                     
                 );
                 
-                   $UserAPI->updateProfile($accessToken['accesstoken'][0], json_encode($metas));
-                 
+                  $UserAPI->updateProfile($accessToken, $metas);
                     
-                }catch(\LoginRadiusSDK\LoginRadiusException $e){
+                    
+                }catch(\LoginRadiusSDK\LoginRadiusException $e){ 
                     
                     $message = isset($e->getErrorResponse()->Description) ? $e->getErrorResponse()->Description : _e("Opps Something Went Wrong !");
                         add_user_meta($user_id, 'ciam_pass_error', $message);
                         $ciam_message = true;
-                    
+                        $_POST = array();
                 }
             }
             register_setting('ciam_authentication_settings', 'ciam_authentication_settings', array($this, 'validation'));
@@ -116,47 +133,32 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                     delete_user_meta($user_id, 'ciam_pass_error');
                 }
             }elseif(!empty(get_user_meta($user_id, 'ciam_pass_error', true))){
-                
-                
-                add_action("ciam_password_message", array($this, "pass_message"), 10);
-                
-                do_action("ciam_password_message");
-                
-                
+                ob_start();
                     ?>
-                    
-
-
-                    <?php
-                    
-            }
-
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
-        }
-
-        
-        function pass_message(){ 
-            $user_id = get_current_user_id();
-            ob_start();
-            ?>
-            <div class="updated notice is-dismissible">
+                    <div class="updated notice is-dismissible">
                         <p><strong><?php echo get_user_meta($user_id, 'ciam_pass_error', true); ?></strong></p>
                         <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                     </div>
-            <?php    
-           
-            delete_user_meta($user_id, 'ciam_pass_error');
+
+
+                    <?php
+                    delete_user_meta($user_id, 'ciam_pass_error');
+            }
+
+            /* action for debug mode */
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
-        
-        
+
+        /*
+         * This function validate the post data.
+         */
         
         function validation($settings) {
             if (!isset($settings['enable_hostedpage']) || $settings['enable_hostedpage'] != '1') {
                 if (isset($settings['ciam_autopage']) && $settings['ciam_autopage'] == '1') {
                     // Enable ciam.
                     // Create new pages and get array of page ids.
-                    $options = self::create_pages($settings);
+                    $options = $this->create_pages($settings);
 
                     // Merge new page ids with settings array.
                     $settings = array_merge($settings, $options);
@@ -164,7 +166,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
             }
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), $settings);
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $settings);
 
             return $settings;
         }
@@ -174,21 +176,11 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          */
 
         public function load_scripts() {
-            wp_enqueue_script('ciam_functions', CIAM_PLUGIN_URL . 'authentication/assets/js/custom.min.js', array('jquery'), CIAM_PLUGIN_VERSION);
-
+           
             wp_enqueue_script('ciam', '//auth.lrcontent.com/v2/js/LoginRadiusV2.js', array('jquery'), CIAM_PLUGIN_VERSION, false);
-
-
-            wp_enqueue_style('ciam-style', CIAM_PLUGIN_URL . 'authentication/assets/css/style.min.css', CIAM_PLUGIN_VERSION);
-
-            wp_enqueue_style('ciam-style', CIAM_PLUGIN_URL . 'authentication/assets/css/style.css', CIAM_PLUGIN_VERSION);
-            
-            wp_enqueue_style('ciam-style-fancybox', CIAM_PLUGIN_URL . 'authentication/assets/css/jquery.fancybox.css', CIAM_PLUGIN_VERSION);
-            
-            wp_enqueue_script('ciam_fancybox', CIAM_PLUGIN_URL . 'authentication/assets/js/jquery.fancybox.pack.js', array('jquery'), CIAM_PLUGIN_VERSION);
-
+           
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), '');
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
         /**
@@ -197,8 +189,9 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * @param type $settings
          * @return type
          */
-        public static function create_pages($settings) {
-
+        public function create_pages($settings) {
+           
+            $user_id =  get_current_user_id();
             // Create Login Page.
             if (!isset($settings['login_page_id']) || $settings['login_page_id'] == '') {
                 $loginPage = array(
@@ -206,7 +199,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                     'post_content' => '[ciam_login_form]',
                     'post_status' => 'publish',
                     'post_type' => 'page',
-                    'post_author' => get_current_user_id(),
+                    'post_author' => $user_id,
                     'comment_status' => 'closed'
                 );
                 $loginPageId = wp_insert_post($loginPage);
@@ -221,7 +214,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                     'post_content' => '[ciam_registration_form]',
                     'post_status' => 'publish',
                     'post_type' => 'page',
-                    'post_author' => get_current_user_id(),
+                    'post_author' => $user_id,
                     'comment_status' => 'closed'
                 );
                 $registrationPageId = wp_insert_post($registrationPage);
@@ -236,7 +229,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                     'post_content' => '[ciam_password_form]',
                     'post_status' => 'publish',
                     'post_type' => 'page',
-                    'post_author' => get_current_user_id(),
+                    'post_author' => $user_id,
                     'comment_status' => 'closed'
                 );
                 $changePasswordPageId = wp_insert_post($changePasswordPage);
@@ -248,18 +241,16 @@ if (!class_exists('CIAM_Authentication_Admin')) {
             if (!isset($settings['lost_password_page_id']) || $settings['lost_password_page_id'] == '') {
                 $lostPasswordPage = array(
                     'post_title' => 'Forgot Password',
-                    'post_content' => '[ciam_forgotten_form]',
+                    'post_content' => '[ciam_forgot_form]',
                     'post_status' => 'publish',
                     'post_type' => 'page',
-                    'post_author' => get_current_user_id(),
+                    'post_author' => $user_id,
                     'comment_status' => 'closed'
                 );
                 $lostPasswordPageId = wp_insert_post($lostPasswordPage);
             } else {
                 $lostPasswordPageId = $settings['lost_password_page_id'];
             }
-
-            
 
             $output = array(
                 'login_page_id' => trim($loginPageId),
@@ -270,17 +261,8 @@ if (!class_exists('CIAM_Authentication_Admin')) {
 
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), $output);
-
-
-
-
-            return array(
-                'login_page_id' => trim($loginPageId),
-                'registration_page_id' => trim($registrationPageId),
-                'change_password_page_id' => trim($changePasswordPageId),
-                'lost_password_page_id' => trim($lostPasswordPageId)
-            );
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $output);
+            return $output;
         }
 
         /*
@@ -288,9 +270,28 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * This is the first function which is called while plugin admin page is requested
          */
 
-        public static function options_page() {
+        public static function options_page() { 
             include_once CIAM_PLUGIN_DIR . "authentication/admin/views/settings.php";
-            ciam_authentication_settings::render_options_page();
+            
+            $args = array(
+                'sort_order' => 'ASC',
+                'sort_column' => 'post_title',
+                'hierarchical' => 1,
+                'exclude' => '',
+                'include' => '',
+                'meta_key' => '',
+                'meta_value' => '',
+                'authors' => '',
+                'child_of' => 0,
+                'parent' => -1,
+                'exclude_tree' => '',
+                'number' => '',
+                'offset' => 0,
+                'post_type' => 'page',
+                'post_status' => 'publish'
+            );
+            $obj_ciam_authentication_settings = new ciam_authentication_settings(); 
+            $obj_ciam_authentication_settings->render_options_page($args);
 
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), "");

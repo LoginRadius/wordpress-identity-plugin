@@ -9,29 +9,33 @@ if (!class_exists('CIAM_Authentication_Login')) {
 
     class CIAM_Authentication_Login {
 
+        /*
+         * Class constructor function.
+         */
         function __construct() {
-            global $ciam_credencials;
-
-            if (!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])) {
-                return;
-            }
+           
             add_action('template_redirect', array($this, 'token_handler'), 9, 2);
             add_action('wp_logout', array($this, 'home_redirection'));
 
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
         }
 
+        /*
+         * Mange site home redirection
+         */
         public function home_redirection() {
-            global $ciam_setting;
-
-            delete_user_meta(get_current_user_id(), 'accesstoken'); // deleting the logged out user access token from db.
-            delete_user_meta(get_current_user_id(), 'ciam_current_user_uid'); // deleting the current user uid.
-            wp_safe_redirect(get_permalink($ciam_setting['login_page_id']));
+            $user_id = get_current_user_id();
+            delete_user_meta($user_id, 'accesstoken'); // deleting the logged out user access token from db.
+            delete_user_meta($user_id, 'ciam_current_user_uid'); // deleting the current user uid.
+             wp_redirect( home_url() );
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
+            exit();
         }
+        
+        /*
+         * handle token when user tries to login
+         */
 
         public function token_handler() {
             global $socialLoginObject, $ciam_credencials, $ciam_message;
@@ -129,14 +133,14 @@ if (!class_exists('CIAM_Authentication_Login')) {
                         add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
                     }
 
-                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
+                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
                     return;
                 }
             }
 
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class($this), "");
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }
 
     }

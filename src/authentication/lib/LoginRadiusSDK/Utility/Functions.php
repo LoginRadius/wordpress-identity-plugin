@@ -47,7 +47,7 @@ class Functions
             if (empty(self::$apikey) || empty(self::$apisecret)) {
                 if (defined('LR_API_KEY') && defined('LR_API_SECRET')) {
                     self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
-                } else {
+                } else { 
                     throw new LoginRadiusException('Required "LoginRadius" API Key and API Secret.');
                 }
             }
