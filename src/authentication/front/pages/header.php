@@ -21,7 +21,7 @@ if (!class_exists('CIAM_Authentication_Header')) {
          */
 
         public function init() {
-            global $ciam_setting;
+            global $ciam_setting,$ciam_credencials;
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Utility/SOTT.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Social/ProvidersAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Social/SocialLoginAPI.php');
@@ -33,7 +33,11 @@ if (!class_exists('CIAM_Authentication_Header')) {
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Management/CustomObjectAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Management/SchemaAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Advance/RestHooksAPI.php');
-
+             
+            if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){
+                 return;  
+            }
+            
             wp_enqueue_script('ciam', '//auth.lrcontent.com/v2/js/LoginRadiusV2.js', array('jquery'), CIAM_PLUGIN_VERSION, false);
 
             // switching the minified version of js and css file 

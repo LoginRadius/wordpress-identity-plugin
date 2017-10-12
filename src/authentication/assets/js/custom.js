@@ -130,7 +130,7 @@ function registration_hook(url, authenticationtype, phonelogin) {
         jQuery("#ciam_loading_gif").hide();
         if (typeof (phonelogin) === "undefined" || phonelogin === "" || phonelogin == "email") {
             if (authenticationtype === "optional") {
-                ciamfunctions.message("Link has been sent to your email address, it is optional to verify it you can directly get login with your credencials", "#registration_message", "success");
+                ciamfunctions.message("Link has been sent to your email address, it is optional to verify it you can directly get login with your credentials", "#registration_message", "success");
             } else if (authenticationtype === "disable") {
                 ciamfunctions.message("Thanks for getting register", "#registration_message", "success");
             } else if (authenticationtype === "required") {
@@ -205,12 +205,7 @@ function social(url) {
     sl_options.container = "sociallogin-container";
     LRObject.init('socialLogin', sl_options);
 }
-function changepasswordform(img) {
-    jQuery("#password th").html('');
-    jQuery("#password td").html('');
-    jQuery("#password th").html('<span>Change Password</span>');
-    var content = '<a id="open_password_popup" class="open ciam-password-button" href="javascript:void(0);">Change Password</a><div class="popup-outer-password" style="display:none;"><span id="close_password_popup"><img src="' + img + '" alt="close" /></span><div class="popup-inner-password"><span class="popup-txt"><h1><strong>Please Enter New Password</strong></h1></span><div id="changepassword-container"></div></div></div>';
-    jQuery(".user-pass1-wrap td").append(content);
+function changepasswordform() {
     /* add email sctipt */
     var changepassword_options = {};
     changepassword_options.container = "changepassword-container";
@@ -357,7 +352,7 @@ function loadingimg() {
             jQuery('#registration-container,#interfacecontainerdiv,#login-container').hide();
             jQuery("#ciam_loading_gif").hide();
         }
-        if (name == 'twofaotp' || name == "loginRequiredFieldsUpdate" || name == "showQRcode") {
+        if (name == 'twofaotp' || name == 'otp' || name == "loginRequiredFieldsUpdate" || name == "showQRcode") {
             jQuery('#interfacecontainerdiv').hide();
             jQuery("#ciam_loading_gif").hide();
         }
@@ -445,7 +440,6 @@ jQuery(document).ready(function ($) {
         hideAndShowElement($(this), '.ciam-custom-page-settings');
     });
     hideAndShowElement($('#ciam-autopage'), '.ciam-custom-page-settings');
-    jQuery("#email").attr('readonly', 'readonly');
 });
 /* multiple email function */
 function additionalemailform(useremail, lr_profile_email, count, img) {
@@ -653,8 +647,7 @@ jQuery(document).ready(function () {
             jQuery('#requireflow').find('input[type=checkbox]:checked').removeAttr('checked');/* removing the selected checkbox */
             jQuery('#optionalflow').find('input[type=checkbox]:checked').removeAttr('checked');/* removing the selected checkbox */
         }
-    }))
-        ;
+    }));
 
 });
 

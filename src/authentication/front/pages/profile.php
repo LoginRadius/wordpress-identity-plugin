@@ -94,7 +94,8 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          * Two Factor Authentication
          */
 
-        public function profiletwofactorauthentication() {?>
+        public function profiletwofactorauthentication() {
+            ?>
             <div style="clear:both;"><h2>Two Factor Authentication</h2><div id="authentication-container"></div></div>
             <?php
         }
@@ -103,7 +104,8 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          * update phone on profile if phone verification if enable
          */
 
-        public function profilephoneuupdate() {?>
+        public function profilephoneuupdate() {
+            ?>
             <div style="clear:both;"><h2>Update Phone Number</h2><div id="updatephone-container"></div> </div>
             <?php
         }
@@ -116,11 +118,11 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             ?>
             <script type="text/html" id="loginradiuscustom_tmpl_link">
                 <# if(isLinked) { #>
-                <div class="ciam-linked">
-                    <div class="ciam-provider-label ciam-icon-<#=Name.toLowerCase()#>"></div>Connected
+                    <div class="ciam-linked">
+                        <div class="ciam-provider-label ciam-icon-<#=Name.toLowerCase()#>"></div>Connected
                         <a onclick='return <#=ObjectName#>.util.unLinkAccount("<#= Name.toLowerCase() #>","<#= providerId #>")'>delete</a>
                     </div>
-                <# }else{ #>
+                <# }else { #>
                     <div class="ciam-unlinked">
                         <a class="ciam-provider-label ciam-icon-<#=Name.toLowerCase()#>" href="javascript:void(0)" onclick="return  <#=ObjectName#>.util.openWindow('<#= Endpoint #>');" title="<#=Name#>" alt="Sign in with <#=Name#>"></a>
                     </div>
@@ -135,7 +137,8 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          * Add linking interface custom div
          */
 
-        function accountlinking_custom_div() {?>
+        function accountlinking_custom_div() {
+            ?>
             <div>
                 <span id="social-msg"></span>
                 <div id="interfacecontainerdiv" class="interfacecontainerdiv"></div>
@@ -149,6 +152,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
         /*
          * Add More email to CMS ....
          */
+
         public function extra_email_fields() {
             global $ciam_credencials, $pagenow;
             $user_id = get_current_user_id();
@@ -156,24 +160,36 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
                 $current_user = wp_get_current_user(); // getting the current user info....
                 $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
+
                 if (empty($ciam_uid)) {
-                    $lr_profile = $accoutObj->getProfileByEmail($current_user->user_email);
-                    add_user_meta($user_id, 'ciam_current_user_uid', $lr_profile->Uid);
-                } else {
-                    $lr_profile = $accoutObj->getProfileByUid($ciam_uid);
-                    $lr_array = array();
-
-                    foreach ($lr_profile->Email as $key => $value) {
-                        $lr_array[$key] = $value->Value;
+                    try {
+                        $lr_profile = $accoutObj->getProfileByEmail($current_user->user_email);
+                        if(isset($lr_profile->Description)){
+                            error_log($lr_profile->Description);
+                        }else{
+                            add_user_meta($user_id, 'ciam_current_user_uid', $lr_profile->Uid);
+                        }
+                    } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                        error_log($e->getErrorResponse()->Description);
                     }
-
-                    if (!in_array($current_user->user_email, $lr_array)) {
-                        wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr($lr_profile->Email[0]->Value)));                // updating email to cms db..
-                        $current_user = wp_get_current_user();
-                        $current_user->user_email = $lr_profile->Email[0]->Value;
+                } else {
+                    $lr_array = array();
+                    try {
+                        $lr_profile = $accoutObj->getProfileByUid($ciam_uid);
+                        foreach ($lr_profile->Email as $key => $value) {
+                            $lr_array[$key] = $value->Value;
+                        }
+                        if (!in_array($current_user->user_email, $lr_array)) {
+                            wp_update_user(array('ID' => $user_id, 'user_email' => esc_attr($lr_profile->Email[0]->Value)));                // updating email to cms db..
+                            $current_user = wp_get_current_user();
+                            $current_user->user_email = $lr_profile->Email[0]->Value;
+                        }
+                    } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                        error_log($e->getErrorResponse()->Description);
                     }
                 }
-                if (!empty($_COOKIE['addemail'])) {?>
+                if (!empty($_COOKIE['addemail'])) {
+                    ?>
                     <div class="updated notice is-dismissible">
                         <p><strong><?php echo $_COOKIE['addemail']; ?></strong></p>
                         <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
@@ -183,10 +199,10 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                     $_COOKIE['addemail'] = "";
                 }
                 ?>
-                <script type="text/javascript">
-                    jQuery(document).ready(function () {
-                         additionalemailform('<?php echo $current_user->user_email ?>',<?php echo json_encode($lr_profile->Email) ?>, '<?php echo count($lr_profile->Email) ?>', '<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>');
-                    });
+                            <script type="text/javascript">
+                            jQuery(document).ready(function () {
+                            additionalemailform('<?php echo $current_user->user_email ?>',<?php echo json_encode($lr_profile->Email) ?>, '<?php echo count($lr_profile->Email) ?>', '<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>');
+                                });
                 </script>
                 <?php
             }
@@ -198,12 +214,13 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          * 2FA on Profile page 
          */
 
-        public function TwoFAonprofile() {?>
-            <script type="text/javascript">
-                jQuery(document).ready(function(){ // it will call the optional 2 fa f                           unction
-                 optionalTwoFA();
-                });
-            </script>
+        public function TwoFAonprofile() {
+            ?>
+                            <script type="text/javascript">
+                            jQuery(document).ready(function(){ // it will call the optional 2 fa f                           unction
+                        optionalTwoFA();
+                            });
+                            </script    >
             <?php
         }
 
@@ -211,17 +228,18 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          * Update phone on profile section. 
          */
 
-        public function profilephoneupdatejs() {?>
-                <script type="text/javascript">
-                    jQuery(document).ready(function(){ // it will call the optional 2 fa f                           unction
-                         updatephoneonprofile();
-                    });
-                </script>
-                <?php
+        public function profilephoneupdatejs() {
+            ?>
+                            <script type="text/javascript">
+                        jQuery(document).ready(function(){ // it will call the optional 2 fa function
+                        updatephoneonprofile();
+                            });
+                            </script>
+                    <?php
+                }
+
+            }
+
+            new CIAM_Authentication_Profile();
         }
-
-    }
-
-    new CIAM_Authentication_Profile();
-}
 

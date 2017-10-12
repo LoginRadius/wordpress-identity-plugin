@@ -286,6 +286,13 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                 LRObject.$hooks.register('endProcess', function (name) {
                     jQuery("#ciam_loading_gif").hide();
                 });
+                jQuery(document).ready(function () {
+                <?php 
+                if(!is_super_admin()){?>
+                    jQuery("#email").attr('readonly', 'readonly');
+                    <?php }
+                ?>
+                        });
             </script>                
             <?php
             /* action for debug mode */

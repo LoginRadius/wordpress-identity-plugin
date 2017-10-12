@@ -12,109 +12,245 @@ use LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
 if (!class_exists('CIAM_Authentication_Admin')) {
 
     class CIAM_Authentication_Admin {
-
         /*
          * Class constructor function
          */
-        public function __construct() { 
-            
+
+        public function __construct() {
             add_action('admin_init', array($this, 'admin_init'));
-            
-           
+            add_action('init', array($this, 'init'));
         }
 
-       
-        
+        /**
+         * Init Section To call Wordpress Hooks
+         */
+        function init() {
+            add_action('delete_user', array($this, 'delete_user'));
+            if (is_multisite()) {
+                add_action('wpmu_delete_user', array($this, 'delete_user'));
+            }
+            /* Save Profile field on cIAM */
+            add_action('personal_options_update', array($this, 'save_profile'));
+            add_action('edit_user_profile_update', array($this, 'save_profile'));
+            /* Save Profile field on cIAM */
+            /* Save cIAM profile data on wp db */
+            add_action('user_register', array($this, 'user_register'), 10, 1);
+            /* Save cIAM profile data on wp db */
+            if (current_user_can('manage_options')) {
+                add_filter('user_profile_update_errors', array($this, 'add_profile'), 10, 3);
+            }
+        }
+
+        /**
+         * 
+         * @global type $ciamUserProfile
+         * @param type $user_id
+         */
+        public function user_register($user_id) {
+            global $ciamUserProfile;
+            if (isset($ciamUserProfile->Uid)) {
+                add_user_meta($user_id, 'ciam_uid', $ciamUserProfile->Uid);
+            }
+            if (isset($ciamUserProfile->ID)) {
+                add_user_meta($user_id, 'ciam_id', $ciamUserProfile->ID);
+            }
+        }
+
+        /**
+         * 
+         * @global type $ciam_credencials
+         * @global type $ciamUserProfile
+         * @global \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI $accoutObj
+         * @param type $errors
+         * @param type $update
+         * @param type $user
+         * @return type
+         */
+        public function add_profile($errors, $update, $user) {
+            global $ciam_credencials, $ciamUserProfile, $accoutObj;
+            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+
+            $params = array(
+                'UserName' => isset($user->user_login) ? $user->user_login : '',
+                'FirstName' => isset($user->first_name) ? $user->first_name : '',
+                'LastName' => isset($user->last_name) ? $user->last_name : '',
+                'EmailVerified' => true
+            );
+            if (isset($user->user_pass)) {
+                $params['Password'] = isset($user->user_pass) ? $user->user_pass : '';
+            }
+            if (false == $update) {
+                $params['Email'] = array(array('Type' => 'Primary', 'Value' => $user->user_email));
+                try {
+                    $ciamUserProfile = $accoutObj->create($params);
+                } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                    $ciamUserProfile = '';
+                    $errors->add('user_creation_error', $e->getErrorResponse()->description);
+                    return;
+                }
+            } else {
+                $this->save_profile($user->ID);
+            }
+        }
+
+        /**
+         * 
+         * @global type $pagenow
+         * @global type $ciam_credencials
+         * @global type $ciamUserProfile
+         * @global \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI $accoutObj
+         * @param type $user_id
+         * @return boolean
+         */
+        public function save_profile($user_id) {
+            global $pagenow, $ciam_credencials, $ciamUserProfile, $accoutObj;
+            if (!current_user_can('edit_user', $user_id)) {
+                return false;
+            }
+            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+
+            $user = get_userdata($user_id);
+            $params = array(
+                'FirstName' => isset($user->first_name) ? $user->first_name : '',
+                'LastName' => isset($user->last_name) ? $user->last_name : '',
+            );
+            $accountId = get_user_meta($user_id, 'ciam_uid', true);
+            if (!empty($accountId)) {
+                
+                if (isset($user->user_pass)) {
+                $password = ((isset($_POST) && isset($_POST['pass1'])) ? $_POST['pass1'] : '');
+                try {
+                    $accoutObj->setPassword($accountId, $password);
+                    } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                    $ciamUserProfile = '';
+                    wp_redirect($pagenow . '?error=1');
+                    exit();
+                }
+            }
+                try {
+                    $ciamUserProfile = $accoutObj->update($accountId, $params);
+                    $this->user_register($user_id);
+                } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                    $ciamUserProfile = '';
+                    wp_redirect($pagenow . '?error=1');
+                    exit();
+                }
+            } else {
+                $ciamUserProfile = $accoutObj->getProfileByEmail($user->user_email);
+                if (isset($ciamUserProfile->Uid)) {//update profile
+                    $this->user_register($user_id);
+                } else {//create profile on lr
+                    $params = array(
+                        'UserName' => isset($user->user_login) ? $user->user_login : '',
+                        'FirstName' => isset($user->first_name) ? $user->first_name : '',
+                        'LastName' => isset($user->last_name) ? $user->last_name : '',
+                        'EmailVerified' => true
+                    );
+                    $params['Email'] = array(array('Type' => 'Primary', 'Value' => $user->user_email));
+                    try {
+                        $ciamUserProfile = $accoutObj->create($params);
+                    } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                        $ciamUserProfile = '';
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
+         * delete user at cIAM
+         * 
+         * @param type $user_id
+         */
+        public function delete_user($user_id) {
+            global $ciam_credencials, $accoutObj;
+            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+
+            $uid = get_user_meta($user_id, 'ciam_uid', true);
+            if (!empty($uid)) {
+                try {
+                    $accoutObj->delete($uid);
+                } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                    error_log($e->getErrorResponse()->Description);
+                }
+            }
+        }
+
         /*
          * This function will get initiallised when wordpress admin init initialised....
          */
-        
-        public function admin_init() { 
 
+        public function admin_init() {
             global $ciam_credencials, $message;
-           
             add_action('admin_enqueue_scripts', array($this, 'load_scripts'), 5);
             $ciam_message = false;
             $user_id = get_current_user_id();
             $UserAPI = new UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
-           
-            $accessToken = get_user_meta($user_id,'accesstoken',true);
-             
+
+            $accessToken = get_user_meta($user_id, 'accesstoken', true);
+
             /* checking for the change password form is checked or not */
-            
+
             $passform = isset($_POST['passform']) ? $_POST['passform'] : '';
 
             $oldpassword = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : '';
             $newpassword = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
             $confirmpassword = isset($_POST['confirmnewpassword']) ? $_POST['confirmnewpassword'] : '';
-            
+
             if (isset($passform) && ($passform == 1)) {
                 if (!empty($oldpassword) && !empty($newpassword)) {
-                      
-                    
-                    if($newpassword === $confirmpassword){
-                        
-                       try {
-                        $UserAPI->changeAccountPassword($accessToken, $_POST['oldpassword'], $_POST['newpassword']);
-                        
-                        // saving wordpress data to lr on profile updation....
-                $metas = array(
-                    'NickName' => isset($_POST['nickname']) ? $_POST['nickname'] : '',
-                    'FirstName' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
-                    'LastName' => isset($_POST['last_name']) ? $_POST['last_name'] : '',
-                    'ImageUrl' => isset($_POST['url']) ? $_POST['url'] : '',
-                 );
-                    
-                   $UserAPI->updateProfile($accessToken, json_encode($metas));
-                     
-                        
-                    } catch (\LoginRadiusSDK\LoginRadiusException $e) { 
 
 
-                        $message = isset($e->getErrorResponse()->Description) ? $e->getErrorResponse()->Description : _e("Opps Something Went Wrong !");
-                        add_user_meta($user_id, 'ciam_pass_error', $message);
-                        $ciam_message_password = true;
-                        
-                        $_POST = array();
-                        
-                      
-                    }
-                        
-                        
-                    }else{
-                        
+                    if ($newpassword === $confirmpassword) {
+
+                        try {
+                            $UserAPI->changeAccountPassword($accessToken, $_POST['oldpassword'], $_POST['newpassword']);
+
+                            // saving wordpress data to lr on profile updation....
+                            $metas = array(
+                                'NickName' => isset($_POST['nickname']) ? $_POST['nickname'] : '',
+                                'FirstName' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
+                                'LastName' => isset($_POST['last_name']) ? $_POST['last_name'] : '',
+                                'ImageUrl' => isset($_POST['url']) ? $_POST['url'] : '',
+                            );
+
+                            $UserAPI->updateProfile($accessToken, json_encode($metas));
+                        } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+
+
+                            $message = isset($e->getErrorResponse()->Description) ? $e->getErrorResponse()->Description : _e("Opps Something Went Wrong !");
+                            add_user_meta($user_id, 'ciam_pass_error', $message);
+                            $ciam_message_password = true;
+
+                            $_POST = array();
+                        }
+                    } else {
+
                         add_user_meta($user_id, 'ciam_pass_error', 'Please make sure that your new and confirm password are same.');
                         $ciam_message_password = true;
-                        
+
                         $_POST = array();
-                        
                     }
-                    
-                    
-                    
                 }
-            }elseif(isset($_POST['first_name']) && !empty($_POST['first_name'])){
-              
-                try{
-                   
-                // saving wordpress data to lr on profile updation....
-                $metas = array(
-                    'NickName' => isset($_POST['nickname']) ? $_POST['nickname'] : '',
-                    'FirstName' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
-                    'LastName' => isset($_POST['last_name']) ? $_POST['last_name'] : '',
-                    'ImageUrl' => isset($_POST['url']) ? $_POST['url'] : '',
-                    
-                );
-                
-                  $UserAPI->updateProfile($accessToken, $metas);
-                    
-                    
-                }catch(\LoginRadiusSDK\LoginRadiusException $e){ 
-                    
+            } elseif (isset($_POST['first_name']) && !empty($_POST['first_name'])) {
+
+                try {
+
+                    // saving wordpress data to lr on profile updation....
+                    $metas = array(
+                        'NickName' => isset($_POST['nickname']) ? $_POST['nickname'] : '',
+                        'FirstName' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
+                        'LastName' => isset($_POST['last_name']) ? $_POST['last_name'] : '',
+                        'ImageUrl' => isset($_POST['url']) ? $_POST['url'] : '',
+                    );
+
+                    $UserAPI->updateProfile($accessToken, $metas);
+                } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+
                     $message = isset($e->getErrorResponse()->Description) ? $e->getErrorResponse()->Description : _e("Opps Something Went Wrong !");
-                        add_user_meta($user_id, 'ciam_pass_error', $message);
-                        $ciam_message = true;
-                        $_POST = array();
+                    add_user_meta($user_id, 'ciam_pass_error', $message);
+                    $ciam_message = true;
+                    $_POST = array();
                 }
             }
             register_setting('ciam_authentication_settings', 'ciam_authentication_settings', array($this, 'validation'));
@@ -132,17 +268,17 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                     <?php
                     delete_user_meta($user_id, 'ciam_pass_error');
                 }
-            }elseif(!empty(get_user_meta($user_id, 'ciam_pass_error', true))){
+            } elseif (!empty(get_user_meta($user_id, 'ciam_pass_error', true))) {
                 ob_start();
-                    ?>
-                    <div class="updated notice is-dismissible">
-                        <p><strong><?php echo get_user_meta($user_id, 'ciam_pass_error', true); ?></strong></p>
-                        <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
-                    </div>
+                ?>
+                <div class="updated notice is-dismissible">
+                    <p><strong><?php echo get_user_meta($user_id, 'ciam_pass_error', true); ?></strong></p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>
 
 
-                    <?php
-                    delete_user_meta($user_id, 'ciam_pass_error');
+                <?php
+                delete_user_meta($user_id, 'ciam_pass_error');
             }
 
             /* action for debug mode */
@@ -152,7 +288,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
         /*
          * This function validate the post data.
          */
-        
+
         function validation($settings) {
             if (!isset($settings['enable_hostedpage']) || $settings['enable_hostedpage'] != '1') {
                 if (isset($settings['ciam_autopage']) && $settings['ciam_autopage'] == '1') {
@@ -176,9 +312,9 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          */
 
         public function load_scripts() {
-           
+
             wp_enqueue_script('ciam', '//auth.lrcontent.com/v2/js/LoginRadiusV2.js', array('jquery'), CIAM_PLUGIN_VERSION, false);
-           
+
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
@@ -190,8 +326,8 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * @return type
          */
         public function create_pages($settings) {
-           
-            $user_id =  get_current_user_id();
+
+            $user_id = get_current_user_id();
             // Create Login Page.
             if (!isset($settings['login_page_id']) || $settings['login_page_id'] == '') {
                 $loginPage = array(
@@ -270,9 +406,9 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * This is the first function which is called while plugin admin page is requested
          */
 
-        public static function options_page() { 
+        public static function options_page() {
             include_once CIAM_PLUGIN_DIR . "authentication/admin/views/settings.php";
-            
+
             $args = array(
                 'sort_order' => 'ASC',
                 'sort_column' => 'post_title',
@@ -290,7 +426,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
                 'post_type' => 'page',
                 'post_status' => 'publish'
             );
-            $obj_ciam_authentication_settings = new ciam_authentication_settings(); 
+            $obj_ciam_authentication_settings = new ciam_authentication_settings();
             $obj_ciam_authentication_settings->render_options_page($args);
 
             /* action for debug mode */

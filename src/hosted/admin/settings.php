@@ -30,9 +30,9 @@ if (!class_exists('ciam_hostedpage_settings')) {
             <label class="active-toggle">
                 <input type="checkbox" class="active-toggle" id="ciam_enable_hostedPage" name="ciam_authentication_settings[enable_hostedpage]" value="1" <?php echo ( isset($ciam_setting['enable_hostedpage']) && $ciam_setting['enable_hostedpage'] == '1' ) ? 'checked' : ''; ?> />
                 <span class="active-toggle-name">
-            <?php _e('Enable hosted page?', 'CIAM'); ?> 
+            <?php _e('Enable Hosted Page.', 'CIAM'); ?> 
                 </span>
-                <span class="hostedpage-tooltip ciam-tooltip" data-title="<?php _e('This feature enable the hosted page functionality. It is recommended to enable SSO with hosted page.', 'ciam-plugin-slug'); ?>">
+                <span class="hostedpage-tooltip ciam-tooltip" data-title="<?php _e('From here, Hosted Page functionality can be enabled. It is recommended that SSO should be enabled with the Hosted Page.Turn on, if you want to enable auto generate authentication pages', 'ciam-plugin-slug'); ?>">
                     <span class="dashicons dashicons-editor-help"></span>
                 </span>
             </label>   

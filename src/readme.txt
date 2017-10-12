@@ -3,7 +3,7 @@ Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
 Tested up to: 4.8
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv2 or later
 
 
@@ -14,6 +14,9 @@ License: GPLv2 or later
 * Log Generation Functionality
 
 == Change Log ==
+= 3.1.1 =
+1) Removed redirection to LoginRadius dashboard on user add and edit time from admin.
+2) Enhanced User Add and Edit functionality.On add and edit user from admin data will get saved to LoginRadius.
 
 = 3.1.0 =
 * Implemented New Functionality.

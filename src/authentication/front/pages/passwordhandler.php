@@ -21,9 +21,12 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
          */
         public function init(){
          //   if (!empty($ciam_setting['login_page_id'])) {
+            
             add_shortcode('ciam_forgot_form', array($this, 'ciam_forgot_form'));
             add_action('wp_head', array($this, 'ciam_hook_changepassword'));
+            
             add_action('admin_head', array($this, 'ciam_hook_passwordform'));
+            
             add_shortcode('ciam_password_form', array($this, 'ciam_password_form'));
             
             
@@ -128,17 +131,45 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
         /*
          * Replace old password section in the wp admin
          */
-        public function ciam_hook_passwordform() {?>
+        public function ciam_hook_passwordform() {
+             $uri = $_SERVER['REQUEST_URI']; // getting the current page url
+             $pagename = explode('?',basename($uri)); // checking for the query string
+             
+            if($pagename[0] != "user-new.php" && $pagename[0] != "user-edit.php"){ // condition to check the default add and edit page
+            ?>
 
             <script type="text/javascript">
                 jQuery(document).ready(function () {
-                    changepasswordform('<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>');
-
+                    setTimeout(function(){ changepasswordform(); },500);
+                    LRObject.$hooks.register('afterFormRender', function (name) {
+                    if (name === "changepassword") {
+                       
+                        jQuery('#changepassword-container').append('<span class="show-password"></span>')
+                      
+                    }
+                    });
+                   
+                        jQuery("#password th").html('');
+                        jQuery("#password td").html('');
+                        jQuery("#password th").html('<span>Change Password</span>');
+                       
+                        var content = '<a id="open_password_popup" class="open ciam-password-button" href="javascript:void(0);">Change Password</a><div class="popup-outer-password" style="display:none;"><span id="close_password_popup"><img src="<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>" alt="close" /></span><div class="popup-inner-password"><span class="popup-txt"><h1><strong>Please Enter New Password</strong></h1></span><div id="changepassword-container"></div></div></div><span class="password-input-wrapper show-password"><input style="display:hidden;" type="password" name="pass1" id="pass1" class="regular-text strong" value="" autocomplete="off" data-pw="Z4G%PbRnMl)krYm)vrCiNV!C" aria-describedby="pass-strength-result"></span>';
+                        jQuery(".user-pass1-wrap td").append(content);
+                    
                 });
             </script>
 
-
+               
             <?php
+            }else{ ?>
+            
+               <script type="text/javascript">
+               jQuery(document).ready(function(){
+                   setTimeout(function(){ jQuery("#pass1-text,#pass1").attr('style','visibility:visible !important;'); },500); 
+               });       
+               </script> 
+                
+           <?php }
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }

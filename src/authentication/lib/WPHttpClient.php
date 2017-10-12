@@ -28,8 +28,7 @@ class WPHttpClient implements IHttpClient {
     }
 
     public function request($path, $query_array = array(), $options = array()) {
-
-        
+       
         $parse_url = parse_url($path);
         $request_url = '';
         if (!isset($parse_url['scheme']) || empty($parse_url['scheme'])) {
@@ -45,7 +44,6 @@ class WPHttpClient implements IHttpClient {
             } else {
                 $request_url .= "&";
             }
-            
             $request_url .= Functions::queryBuild($query_array);
             
         }
@@ -59,15 +57,18 @@ class WPHttpClient implements IHttpClient {
         
             $argument['headers'] = array('content-type'=>'application/' . $content_type);
             if($content_type == 'json'){
-               // $data = $data;
+               if(!is_string($data)){
                 $data = json_encode($data);
-                
+               }
             }
-            $argument['body'] = $data;
+            
+            if($data !== true){
+                $argument['body'] = $data;
+            }
         
         
         $response = wp_remote_request($request_url, $argument);
-     
+
         if (!empty($response)) {
             if(isset($response->errors)){
                 

@@ -41,9 +41,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
         public function register_hook_callbacks() {
             add_action('admin_init', array($this, 'admin_init'));
             add_action('admin_enqueue_scripts', array($this, 'load_scripts'), 5);
-            if(is_super_admin()){ // redirect super admin to secure dashboard on user section 
-            add_action('admin_head',array($this,'lr_dashboard_redirect'));
-            }
+            
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
@@ -57,22 +55,6 @@ if (!class_exists('CIAM_Activation_Admin')) {
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
-
-        /*
-         * It will redirect user to the login radius dashboard on clicking the user section
-         */
-        
-        public function lr_dashboard_redirect(){  ?>
-           
-           <script type="text/javascript">
-              jQuery(document).ready(function(){
-                  jQuery('#menu-users a').attr('href','http://secure.loginradius.com/');
-                  jQuery('#menu-users ul li:nth-child(4) > a').attr('href','profile.php');
-              });
-           </script>
-              
-       <?php }
-        
         
         /**
          * Get response from LoginRadius api

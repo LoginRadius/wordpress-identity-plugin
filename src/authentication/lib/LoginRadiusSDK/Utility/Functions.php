@@ -208,7 +208,7 @@ class Functions
     public static function queryBuild($data = array())
     {
 	
-        if (is_array($data) && sizeof($data) > 0) {
+        if (is_array($data) && sizeof($data) > 0) {//error_log(json_encode($data)."\r\n". serialize($data)."\r\n\r\n");
             return http_build_query($data);
         } else {
             return '';
