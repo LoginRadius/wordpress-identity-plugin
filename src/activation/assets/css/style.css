@@ -921,3 +921,46 @@ textarea.ciam-shortcode {
 .custom-radio span.ciam-tooltip.tip-top {
     margin-top: -8px;
 }
+.lr-frame a {
+    display: block;
+}
+span.ciam_property_title.custom_ciam_property_title.requires {
+	position: relative;
+	font-size: 13px !important;
+}
+input.active-row-field.custom_active-row-field {
+    margin: 0;
+}
+input.active-row-field.custom_active-row-field {
+    margin: 0;
+	width: 100% !important;
+	height: 28px;
+}
+span.ciam_property_title.custom_ciam_property_title.requires::before {
+    content: "*";
+    color: red;
+    position: absolute;
+    top: 0;
+    right: -10px;
+}
+.ciam_show_button
+{
+	padding: 4px 8px;
+    background: #29d;
+    width: 40px;
+    color: #fff;
+    position: absolute;
+    right: 0;
+	text-align: center;
+	cursor: pointer;
+}
+.ciam_ciamsecrettoggle
+{
+	position: relative;
+}
+.ciam-email-row {
+    margin: 5px 0;
+}
+.ciam-email-row a.remove-popup {
+    margin-left: 2px;
+}

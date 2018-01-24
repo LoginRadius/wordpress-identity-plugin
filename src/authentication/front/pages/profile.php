@@ -23,33 +23,56 @@ if (!class_exists('CIAM_Authentication_Profile')) {
         public function init() {
             global $ciam_setting;
 
-            if (isset($ciam_setting) && !empty($ciam_setting['authentication_flow_type']) && $ciam_setting['authentication_flow_type'] !== "disable") {
+        
                 add_action('admin_head', array($this, 'ciam_hook_accountLinking'));
                 add_action('admin_head', array($this, 'ciam_hook_accountunlinking'));
                 add_action('admin_head', array($this, 'accountlinking_custom_script'));
                 add_action('show_user_profile', array($this, 'accountlinking_custom_div'));
-            }
-
-            if (isset($ciam_setting['2fa']) && $ciam_setting['2fa'] == 1 && (!isset($ciam_setting['2fa']) || $ciam_setting['2fa'] != "phone")) {
-                if (isset($ciam_setting['authenticationtype']) && !empty($ciam_setting['authenticationtype'])) {
-                    add_action('show_user_profile', array($this, 'profiletwofactorauthentication'));
-                    add_action('edit_user_profile', array($this, 'profiletwofactorauthentication'));
-                    add_action('admin_head', array($this, 'TwoFAonprofile'));
+           
+                add_action('show_user_profile', array($this, 'profiletwofactorauthentication'));
+                add_action('edit_user_profile', array($this, 'profiletwofactorauthentication'));
+                add_action('admin_head', array($this, 'TwoFAonprofile'));
+                    
+                    
+               add_action('show_user_profile', array($this, 'profilephoneuupdate'));
+                add_action('admin_head', array($this, 'profilephonedisplay'));
+               add_action('admin_head', array($this, 'profilephoneupdatejs'));
+        
+               add_action('edit_user_profile', array($this, 'accountlinking_custom_div'));
+            
+               add_action('admin_head', array($this, 'extra_email_fields'));
+          
+        }
+        
+        
+        public function profilephonedisplay()
+        {
+             $user_id = get_current_user_id();
+            global $ciam_credencials,$pagenow;
+            $accesstoken = get_user_meta($user_id, 'accesstoken', true);
+           
+            if (!empty($accesstoken && $pagenow === "profile.php")) {
+                $phoneid = '--';
+                $userAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                try{
+                      $userpro = $userAPI->getProfile($accesstoken);
+                }catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                        error_log($e->getErrorResponse()->Description);
+                    }
+                if(isset($userpro))
+                {
+                $phoneid = isset($userpro->PhoneId) && $userpro->PhoneId != '' ? $userpro->PhoneId : '--';
+                $phone_html = '<tr class="phoneid_table" style="display: none"><th>Phone Number</th><td>'. $phoneid.'</td></tr>';
+                ?>
+                <script>
+                    jQuery(document).ready(function() {
+            field = '<?php echo $phone_html;?>'
+            jQuery(field).insertBefore('.user-url-wrap');
+        });
+                    </script>
+                    <?php
                 }
-            }
-
-            if (isset($ciam_setting['phonelogin']) && $ciam_setting['phonelogin'] == "phone") {
-                add_action('show_user_profile', array($this, 'profilephoneuupdate'));
-                add_action('admin_head', array($this, 'profilephoneupdatejs'));
-                add_action('admin_head', array($this, 'ciam_hook_accountLinking'));
-                add_action('admin_head', array($this, 'ciam_hook_accountunlinking'));
-                add_action('admin_head', array($this, 'accountlinking_custom_script'));
-                add_action('show_user_profile', array($this, 'accountlinking_custom_div'));
-            }
-
-            add_action('edit_user_profile', array($this, 'accountlinking_custom_div'));
-            if (!isset($ciam_setting['phonelogin']) || $ciam_setting['phonelogin'] != "phone") {
-                add_action('admin_head', array($this, 'extra_email_fields'));
+                
             }
         }
 
@@ -67,7 +90,13 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                         localStorage.setItem('LRTokenKey', "<?php echo $accesstoken; ?>");
             <?php } ?>
                     jQuery(document).ready(function () {
-                    accountlinking();
+                        var lrObjectInterval23 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval23);
+                         accountlinking();
+                     }
+                        }, 1);
                     });</script>
             <?php
             /* action for debug mode */
@@ -82,7 +111,13 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             ?>
             <script>
                 jQuery(document).ready(function () {
+                var lrObjectInterval24 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval24);
                 accountunlinking();
+            }
+                }, 1);
                 });</script>
 
             <?php
@@ -95,9 +130,25 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          */
 
         public function profiletwofactorauthentication() {
+            $user_id = get_current_user_id();
+            global $ciam_credencials;
+            $accesstoken = get_user_meta($user_id, 'accesstoken', true);
+           
+            if (!empty($accesstoken)) {
+                $socialAPI = new \LoginRadiusSDK\CustomerRegistration\Social\SocialLoginAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                try{
+                      $socialpro = $socialAPI->getUserProfiledata($accesstoken);
+                }catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                        error_log($e->error_response->description);
+                    }
+                if(isset($socialpro) && $socialpro->Provider == 'RAAS')
+                {
             ?>
-            <div style="clear:both;"><h2>Two Factor Authentication</h2><div id="authentication-container"></div></div>
+          <div style="clear:both;"><h2 class="profiletwofactorauthentication" style="display: none">Two Factor Authentication</h2><div id="authentication-container"></div></div>   
+                   
             <?php
+                }
+            }
         }
 
         /*
@@ -105,10 +156,15 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          */
 
         public function profilephoneuupdate() {
+           
+            
             ?>
-            <div style="clear:both;"><h2>Update Phone Number</h2><div id="updatephone-container"></div> </div>
+                <div style="clear:both;"><h2 class="profilephoneuupdate" style="display: none">Update Phone Number</h2><div id="updatephone-container"></div> </div>
             <?php
+            
         }
+        
+       
 
         /*
          * Account Linking code starts....
@@ -160,6 +216,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
                 $current_user = wp_get_current_user(); // getting the current user info....
                 $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
+               
 
                 if (empty($ciam_uid)) {
                     try {
@@ -176,6 +233,8 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                     $lr_array = array();
                     try {
                         $lr_profile = $accoutObj->getProfileByUid($ciam_uid);
+                        if(!empty($lr_profile->Email))
+                        {
                         foreach ($lr_profile->Email as $key => $value) {
                             $lr_array[$key] = $value->Value;
                         }
@@ -184,6 +243,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                             $current_user = wp_get_current_user();
                             $current_user->user_email = $lr_profile->Email[0]->Value;
                         }
+                    }
                     } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                         error_log($e->getErrorResponse()->Description);
                     }
@@ -198,6 +258,8 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                     unset($_COOKIE['addemail']);
                     $_COOKIE['addemail'] = "";
                 }
+                if(isset($lr_profile->Email))
+                {
                 ?>
                             <script type="text/javascript">
                             jQuery(document).ready(function () {
@@ -205,6 +267,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                                 });
                 </script>
                 <?php
+                }
             }
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
@@ -218,7 +281,13 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             ?>
                             <script type="text/javascript">
                             jQuery(document).ready(function(){ // it will call the optional 2 fa f                           unction
+                       var lrObjectInterval25 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval25);
                         optionalTwoFA();
+                        }
+                        }, 1);
                             });
                             </script    >
             <?php
@@ -232,7 +301,13 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             ?>
                             <script type="text/javascript">
                         jQuery(document).ready(function(){ // it will call the optional 2 fa function
+                       var lrObjectInterval26 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval26);
                         updatephoneonprofile();
+                        }
+                        }, 1);
                             });
                             </script>
                     <?php

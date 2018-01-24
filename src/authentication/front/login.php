@@ -38,7 +38,7 @@ if (!class_exists('CIAM_Authentication_Login')) {
          */
 
         public function token_handler() {
-            global $socialLoginObject, $ciam_credencials, $ciam_message;
+            global $ciam_credencials, $ciam_message;
 
             $token = isset($_REQUEST['token']) ? $_REQUEST['token'] : '';
 
@@ -49,17 +49,12 @@ if (!class_exists('CIAM_Authentication_Login')) {
                 $apikey = isset($ciam_credencials['apikey']) ? $ciam_credencials['apikey'] : '';
                 $secret = isset($ciam_credencials['secret']) ? $ciam_credencials['secret'] : '';
                 if (!empty($apikey) && !empty($secret)) {
-                    $socialLoginObject = new \LoginRadiusSDK\CustomerRegistration\Social\SocialLoginAPI($apikey, $secret, array('output_format' => 'json'));
                     $userProfileApi = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($apikey, $secret, array('output_format' => 'json'));
                     try {
 
-                        $accesstoken = $socialLoginObject->exchangeAccessToken($token);
-
-                        if (isset($accesstoken->access_token) && !empty($accesstoken->access_token)) {
-                            //Get Access Token From LoginRadius
-
+                        $accesstoken = $token;
                             try {
-                                $userProfileData = $userProfileApi->getProfile($accesstoken->access_token);
+                                $userProfileData = $userProfileApi->getProfile($accesstoken);
 
                                 if (isset($userProfileData->Uid) && !empty($userProfileData->Uid)) {//check uid get or not 
                                     $checkUidExists = get_users(array(
@@ -77,7 +72,6 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                         //Uid not exist in so check email
                                         $email = isset($userProfileData->Email[0]->Value) ? $userProfileData->Email[0]->Value : '';
 
-
                                         if (!empty($email)) {
                                             if (email_exists($email)) {
                                                 //link user in user meta
@@ -89,6 +83,7 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                                 /* Register New User */
 
                                                 $user_id = wp_insert_user($loginHelper->register($email, $userProfileData));
+                                                
                                               // checking if username is exist than create dynamic username.
                                                 if (isset($user_id->errors['existing_user_login'][0]) && $user_id->errors['existing_user_login'][0] == "Sorry, that username already exists!") { 
                                                     $userarr = $loginHelper->register($email, $userProfileData);
@@ -105,13 +100,13 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                                     //allow Login
                                                     $loginHelper->allow_login($user_id, $userProfileData, true);
                                                 } else {
-
                                                     do_action('ciam_sso_logout');
                                                     add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
                                                 }
                                             }
                                         } else {
                                             do_action('ciam_sso_logout');
+                                            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "Email Field is empty");
                                         }
                                     }
                                 }
@@ -121,11 +116,7 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                 do_action('ciam_sso_logout');
                                 add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
                             }
-                        } else {
-                            $ciam_message = $accesstoken->description;
-                            do_action('ciam_sso_logout');
-                            add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
-                        }
+                       
                     } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                         //access Token is invalid
                         $ciam_message = $e->getMessage();

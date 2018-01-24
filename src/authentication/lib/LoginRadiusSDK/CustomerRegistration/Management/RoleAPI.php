@@ -26,8 +26,7 @@ class RoleAPI {
      * @param type $customize_options
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**
@@ -35,8 +34,8 @@ class RoleAPI {
      *
      * @return type
      */
-    public function get() {
-        return $this->apiClientHandler("role");
+    public function get($fields = '*') {
+        return $this->apiClientHandler("role", array('fields' => $fields));
     }
 
     /**
@@ -46,8 +45,8 @@ class RoleAPI {
      *
      * @return type
      */
-    public function getContext($uid) {
-        return $this->apiClientHandler("account/" . $uid . "/rolecontext");
+    public function getContext($uid, $fields = '*') {
+        return $this->apiClientHandler("account/" . $uid . "/rolecontext", array('fields' => $fields));
     }
 
     /**
@@ -72,8 +71,8 @@ class RoleAPI {
      *  }
      * @return type
      */
-    public function upsertContext($uid, $rolesContext) {
-        return $this->apiClientHandler("account/" . $uid . "/rolecontext", array(), array('method' => 'put', 'post_data' => $rolesContext));
+    public function upsertContext($uid, $rolesContext, $fields = '*') {
+        return $this->apiClientHandler("account/" . $uid . "/rolecontext", array('fields' => $fields), array('method' => 'put', 'post_data' => $rolesContext, 'content_type' => 'json'));
     }
 
     /**
@@ -83,8 +82,8 @@ class RoleAPI {
      * @param $roleContextName String data
      * @return type
      */
-    public function deleteContextbyContextName($uid, $roleContextName) {
-        return $this->apiClientHandler("account/" . $uid . "/rolecontext/" . $roleContextName, array(), array('method' => 'delete', 'post_data' => true));
+    public function deleteContextbyContextName($uid, $roleContextName, $fields = '*') {
+        return $this->apiClientHandler("account/" . $uid . "/rolecontext/" . $roleContextName, array('fields' => $fields), array('method' => 'delete', 'post_data' => true));
     }    
     /**
      * Delete Roles From Context
@@ -95,8 +94,8 @@ class RoleAPI {
      * }
      * @return type
      */
-    public function deleteRoleFromContext($uid, $roleContextName, $roles) {
-        return $this->apiClientHandler("account/" . $uid . "/rolecontext/" . $roleContextName, "/role", array(), array('method' => 'delete', 'post_data' => $roles));
+    public function deleteRoleFromContext($uid, $roleContextName, $roles, $fields = '*') {
+        return $this->apiClientHandler("account/" . $uid . "/rolecontext/" . $roleContextName. "/role", array('fields' => $fields), array('method' => 'delete', 'post_data' => $roles, 'content_type' => 'json'));
     }
     /**
      * Delete Additional Permission by Role Context Name
@@ -109,8 +108,8 @@ class RoleAPI {
      * }
      * @return type
      */
-    public function deleteAdditionalPermissionFromContext($uid, $roleContextName, $additionalPermission) {
-        return $this->apiClientHandler("account/" . $uid . "/rolecontext/" . $roleContextName, "/additionalpermission", array(), array('method' => 'delete', 'post_data' => $additionalPermission));
+    public function deleteAdditionalPermissionFromContext($uid, $roleContextName, $additionalPermission, $fields = '*') {
+        return $this->apiClientHandler("account/" . $uid . "/rolecontext/" . $roleContextName. "/additionalpermission", array('fields' => $fields), array('method' => 'delete', 'post_data' => $additionalPermission, 'content_type' => 'json'));
     }
 
     /**
@@ -132,8 +131,8 @@ class RoleAPI {
 
      * @return type
      */
-    public function create($roles) {
-        return $this->apiClientHandler("role", array(), array('method' => 'post', 'post_data' => $roles, 'content_type' => 'json'));
+    public function create($roles, $fields = '*') {
+        return $this->apiClientHandler("role", array('fields' => $fields), array('method' => 'post', 'post_data' => $roles, 'content_type' => 'json'));
     }
 
     /**
@@ -141,10 +140,10 @@ class RoleAPI {
      *
      * $role = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //Name of Role
      *
-     * return {“IsDeleted” : true}
+     * return {�IsDeleted� : true}
      */
-    public function delete($role) {
-        return $this->apiClientHandler('role/' . $role, array(), array('method' => 'delete', 'post_data' => true));
+    public function delete($role, $fields = '*') {
+        return $this->apiClientHandler('role/' . $role, array('fields' => $fields), array('method' => 'delete', 'post_data' => true));
     }
 
     /**
@@ -152,16 +151,16 @@ class RoleAPI {
      *
      * $role = 'xxxxxx'; // role name
      * $permissions = {
-     * “Permissions” :[
-     * {“Permission” : true},
-     * {“Permission” : true}
+     * �Permissions� :[
+     * {�Permission� : true},
+     * {�Permission� : true}
      * ]
      * }
      *
-     * return {“isPosted”: “true”}
+     * return {�isPosted�: �true�}
      */
-    public function addPermission($role, $permissions) {
-        return $this->apiClientHandler("role/" . $role . "/permission", '', array('method' => 'put', 'post_data' => $permissions, 'content_type' => 'json'));
+    public function addPermission($role, $permissions, $fields = '*') {
+        return $this->apiClientHandler("role/" . $role . "/permission", array('fields' => $fields), array('method' => 'put', 'post_data' => $permissions, 'content_type' => 'json'));
     }
 
     /**
@@ -169,16 +168,16 @@ class RoleAPI {
      *
      * $role = 'xxxxxx'; // role name
      * $permissions = {
-     * “Permissions” :[
-     * {“Permission” : true},
-     * {“Permission” : true}
+     * �Permissions� :[
+     * {�Permission� : true},
+     * {�Permission� : true}
      * ]
      * }
      *
-     * return { “Name” : “<name of role>”,“Permissions” :[{“Permission” : true},{“Permission” : true}]}
+     * return { �Name� : �<name of role>�,�Permissions� :[{�Permission� : true},{�Permission� : true}]}
      */
-    public function removePermission($role, $permissions) {
-        return $this->apiClientHandler('role/' . $role . '/permission', '', array('method' => 'delete', 'post_data' => $permissions, 'content_type' => 'json'));
+    public function removePermission($role, $permissions, $fields = '*') {
+        return $this->apiClientHandler('role/' . $role . '/permission', array('fields' => $fields), array('method' => 'delete', 'post_data' => $permissions, 'content_type' => 'json'));
     }
 
     /**
@@ -187,30 +186,30 @@ class RoleAPI {
      * @param $uid
      * @return type
      */
-    public function getAccountRolesByUid($uid) {
-        return $this->apiClientHandler('account/' . $uid . '/role');
+    public function getAccountRolesByUid($uid, $fields = '*') {
+        return $this->apiClientHandler('account/' . $uid . '/role', array('fields' => $fields));
     }
 
     /**
      * Insert role to account.
      *
      * @param $uid
-     * @param $data = {“Roles” : [“Role1”,”Role2”]}
+     * @param $data = {�Roles� : [�Role1�,�Role2�]}
      * @return type
      */
-    public function assignRolesByUid($uid, $data) {
-        return $this->apiClientHandler('account/' . $uid . '/role', '', array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    public function assignRolesByUid($uid, $data, $fields = '*') {
+        return $this->apiClientHandler('account/' . $uid . '/role', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
      * Delete role.
      *
      * @param $uid
-     * @param $data = {“Roles” : [“Role1”,”Role2”]}
+     * @param $data = {�Roles� : [�Role1�,�Role2�]}
      * @return type
      */
-    public function deleteAccountRoles($uid, $data) {
-        return $this->apiClientHandler('account/' . $uid . '/role', '', array('method' => 'delete', 'post_data' => $data, 'content_type' => 'json'));
+    public function deleteAccountRoles($uid, $data, $fields = '*') {
+        return $this->apiClientHandler('account/' . $uid . '/role', array('fields' => $fields), array('method' => 'delete', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -221,7 +220,8 @@ class RoleAPI {
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $options = array()) {
+    private function apiClientHandler($path, $query_array = array(), $customize_options = array()) {
+        $options = array_merge(array('authentication' => 'secret'), $customize_options);
         return Functions::apiClient("/identity/v2/manage/" . $path, $query_array, $options);
     }
 

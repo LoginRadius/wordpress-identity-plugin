@@ -38,17 +38,14 @@ if (!class_exists('CIAM_Authentication_Register')) {
        
         public function ciam_registration_form() {
             global $ciam_setting;
-           if(!empty($ciam_setting['registration_page_id'])){ 
-            $authenticationflowtype = isset($ciam_setting['authentication_flow_type']) ? $ciam_setting['authentication_flow_type'] : 'required';
-           
-            $phonelogin = isset($ciam_setting['phonelogin']) ? $ciam_setting['phonelogin'] : '';
+           if(!empty($ciam_setting['registration_page_id'])){
             $url = get_permalink($ciam_setting['login_page_id']);
             if (!is_user_logged_in()) {
                 ?>
 
                 <script type="text/javascript">
                     jQuery(document).ready(function () {
-                        registration_hook('<?php echo $url ?>','<?php echo $authenticationflowtype; ?>','<?php echo $phonelogin ?>');
+                        registration_hook('<?php echo $url ?>');
                         social('<?php echo $url ?>');
                     });
                 </script> 
@@ -57,7 +54,7 @@ if (!class_exists('CIAM_Authentication_Register')) {
                 $message = '<div id="messageinfo" class="messageinfo"></div>';
                 ob_start();
                 $html = '<div class="ciam-user-reg-container">' . $message;
-                $html .= '<span id="registration_message"></span><div id="sociallogin-container"></div><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div><div id="registration-container" class="ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="ciam-loading-img"><img class="loading_circle ciam_loading_gif_align" src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading_icon.gif' . '" alt="loding image" /></div></div>';
+                $html .= '<span id="registration_message"></span><span id="loginmessage"></span><div id="sociallogin-container"></div><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div><div id="registration-container" class="ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="ciam-loading-img"><img class="loading_circle ciam_loading_gif_align" src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading_icon.gif' . '" alt="loding image" /></div></div>';
                 $html .= '<span class="ciam-link"><a href="' . wp_login_url(). '">Login</a></span>';
                 $html .= '<span class="ciam-link btn"><a href="' . wp_lostpassword_url() . '">Forgot Password</a></span></div>';
                 add_action('wp_footer', array($this,'datepickerscript'));

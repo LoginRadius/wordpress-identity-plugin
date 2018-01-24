@@ -39,6 +39,7 @@ if (!class_exists('CIAM_Activation')) {
             $ciam_credencials = get_option('Ciam_API_settings');
 
             $ciam_setting = get_option('Ciam_Authentication_settings');
+            
 
 
 
@@ -151,6 +152,7 @@ if (!class_exists('CIAM_Activation')) {
             require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/LoginRadiusException.php';
 
             require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Utility/Functions.php';
+            require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Advance/CloudAPI.php';
 
 
 

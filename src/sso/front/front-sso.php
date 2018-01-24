@@ -30,14 +30,20 @@ if (!class_exists('CIAM_Front_Sso')) {
          * Adding commom option for Loginradius js
          */
           public function ciam_sso_commonoptions() { 
-              global $ciam_credencials;
+              global $ciam_credencials, $ciam_setting;
               if(!empty($ciam_credencials['apikey'])){ // checking for the api key and site name is not blank.
               ?>
              <script type="text/javascript">
              var commonOptions = {};
              commonOptions.apiKey = '<?php echo $ciam_credencials['apikey']; ?>';
              commonOptions.appName = '<?php echo $ciam_credencials['sitename']; ?>';
+             var lrObjectInterval27 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval27);
              var LRObject = new LoginRadiusV2(commonOptions);
+         }
+             }, 1);
              </script>
               <?php 
               }
@@ -71,7 +77,13 @@ if (!class_exists('CIAM_Front_Sso')) {
                         //Write your custom code here
                         window.location.href = '<?php echo (site_url('/')) ?>';
                     };
+                   var lrObjectInterval28 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval28);
                     LRObject.init("logout", logout_options);
+                }
+                   }, 1);
                 })
             </script>
             <?php
@@ -115,9 +127,13 @@ if (!class_exists('CIAM_Front_Sso')) {
                             document.body.appendChild(form);
                             form.submit();
                         };
-                        LRObject.util.ready(function () {
+                        var lrObjectInterval29 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval29);
                             LRObject.init("ssoLogin", ssologin_options);
-                        });
+                    }
+                        }, 1);
                  <?php } } else {  ?>
                         var check_options = {};
                         check_options.onError = function (response) {
@@ -139,10 +155,13 @@ if (!class_exists('CIAM_Front_Sso')) {
                             // On Success
                             // If user is log in then this function will execute.
                         };
-                        LRObject.util.ready(function () {
-                            
+                        var lrObjectInterval31 = setInterval(function () {
+                       if(typeof LRObject !== 'undefined')
+                       {
+                        clearInterval(lrObjectInterval31);  
                             LRObject.init("ssoNotLoginThenLogout", check_options);
-                        });
+                    }
+                        }, 1);
                         var href = jQuery('#wp-admin-bar-logout a').attr('href');
                         jQuery('#wp-admin-bar-logout a').css({"cursor": "pointer"});
                         jQuery('#wp-admin-bar-logout a').removeAttr('href');
@@ -167,7 +186,13 @@ if (!class_exists('CIAM_Front_Sso')) {
                                 // On Success
                                 //Write your custom code here
                             };
+                            var lrObjectInterval30 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval30);
                             LRObject.init("logout", logout_options);
+                        }
+                            }, 1);
                         }
             <?php } ?>
                 });

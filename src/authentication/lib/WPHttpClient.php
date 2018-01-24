@@ -35,9 +35,15 @@ class WPHttpClient implements IHttpClient {
             $request_url .= API_DOMAIN;
         }
         $request_url .= $path;
+        
         if ($query_array !== false) { 
-            $secure = "secret";
-            $query_array = (isset($options['authentication']) && ($options['authentication'] == false)) ? $query_array : Functions::authentication($query_array,$secure);
+           if (isset($options['authentication']) && $options['authentication'] == 'headsecure') {
+                $options = array_merge($options, Functions::authentication(array(), $options['authentication']));
+                $query_array = isset($options['authentication']) ? $query_array : $query_array;
+            }
+            else {
+                $query_array = isset($options['authentication']) ? Functions::authentication($query_array, $options['authentication']) : $query_array;
+            }
            
             if (strpos($request_url, "?") === false) {
                 $request_url .= "?";
@@ -47,10 +53,15 @@ class WPHttpClient implements IHttpClient {
             $request_url .= Functions::queryBuild($query_array);
             
         }
-        $argument = array('timeout'     => 500);
-        $argument['method'] = isset($options['method']) ? strtolower($options['method']) : 'get';
+        
+        
+        $argument = array('timeout' => 500);
+        $argument['method'] = isset($options['method']) ? strtolower($options['method']) : 'GET';
         $data = isset($options['post_data']) ? $options['post_data'] : array();
         $content_type = isset($options['content_type']) ? trim($options['content_type']) : 'x-www-form-urlencoded';
+         $sott_header_content = isset($options['X-LoginRadius-Sott']) ? trim($options['X-LoginRadius-Sott']) : '';
+        $apikey_header_content = isset($options['X-LoginRadius-ApiKey']) ? trim($options['X-LoginRadius-ApiKey']) : '';
+        $secret_header_content = isset($options['X-LoginRadius-ApiSecret']) ? trim($options['X-LoginRadius-ApiSecret']) : '';
         
         
         
@@ -65,8 +76,6 @@ class WPHttpClient implements IHttpClient {
             if($data !== true){
                 $argument['body'] = $data;
             }
-        
-        
         $response = wp_remote_request($request_url, $argument);
 
         if (!empty($response)) {

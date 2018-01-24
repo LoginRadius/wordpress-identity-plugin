@@ -17,10 +17,11 @@ jQuery(document).ready(function ($) {
     });    
 
     $("#submit").on('click',function(){ 
+        
 
        
 
-       if(($("#sitename").val() == "") || ($("#apikey").val() == "") || ($("#secret").val() == "")){
+       if(($("#apikey").val() == "") || ($("#secret").val() == "")){
 
            $("#error_msg").css({'font-weight':'600','font-size':'0.8em','padding':'.5em 0 .5em 13px'}).text('All fields are required!').show().fadeOut(5000);;
 
@@ -31,6 +32,13 @@ jQuery(document).ready(function ($) {
     });
 
 });
+function ciamsecrettoggle(){
+        if(jQuery("#secret").prop("type") == 'password'){
+            jQuery("#secret").prop("type",'text');
+        }else{
+            jQuery("#secret").prop("type",'password');
+        }
+    }
 
 
 

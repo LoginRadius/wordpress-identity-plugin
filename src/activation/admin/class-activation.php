@@ -73,14 +73,14 @@ if (!class_exists('CIAM_Activation_Admin')) {
 
                 if (isset($response->Status) && $response->Status) {
                     /* action for debug mode */
-                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                     return true;
                 } else {
 
                     $currentErrorCode = '0';
                     $currentErrorResponse = "Details Entered are wrong!";
                     /* action for debug mode */
-                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                     return false;
                 }
             } catch (\LoginRadiusSDK\LoginRadiusException $e) { 
@@ -89,7 +89,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
                 $currentErrorResponse = "Something went wrong: " . $e->getErrorResponse()->description;
 
                 /* action for debug mode */
-                do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return false;
             }
             }catch(\LoginRadiusSDK\LoginRadiusException $e){
@@ -97,7 +97,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
                 $currentErrorResponse = "Please recheck your LoginRadius details";
 
                 /* action for debug mode */
-                do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return false;
             }
         }
@@ -108,21 +108,15 @@ if (!class_exists('CIAM_Activation_Admin')) {
          */
 
         function ciam_activation_validation($settings) {
-
-            $settings['sitename'] = sanitize_text_field($settings['sitename']);
             $settings['apikey'] = sanitize_text_field($settings['apikey']);
             $settings['secret'] = sanitize_text_field($settings['secret']);
-            if (empty($settings['sitename'])) {
-                $message = 'LoginRadius Site Name is blank. Get your LoginRadius Site Name from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>';
-                add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
-            }
 
             if (empty($settings['apikey']) && empty($settings['secret'])) {
                 $message = 'LoginRadius API Key and API Secret are blank. Get your LoginRadius API Key and API Secret from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>';
                 add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
 
                 /* action for debug mode */
-                do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+               // do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return $settings;
             }
 
@@ -131,7 +125,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
                 add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
 
                 /* action for debug mode */
-                do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return $settings;
             }
 
@@ -139,18 +133,69 @@ if (!class_exists('CIAM_Activation_Admin')) {
                 $message = 'LoginRadius API Secret is blank. Get your LoginRadius API Secret from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>';
                 add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
                 /* action for debug mode */
-                do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return $settings;
             }
 
             if (isset($settings['apikey']) && isset($settings['secret'])) {
-
                 $encodeString = 'settings';
 
-                if ($this->api_validation_response($settings['apikey'], $settings['secret'], $encodeString)) {
-
+                if ($this->api_validation_response($settings['apikey'], $settings['secret'], $encodeString)) { 
+                    $config_api = get_option('Ciam_API_settings') ? get_option('Ciam_API_settings') : '';
+               
+                    if(!isset($config_api['apikey']) || !isset($config_api['secret']) || $config_api['apikey'] != $settings['apikey'] || $config_api['secret'] != $settings['secret'] || !isset($config_api['update_plugin']) || $config_api['update_plugin'] == 'false')
+                    {
+                    
+                    $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($settings['apikey'], $settings['secret']);
+                    
+                    $config = json_decode($cloudAPI->getConfigurationList(), TRUE);
+                    $ciam_settings = get_option('ciam_authentication_settings');
+                    
+                    $config_options = array();
+                    if(isset($config['AppName']))
+                    {
+                        $settings['sitename'] = $config['AppName'];
+                    }
+                    if(isset($config['IsUserNameLogin']) && !isset($ciam_settings['login_type']))
+                    {
+                    $config_options['login_type'] =  $config['IsUserNameLogin'];
+                    }
+                    if(isset($config['AskEmailIdForUnverifiedUserLogin']) && !isset($ciam_settings['askEmailForUnverifiedProfileAlways']))
+                    {
+                    $config_options['askEmailForUnverifiedProfileAlways'] =  $config['AskEmailIdForUnverifiedUserLogin'];
+                    }
+                    if(isset($config['AskRequiredFieldsOnTraditionalLogin']) && !isset($ciam_settings['AskRequiredFieldsOnTraditionalLogin']))
+                    {
+                    $config_options['AskRequiredFieldsOnTraditionalLogin'] =  $config['AskRequiredFieldsOnTraditionalLogin'];
+                    }
+                    if(isset($config['AskPasswordOnSocialLogin']) && !isset($ciam_settings['prompt_password']))
+                    {
+                    $config_options['prompt_password'] =  $config['AskPasswordOnSocialLogin'];
+                    }
+                    if(isset($config['CheckPhoneNoAvailabilityOnRegistration']) && !isset($ciam_settings['existPhoneNumber']))
+                    {
+                    $config_options['existPhoneNumber'] =  $config['CheckPhoneNoAvailabilityOnRegistration'];
+                    }
+                    if(isset($config['IsInstantSignin']['EmailLink']) && !isset($ciam_settings['onclicksignin']))
+                    {
+                    $config_options['onclicksignin'] =  $config['IsInstantSignin']['EmailLink'];
+                    }
+                    if(isset($config['IsInstantSignin']['SmsOtp']) && !isset($ciam_settings['instantotplogin']))
+                    {
+                    $config_options['instantotplogin'] =  $config['IsInstantSignin']['SmsOtp'];
+                    }
+                   if(get_option('ciam_authentication_settings'))
+                   {
+                    $config_options = array_merge(get_option('ciam_authentication_settings') , $config_options);
+                     update_option('ciam_authentication_settings' , $config_options);
+                   }
+                   else
+                   {
+                       add_option('ciam_authentication_settings' , $config_options);
+                   }
+                    }
                     /* action for debug mode */
-                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
 
                     return $settings;
                 } else {
@@ -184,13 +229,13 @@ if (!class_exists('CIAM_Activation_Admin')) {
 
                 add_settings_error('LR_Ciam_API_settings', esc_attr('settings_updated'), 'Settings Updated', 'updated');
                 /* action for debug mode */
-                do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+               // do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
 
                 return $settings;
             }
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+            //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
         /*
@@ -213,7 +258,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
             wp_enqueue_style('ciam-admin-style');
             
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+            //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
         /*
@@ -227,7 +272,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
             $obj_CIAM_Activation_Settings->render_options_page();
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), '');
+            //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_called_class(), '');
         }
 
     }

@@ -22,7 +22,7 @@ if (!class_exists('CIAM_Authentication_Backupcode')) {
          */
 
         public function init() {
-            add_action('admin_head', array($this, 'ciam_backupcode'));
+            add_action('show_user_profile', array($this, 'ciam_backupcode'));
         }
 
         /*
@@ -30,16 +30,15 @@ if (!class_exists('CIAM_Authentication_Backupcode')) {
          */
 
         public function ciam_backupcode() {
+            
             global $ciam_setting, $ciam_credencials;
-            if (isset($ciam_setting['2fa']) && $ciam_setting['2fa'] == 1) {
                 $user_id = get_current_user_id();
                 if ($user_id > 0) {
                     $accessToken = get_user_meta($user_id, 'accesstoken', true);
                     if (!empty($accessToken)) {
-                        $UserAPI = new UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+                        $UserAPI = new UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
                         try {
-                            $permission = $UserAPI->configureTwoFAByToken($accessToken, '');
-                            $authpermission = json_decode($permission);
+                            $authpermission = $UserAPI->configureTwoFAByToken($accessToken, '');
                             if ((isset($authpermission->IsGoogleAuthenticatorVerified) && $authpermission->IsGoogleAuthenticatorVerified) || (isset($authpermission->IsOTPAuthenticatorVerified) && $authpermission->IsOTPAuthenticatorVerified)) {
                                 ?>
                                 <script type="text/javascript">
@@ -54,7 +53,6 @@ if (!class_exists('CIAM_Authentication_Backupcode')) {
                         }
                     }
                 }
-            }
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
         }

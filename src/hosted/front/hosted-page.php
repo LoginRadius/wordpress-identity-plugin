@@ -117,7 +117,7 @@ if (!class_exists('CIAM_Hosted_Page')) {
          */
 
         private function hosted_page_urls($action, $redirect = '') {
-            global $ciam_credencials;
+            global $ciam_credencials, $ciam_setting;
 
             $redirect = empty($redirect) ? home_url('/') : $redirect;
             if (!isset($_GET['redirect_to'])) {
@@ -232,7 +232,7 @@ if (!class_exists('CIAM_Hosted_Page')) {
          */
 
         public function profile_url() {
-            global $ciam_credencials;
+            global $ciam_credencials, $ciam_setting;
 
             $appName = isset($ciam_credencials['sitename']) ? $ciam_credencials['sitename'] : '';
             if (!empty($appName)) {

@@ -228,6 +228,7 @@ if (!class_exists('CIAM_Authentication_Helper')) {
         public function allow_login($user_id, $userProfileData, $register = false) {
             // saving data for hosted page login case....
             if (isset($_REQUEST['token']) && !empty($_REQUEST['token'])) {
+                
 
                 add_user_meta($user_id, 'accesstoken', $_REQUEST['token']);
             }
@@ -243,16 +244,16 @@ if (!class_exists('CIAM_Authentication_Helper')) {
             // saving lr data to wordpress on login....
             $userdata = array(
                 'ID' => $user_id,
-                'user_nicename' => $userProfileData->FirstName,
-                'user_url' => $userProfileData->ImageUrl,
+                'user_nicename' => isset($userProfileData->FirstName) ? $userProfileData->FirstName : '',
+                'user_url' => isset($userProfileData->ImageUrl) ? $userProfileData->ImageUrl : '',
             );
 
             wp_update_user($userdata); // updating data to user table....
 
             $metas = array(
-                'nickname' => $userProfileData->NickName,
-                'first_name' => $userProfileData->FirstName,
-                'last_name' => $userProfileData->LastName,
+                'nickname' => isset($userProfileData->NickName) ? $userProfileData->NickName : '',
+                'first_name' => isset($userProfileData->FirstName) ? $userProfileData->FirstName : '',
+                'last_name' => isset($userProfileData->LastName) ? $userProfileData->LastName : '',
             );
 
 

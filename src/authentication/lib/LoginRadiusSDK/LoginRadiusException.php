@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadiusException
  * @author : LoginRadius Team
- * @version : 4.2.0
+ * @version : 4.5.1
  * @license : https://opensource.org/licenses/MIT
  */
 namespace LoginRadiusSDK;
@@ -29,7 +29,7 @@ class LoginRadiusException extends \Exception
     public function __construct($message, $error_response = array())
     {
         parent::__construct($message);
-       
+
         $this->error_response = $error_response;
     }
 

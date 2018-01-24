@@ -13,6 +13,7 @@ if (!class_exists('CIAM_Authentication_Loginfunction')) {
 
         public function __construct() {
             global $ciam_setting;
+            
             add_action('init', array($this, 'init'), 105);
             if (isset($ciam_setting) && !empty($ciam_setting['login_page_id'])) {
                 add_action('init', array($this, 'custom_page_redirection'));
@@ -186,8 +187,8 @@ if (!class_exists('CIAM_Authentication_Loginfunction')) {
                     $message = '<div id="" class="messageinfo"></div>';
                     ob_start();
 
-                    $html = '<div class="ciam-user-reg-container">' . $message . '<span id="verificationmessage"></span>';
-                    $html .= '<div class="ciam-user-reg-container">' . $message . '<span id="loginmessage"></span><div id="sociallogin-container"></div><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div><div id="login-container" class="ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="ciam-loading-img"><img  src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading_icon.gif' . '" alt="loding image" class="loading_circle ciam_loading_gif_align" /></div></div><div class="various-grid accout-login" id="reset_from" ></div><span class="ciam-link"><a href = "' . wp_registration_url() . '">Register</a></span><span class="ciam-link btn"><a href = "' . wp_lostpassword_url() . '">Forgot Password</a></span></div>';
+                    $html = '<div class="ciam-user-reg-container">' . $message . '<span id="verificationmessage"></span><span id="loginmessage"></span>';
+                    $html .= '<div id="sociallogin-container"></div><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div><div id="login-container" class="ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="ciam-loading-img"><img  src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading_icon.gif' . '" alt="loding image" class="loading_circle ciam_loading_gif_align" /></div></div><div class="various-grid accout-login" id="reset_from" ></div><span class="ciam-link"><a href = "' . wp_registration_url() . '">Register</a></span><span class="ciam-link btn"><a href = "' . wp_lostpassword_url() . '">Forgot Password</a></span></div>';
 
                     do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $html);
                     return $html . ob_get_clean();

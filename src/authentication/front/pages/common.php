@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit();
 }
 
-use LoginRadiusSDK\Utility\SOTT;
+use LoginRadiusSDK\CustomerRegistration\Management\AccountAPI;
 
 if (!class_exists('CIAM_Authentication_Commonmethods')) {
 
@@ -55,13 +55,18 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
             ?>
             <script type='text/javascript'>
                 jQuery(document).ready(function () {
+                    var lrObjectInterval1 = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval1);
                     LRObject.$hooks.register('afterFormRender', function (actionName) {
                         if (actionName === "registration") {
                             show_birthdate_date_block();
                         }
                     });
-
-                });
+                }
+                    }, 1);
+            });
 
 
 
@@ -78,8 +83,8 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
         public function ciam_hook_commonoptions() {
             global $ciam_credencials, $ciam_setting;
 
-            $verificationurl = get_permalink($ciam_setting['login_page_id']);
-            $forgoturl = get_permalink($ciam_setting['change_password_page_id']);
+            $verificationurl = (isset($ciam_setting['login_page_id'])) ? get_permalink($ciam_setting['login_page_id']) : '';
+            $forgoturl = (isset($ciam_setting['change_password_page_id'])) ? get_permalink($ciam_setting['change_password_page_id']) : '';
             if ((!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey'])) || (!isset($ciam_credencials['secret']) && empty($ciam_credencials['secret']))) {
                 return;
             }
@@ -87,13 +92,124 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
             <script>
                 var commonOptions = {};
                 commonOptions.apiKey = "<?php echo $ciam_credencials['apikey']; ?>";
-                commonOptions.appName = "<?php echo $ciam_credencials['sitename']; ?>";
+                commonOptions.appName = '<?php echo $ciam_credencials['sitename']; ?>';
                 commonOptions.formValidationMessage = true;
                 commonOptions.hashTemplate = true;
-                commonOptions.askRequiredFieldForTraditionalLogin = true;
                 commonOptions.forgotPasswordUrl = '<?php echo $forgoturl; ?>';
                 commonOptions.resetPasswordUrl = '<?php echo $forgoturl; ?>';
-            <?php
+               
+                <?php
+            
+                if (isset($ciam_setting['prompt_password']) && $ciam_setting['prompt_password'] == 1) {
+                    ?>
+                        commonOptions.promptPasswordOnSocialLogin = true;
+                    <?php
+                }
+                else{
+                      ?>
+                        commonOptions.promptPasswordOnSocialLogin = false;
+                    <?php
+                }
+                if (isset($ciam_setting['login_type']) && $ciam_setting['login_type'] == 1) {
+                    ?>
+                        commonOptions.usernameLogin = true;
+                    <?php
+                }
+                else{
+                    ?>
+                        commonOptions.usernameLogin = false;
+                    <?php
+                }
+                if (isset($ciam_setting['onclicksignin']) && $ciam_setting['onclicksignin'] == 1) {
+                ?>
+                    commonOptions.instantLinkLogin = true;
+                <?php if (isset($ciam_setting['instantLinkLoginEmailTemplate']) && !empty($ciam_setting['instantLinkLoginEmailTemplate'])) { ?>
+                        commonOptions.instantLinkLoginEmailTemplate = '<?php echo $ciam_setting['instantLinkLoginEmailTemplate'] ?>';
+                    <?php
+                }
+            }
+            else{
+                ?>
+                commonOptions.instantLinkLogin = false;
+                <?php
+            }
+            if (isset($ciam_setting['instantotplogin']) && $ciam_setting['instantotplogin'] == 1) { ?>
+                        commonOptions.instantOTPLogin = true;
+                          <?php if (isset($ciam_setting['instantOTPLoginEmailTemplate']) && !empty($ciam_setting['instantOTPLoginEmailTemplate'])) { ?>
+                        commonOptions.instantOTPLoginEmailTemplate = '<?php echo $ciam_setting['instantOTPLoginEmailTemplate'] ?>';
+                    <?php
+                }
+                }
+                else{
+                    ?>
+                         commonOptions.instantOTPLogin = false;
+                         <?php
+                }
+                if (isset($ciam_setting['askEmailForUnverifiedProfileAlways']) && $ciam_setting['askEmailForUnverifiedProfileAlways'] == 1) {
+                    ?>
+                        commonOptions.askEmailForUnverifiedProfileAlways = true;
+                    <?php
+                }
+                else{
+                     ?>
+                        commonOptions.askEmailForUnverifiedProfileAlways = false;
+                    <?php
+                }
+                if (isset($ciam_setting['AskRequiredFieldsOnTraditionalLogin']) && $ciam_setting['AskRequiredFieldsOnTraditionalLogin'] == 1) {
+                    ?>
+                        commonOptions.askRequiredFieldForTraditionalLogin = true;
+                    <?php
+                }
+                else{
+                    ?>
+                        commonOptions.askRequiredFieldForTraditionalLogin = false;
+                    <?php
+                }
+                if (isset($ciam_setting['existPhoneNumber']) && $ciam_setting['existPhoneNumber'] == 1) {
+                    ?>
+                        commonOptions.existPhoneNumber = true;
+                    <?php
+                }
+                else{
+                   ?>
+                        commonOptions.existPhoneNumber = false;
+                    <?php 
+                }
+                if (isset($ciam_setting['welcome-template']) && $ciam_setting['welcome-template'] != '' && $ciam_setting['welcome-template'] != 'default') {
+                    ?>
+                        commonOptions.welcomeEmailTemplate = '<?php echo $ciam_setting['welcome-template']?>';
+                    <?php
+                }
+                 if (isset($ciam_setting['reset-template']) && $ciam_setting['reset-template'] != '' && $ciam_setting['reset-template'] != 'default') {
+                    ?>
+                        commonOptions.resetPasswordEmailTemplate = '<?php echo $ciam_setting['reset-template']?>';
+                    <?php
+                }
+               if (isset($ciam_setting['account-verification-template']) && $ciam_setting['account-verification-template'] != '' && $ciam_setting['account-verification-template'] != 'default') {
+                    ?>
+                        commonOptions.verificationEmailTemplate = '<?php echo $ciam_setting['account-verification-template']?>';
+                    <?php
+                }
+               if (isset($ciam_setting['smsTemplatePhoneVerification']) && $ciam_setting['smsTemplatePhoneVerification'] != '' && $ciam_setting['smsTemplatePhoneVerification'] != 'default') {
+                    ?>
+                        commonOptions.smsTemplatePhoneVerification = '<?php echo $ciam_setting['smsTemplatePhoneVerification']?>';
+                    <?php
+                }
+                if (isset($ciam_setting['smsTemplateWelcome']) && $ciam_setting['smsTemplateWelcome'] != '' && $ciam_setting['smsTemplateWelcome'] != 'default') {
+                    ?>
+                        commonOptions.smsTemplateWelcome = '<?php echo $ciam_setting['smsTemplateWelcome']?>';
+                    <?php
+                }
+                if (isset($ciam_setting['instantLinkLoginEmailTemplate']) && $ciam_setting['instantLinkLoginEmailTemplate'] != '' && $ciam_setting['instantLinkLoginEmailTemplate'] != 'default') {
+                    ?>
+                        commonOptions.instantLinkLoginEmailTemplate = '<?php echo $ciam_setting['instantLinkLoginEmailTemplate']?>';
+                    <?php
+                }
+                if (isset($ciam_setting['smsTemplate2FA']) && $ciam_setting['smsTemplate2FA'] != '' && $ciam_setting['smsTemplate2FA'] != 'default') {
+                    ?>
+                        commonOptions.smsTemplate2FA = '<?php echo $ciam_setting['smsTemplate2FA']?>';
+                    <?php
+                }
             if (isset($ciam_setting['debug_enable']) && $ciam_setting['debug_enable'] == 1) {
                 ?>
                     commonOptions.debugMode = true;
@@ -104,158 +220,33 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                     commonOptions.displayPasswordStrength = true;
                 <?php
             }
-            if (isset($ciam_setting['pass-max-length']) && isset($ciam_setting['pass-min-length']) && !empty($ciam_setting['pass-max-length']) && !empty($ciam_setting['pass-min-length'])) {
-                ?>
-
-                    commonOptions.passwordLength = {min: "<?php echo $ciam_setting['pass-min-length']; ?>", max: "<?php echo $ciam_setting['pass-max-length'] ?>"};
-                <?php
-            }
+            
             if (isset($ciam_setting['terms_conditions']) && !empty($ciam_setting['terms_conditions'])) {
+                $string = $ciam_setting['terms_conditions'];
+                $string = str_replace(array('<script>', '</script>'), '', $string);
+                $string = trim(str_replace('"', "'", $string));
+                $terms = str_replace(array("\r\n", "\r", "\n"), " ", $string);
                 ?>
-                    commonOptions.termsAndConditionHtml = '<?php echo $ciam_setting['terms_conditions'] ?>';
+                    commonOptions.termsAndConditionHtml = '<?php echo $terms ?>';
                 <?php
             }
-            if (!isset($ciam_setting['captcha'])) { // this will work only if captcha is not enabled.
+           
                 try {
-                    new LoginRadiusSDK\Utility\Functions($ciam_credencials['apikey'], $ciam_credencials['secret']);
-                    $sott = new SOTT();
+                    
+                    $sottApi = new \LoginRadiusSDK\Utility\SOTT($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
+                    $sott = $sottApi->encrypt(20)->Sott;
                     ?>
-                        commonOptions.sott = '<?php echo urlencode($sott->encrypt(10, true)); ?>';
+                        commonOptions.sott = '<?php echo $sott?>';
                 <?php } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     ?>
                         console.log('Internal Error Occured to get SOTT!!');
                     <?php
                 }
-            }
+            
             ?>
                 commonOptions.verificationUrl = '<?php echo $verificationurl; ?>';
-            <?php if (isset($ciam_setting['phonelogin']) && $ciam_setting['phonelogin'] == "phone") { ?>
-                    commonOptions.phoneLogin = true;
-                <?php if (isset($ciam_setting['instantotplogin']) && !empty($ciam_setting['instantotplogin'])) { ?>
-                        commonOptions.instantOTPLogin = true;
-                    <?php
-                }
-                if (isset($ciam_setting['existPhoneNumber']) && !empty($ciam_setting['existPhoneNumber'])) {
-                    ?>
-                        commonOptions.existPhoneNumber = true;
-                    <?php
-                }
-                if (isset($ciam_setting['smsTemplatePhoneVerification']) && !empty($ciam_setting['smsTemplatePhoneVerification'])) {
-                    ?>
-                        commonOptions.smsTemplatePhoneVerification = "<?php echo $ciam_setting['smsTemplatePhoneVerification']; ?>";
-                    <?php
-                }
-                if (isset($ciam_setting['smsTemplateWelcome']) && !empty($ciam_setting['smsTemplateWelcome'])) {
-                    ?>
-                        commonOptions.smsTemplateWelcome = "<?php echo $ciam_setting['smsTemplateWelcome'] ?>";
-                    <?php
-                }
-            } elseif (isset($ciam_setting['authentication_flow_type']) && $ciam_setting['authentication_flow_type'] == "required") {
-                if (isset($ciam_setting['prompt_password']) && $ciam_setting['prompt_password'] == 1) {
-                    ?>
-                        commonOptions.promptPasswordOnSocialLogin = true;
-                    <?php
-                }
-                if (isset($ciam_setting['login_type']) && $ciam_setting['login_type'] == "username") {
-                    ?>
-                        commonOptions.usernameLogin = true;
-                    <?php
-                }
-                if (isset($ciam_setting['askEmailForUnverifiedProfileAlways']) && $ciam_setting['askEmailForUnverifiedProfileAlways'] == 1) {
-                    ?>
-                        commonOptions.askEmailForUnverifiedProfileAlways = true;
-                    <?php
-                }
-                if (isset($ciam_setting['loginOnEmailVerification']) && $ciam_setting['loginOnEmailVerification'] == 1) {
-                    ?>
-                        commonOptions.loginOnEmailVerification = true;
-                    <?php
-                }
-            } elseif (isset($ciam_setting['authentication_flow_type']) && $ciam_setting['authentication_flow_type'] == "optional") {
-                ?>
-                    commonOptions.optionalEmailVerification = true;
                 <?php
-                if (isset($ciam_setting['loginOnEmailVerification']) && $ciam_setting['loginOnEmailVerification'] == 1) {
-                    ?>
-                        commonOptions.loginOnEmailVerification = true;
-                    <?php
-                }
-                if (isset($ciam_setting['askEmailForUnverifiedProfileAlways']) && $ciam_setting['askEmailForUnverifiedProfileAlways'] == 1) {
-                    ?>
-                        commonOptions.askEmailForUnverifiedProfileAlways = true;
-                    <?php
-                }
-            } elseif (isset($ciam_setting['authentication_flow_type']) && $ciam_setting['authentication_flow_type'] == "disable") {
-                ?>
-                    commonOptions.disabledEmailVerification = true;
-                    commonOptions.promptPasswordOnSocialLogin = false;
-                    commonOptions.loginOnEmailVerification = false;
-                    commonOptions.askEmailForUnverifiedProfileAlways = false;
-                    commonOptions.usernameLogin = false;
-                <?php
-            }
-            if (isset($ciam_setting['captcha']) && $ciam_setting['captcha'] == 1) {
-                if ($ciam_setting['captchatype'] == "invisibleRecaptcha") {
-                    ?>
-                        commonOptions.invisibleRecaptcha = true;
-                <?php } elseif ($ciam_setting['captchatype'] == "v2Recaptcha") { ?>
-                        commonOptions.v2Recaptcha = true;
-                <?php } ?>
-                    commonOptions.v2RecaptchaSiteKey = '<?php echo (isset($ciam_setting['recaptchasitekey']) && !empty($ciam_setting['recaptchasitekey']) ? $ciam_setting['recaptchasitekey'] : '') ?>';
-                <?php
-            }
-            if (isset($ciam_setting['account-verification-template']) && !empty($ciam_setting['account-verification-template'])) {
-                ?>
-                    commonOptions.verificationEmailTemplate = '<?php echo $ciam_setting['account-verification-template'] ?>';
-                <?php
-            }
-            if (isset($ciam_setting['welcome-template']) && !empty($ciam_setting['welcome-template'])) {
-                ?>
-                    commonOptions.welcomeEmailTemplate = '<?php echo $ciam_setting['welcome-template'] ?>';
-                <?php
-            }
-            if (isset($ciam_setting['reset-template']) && !empty($ciam_setting['reset-template'])) {
-                ?>
-                    commonOptions.resetPasswordEmailTemplate = '<?php echo $ciam_setting['reset-template'] ?>';
-                <?php
-            }
-// 2 factor authentication
-            if (isset($ciam_setting['2fa']) && $ciam_setting['2fa'] == 1) {
-                if (isset($ciam_setting['authenticationtype']) && $ciam_setting['authenticationtype'] == 'twoFactorAuthentication') {
-                    ?>
-                        commonOptions.twoFactorAuthentication = true;
-                    <?php
-                    if (isset($ciam_setting['google_authenticator']) && $ciam_setting['google_authenticator'] == 1) {
-                        ?>
-                            commonOptions.googleAuthentication = true;
-                        <?php
-                    }
-                } elseif (isset($ciam_setting['authenticationtype']) && $ciam_setting['authenticationtype'] == 'optionalTwoFactorAuthentication') {
-                    ?>
-                        commonOptions.optionalTwoFactorAuthentication = true;
-                        commonOptions.showTwoFactorOnProfile = true;
-                        commonOptions.googleAuthentication = true;
-                    <?php
-                }
-                if (isset($ciam_setting['smsTemplate2FA']) && !empty($ciam_setting['smsTemplate2FA'])) {
-                    ?>
-                        commonOptions.smsTemplate2FA = "<?php echo $ciam_setting['smsTemplate2FA'] ?>";
-                    <?php
-                }
-            }
-            if (isset($ciam_setting['onclicksignin']) && $ciam_setting['onclicksignin'] == 1 && (!isset($ciam_setting['phonelogin']) || $ciam_setting['phonelogin'] != 'phone')) {
-                ?>
-                    commonOptions.instantLinkLogin = true;
-                <?php if (isset($ciam_setting['instantLinkLoginEmailTemplate']) && !empty($ciam_setting['instantLinkLoginEmailTemplate'])) { ?>
-                        commonOptions.instantLinkLoginEmailTemplate = '<?php echo $ciam_setting['instantLinkLoginEmailTemplate'] ?>';
-                    <?php
-                }
-            }
-            if (isset($ciam_setting['remember_me']) && $ciam_setting['remember_me'] == 1) {
-                ?>
-                    commonOptions.stayLogin = true;
-                <?php
-            }
+              
             if (isset($ciam_setting['autohidetime']) && !empty($ciam_setting['autohidetime'])) {
                 ?>
                     var ciamautohidetime = <?php echo (int)$ciam_setting['autohidetime'];?>;
@@ -279,13 +270,27 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                 }
             }
             ?>
-                var LRObject = new LoginRadiusV2(commonOptions);
-                LRObject.$hooks.call('setButtonsName', {
-                    instantLinkLoginButtonLabel: '<?php echo $ciam_setting["instantLinkLoginButtonLabel"] ?>'
-                });
-                LRObject.$hooks.register('endProcess', function (name) {
+                 if (typeof LoginRadiusV2 === 'undefined') {
+    	         var e = document.createElement('script');
+    	         e.src = '//auth.lrcontent2.com/v2/js/LoginRadiusV2.js';
+    	         e.type = 'text/javascript';
+                 document.getElementsByTagName("head")[0].appendChild(e);
+	         }
+	        var lrloadInterval = setInterval(function () {
+    	        if (typeof LoginRadiusV2 != 'undefined') {
+        	clearInterval(lrloadInterval);
+                 LRObject = new LoginRadiusV2(commonOptions);
+    	        }
+	        }, 1);
+                var lrObjectInterval = setInterval(function () {
+                if(typeof LRObject !== 'undefined')
+                {
+                    clearInterval(lrObjectInterval);
+                    LRObject.$hooks.register('endProcess', function (name) {
                     jQuery("#ciam_loading_gif").hide();
                 });
+                }
+                }, 1);
                 jQuery(document).ready(function () {
                 <?php 
                 if(!is_super_admin()){?>

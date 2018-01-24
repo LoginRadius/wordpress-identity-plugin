@@ -30,14 +30,16 @@ h2.nav-tab-wrapper, h3.nav-tab-wrapper {
 Inputs
 ===============================*/
 .ciam-row-field {
-    margin-left: 280px;
+    margin-left: 300px;
     width: 350px !important;
 }
 .ciam-row .ciam-row .ciam-row-field {
     margin-left: 220px;
     width: 350px !important;
 }
-
+#customemailtemplates .ciam-row-field {
+        margin-bottom: 15px;
+}
 
 
 #lr_options_tabs {
@@ -648,6 +650,9 @@ span[class*="lr-img-icon-"].user-reg:after {
 
     width:33%;display:inline-block;
 }
+.advance-template .ciam-row-field {
+    margin-left: 0px !important;
+}
 
 textarea.ciam-shortcode {
     min-height: 0px !important;
@@ -682,11 +687,11 @@ textarea.ciam-shortcode {
     padding-left: 122px;
 }
 #changepassword-container #changepassword-password-strength-meter{
-    width: 489px;
-    padding-left: 124px;
+    width: 192px;
+    margin-left: 124px;
 }
 #changepassword-container #changepassword-password-strength-text{
-    padding-left: 124px;
+    margin-left: 124px;
 }
 #password_msg_success{
     padding-left:162px;
@@ -705,12 +710,14 @@ textarea.ciam-shortcode {
     float:left;    
 }
 #resetpassword-container .loginradius--form-element-content label {
-    width:129px;
     padding :10px;
     float:left;   
 } 
 
 .loginradius-submit{
+    margin-top:5px;
+}
+.lremail-submit{
     margin-top:5px;
 }
 .ciam-email{
@@ -738,6 +745,7 @@ textarea.ciam-shortcode {
 .removeemail-container label{
     width:64px;
     float:left;  
+    line-height: 40px;
 }
 #pass1-text, #pass1{
     visibility:hidden !important;  
@@ -794,18 +802,18 @@ textarea.ciam-shortcode {
     height:auto;
     border-radius:6px;
 }
-#addemail-container .content-loginradius-emailid, .content-loginradius-type{
+#addemail-container .content-lremail-emailid, .content-lremail-type{
     padding-left:25px;
     padding-bottom:20px;
     font-weight: bold;
 }
 
 .removeemail-container .content-loginradius-emailid{
-    padding-left:25px;
+    padding-left:0;
     padding-bottom:20px;
     font-weight: bold;
 }
-#loginradius-addemail-emailid,#loginradius-addemail-type,#loginradius-removeemail-emailid{
+#lremail-addemail-emailid,#lremail-addemail-type,#loginradius-removeemail-emailid{
     width:80%;
     height:30px;
     border-radius:5px;
@@ -900,6 +908,8 @@ textarea.ciam-shortcode {
 #loginradius-button-resendotp{
     padding:14px;
     margin-left:10px;
+    margin-right: 10px;
+
 }
 #updatephone-container #loginradius-button-resendotp{
     padding:4px;
@@ -913,19 +923,28 @@ textarea.ciam-shortcode {
     padding:14px !important;
     margin-top:5px;
 }
-#ciam-autopage, #google_authenticator, #backup_code, #ciam-oneclicksignin,#ciam-loginOnEmailVerification,#prompt_password,#ciam-loginOnEmailVerification-optional{
+#ciam-ciam_autopage, #google_authenticator, #backup_code, #ciam-oneclicksignin,#ciam-loginOnEmailVerification,#prompt_password,#ciam-loginOnEmailVerification-optional{
     display : none !important;
 }
 #resetpassword-container #resetpassword-password-strength-meter{
-    width: 524px;
+    width: 192px;
+}
+#forgotpassword-container #resetpassword-password-strength-meter{
+    width: 192px;
 }
 #registration-container #registration-password-strength-meter{
     width: 192px;
+}
+#socialRegistration-password-strength-meter{
+     width: 192px;
 }
 #authdiv_error{
     color: #FF0000;
 }
 #authdiv_success{
+    color: #008000;
+}
+#authphonediv_success{
     color: #008000;
 }
 #loginradius-submit-login,.linksignin-loginradius-Instant{
@@ -957,7 +976,8 @@ textarea.ciam-shortcode {
 #password-limit,
 .copyMessage,
 #hideoneclickdiv,
-#requireflow{
+#requireflow,
+#hideotpdiv{
     display:none;
 }
 
@@ -967,11 +987,50 @@ textarea.ciam-shortcode {
     min-width: 350px;
     margin: 5px 0px;
 }
+.lremail--form-element-content input[type=text]{
+    min-width: 350px;
+    margin: 5px 0px;
+}
 .loginradius--form-element-content {
     width: 100%;
     clear: both;
 }
-
+.popup-inner .lremail-submit{
+    margin-left: 25px !important;
+    margin-bottom: 25px !important;
+}
+    .remove-popup-inner input.loginradius-submit,
+    .popup-inner .lremail-submit,#changepassword-container .submit-loginradius-submit{
+    vertical-align: baseline;
+    background: #0085ba;
+    border-color: #0073aa #006799 #006799;
+    box-shadow: 0 1px 0 #006799;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 26px;
+    height: 28px;
+    margin: 0;
+    padding: 0 10px 1px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    }
+    #changepassword-container .submit-loginradius-submit{
+    margin-left: 10px;
+    margin-bottom: 15px;
+    }
+    #addemail-container .lremail-validation-message{
+        color: #FF0000;
+    }  
+    
 /* media query start from here */
 @media (max-device-width: 320px) {
     .loginradius-linksignin{
@@ -988,5 +1047,6 @@ textarea.ciam-shortcode {
     #loginradius-button-changenumber{
         padding:14px;
         margin-top:5px;
+    
     }
 }
