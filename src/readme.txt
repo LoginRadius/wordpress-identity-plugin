@@ -2,7 +2,7 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 4.9.1
+Tested up to: 4.9.2
 Stable tag: 3.2.0
 License: GPLv2 or later
 
@@ -15,11 +15,20 @@ License: GPLv2 or later
 
 == Change Log ==
 = 3.2.0 =
-1) Implemented Cloud API Functionality
-2) Removed Advance options directly handled by Cloud API
-3) Added Fallback JS
-4) Added Email template api
-5) Removed Google captcha option from plugin settings, need to change from LoginRadius User Dashboard 
+
+1) Implemented Cloud API Functionality.
+
+2) Removed most of advanced options as now they can be configured from user dashboard.
+
+3) Added Fallback JS.
+
+4) Added Email template API.
+
+5) Removed Google captcha option from plugin settings, need to change from LoginRadius User Dashboard.
+
+
+Notes: Make sure to configure google captcha settings from user dashboard if upgrading to this plugin from previous versions.
+
 
 = 3.1.2 =
 * Minor Bug Fix.
