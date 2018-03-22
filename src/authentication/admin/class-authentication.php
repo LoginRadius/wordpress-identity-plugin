@@ -25,7 +25,6 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * Init Section To call Wordpress Hooks
          */
         function init() {
-            
             add_action('delete_user', array($this, 'delete_user'));
             
             if (is_multisite()) {

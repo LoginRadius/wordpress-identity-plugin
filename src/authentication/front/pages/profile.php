@@ -33,14 +33,17 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 add_action('edit_user_profile', array($this, 'profiletwofactorauthentication'));
                 add_action('admin_head', array($this, 'TwoFAonprofile'));
                     
-                    
-               add_action('show_user_profile', array($this, 'profilephoneuupdate'));
-                add_action('admin_head', array($this, 'profilephonedisplay'));
+               add_action('admin_head', array($this, 'profilephonedisplay'));
                add_action('admin_head', array($this, 'profilephoneupdatejs'));
+               
+               add_action('admin_head', array($this, 'extra_email_fields'));
+               add_action('show_user_profile', array($this, 'profilephoneuupdate'));
+               //add_action('admin_head', array($this, 'extra_email_fields'));
+                
         
                add_action('edit_user_profile', array($this, 'accountlinking_custom_div'));
             
-               add_action('admin_head', array($this, 'extra_email_fields'));
+               
           
         }
         
@@ -52,7 +55,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
            
             if (!empty($accesstoken && $pagenow === "profile.php")) {
-                $phoneid = '--';
+            $phoneid = '--';
                 $userAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
                 try{
                       $userpro = $userAPI->getProfile($accesstoken);
@@ -65,8 +68,9 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 $phone_html = '<tr class="phoneid_table" style="display: none"><th>Phone Number</th><td>'. $phoneid.'</td></tr>';
                 ?>
                 <script>
+                    var phoneid = "<?php echo $phoneid?>";
                     jQuery(document).ready(function() {
-            field = '<?php echo $phone_html;?>'
+            field = '<?php echo $phone_html;?>';
             jQuery(field).insertBefore('.user-url-wrap');
         });
                     </script>
@@ -216,7 +220,6 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
                 $current_user = wp_get_current_user(); // getting the current user info....
                 $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
-               
 
                 if (empty($ciam_uid)) {
                     try {

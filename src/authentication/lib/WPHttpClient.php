@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 3.0.1
+ * @version : 3.2.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -37,13 +37,9 @@ class WPHttpClient implements IHttpClient {
         $request_url .= $path;
         
         if ($query_array !== false) { 
-           if (isset($options['authentication']) && $options['authentication'] == 'headsecure') {
-                $options = array_merge($options, Functions::authentication(array(), $options['authentication']));
-                $query_array = isset($options['authentication']) ? $query_array : $query_array;
-            }
-            else {
-                $query_array = isset($options['authentication']) ? Functions::authentication($query_array, $options['authentication']) : $query_array;
-            }
+           
+            $secure = "secret";
+            $query_array = (isset($options['authentication']) && ($options['authentication'] == false)) ? $query_array : Functions::authentication($query_array,$secure);
            
             if (strpos($request_url, "?") === false) {
                 $request_url .= "?";

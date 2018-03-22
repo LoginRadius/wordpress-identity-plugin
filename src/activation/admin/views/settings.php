@@ -23,7 +23,21 @@ if (!class_exists('CIAM_Activation_Settings')) {
         public function render_options_page() {
 
             global $ciam_credencials;
-
+            if(isset($ciam_credencials['apikey']) && !empty($ciam_credencials['apikey']) && isset($ciam_credencials['secret']) && !empty($ciam_credencials['secret']))
+                {
+            $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+            try {
+                $config = $cloudAPI->getConfigurationList();
+                if($config->IsPhoneLogin)
+                {
+                     echo '<div class="notice notice-warning is-dismissible">
+             <p>If user is registering using only PhoneID then a random Email Id will be generated in the format "PhoneID@yourdomain.com"</p>
+         </div>';
+                }
+            } catch (\LoginRadiusSDK\LoginRadiusException $e) {
+                  error_log($e->getErrorResponse()->Description);
+            }
+                }
             ?>
 
             <div class="wrap active-wrap cf">

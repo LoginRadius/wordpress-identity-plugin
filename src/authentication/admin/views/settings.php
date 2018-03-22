@@ -370,7 +370,7 @@ if (!class_exists('ciam_authentication_settings')) {
                    <?php echo $this->checkbox($ciam_setting , 'existPhoneNumber' , 'ciam-toggle');?>
                 <label class="ciam-show-toggle" for="ciam-existPhoneNumber">
                
-                  <?php _e('Check phone number exist or not?'); ?>
+                  <?php _e('Check Phone number exist or not?'); ?>
                   <span class="ciam-tooltip" data-title="<?php _e('Turn on, if you want to enable Phone Exist functionality', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </label>
                       <?php
                  if(isset($response['SMSTemplates']))
@@ -379,8 +379,8 @@ if (!class_exists('ciam_authentication_settings')) {
               <div id="customemailtemplates">
               <div>
                   <span class="ciam_property_title">
-                <?php _e('Use custom phone verification template', 'ciam-plugin-slug'); ?>
-                <span class="ciam-tooltip" id="custom-phone-temp" data-title="<?php _e('Enter the name of the custom phone verification template which is created in the LoginRadius Dashboard', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </span>
+                <?php _e('Use custom Phone verification template', 'ciam-plugin-slug'); ?>
+                <span class="ciam-tooltip" id="custom-phone-temp" data-title="<?php _e('Enter the name of the custom Phone verification template which is created in the LoginRadius Dashboard', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </span>
                 <span class="" for="custom-phone-template">
                     <?php echo $this->select_template($response['SMSTemplates']['Verification'], $ciam_setting , 'smsTemplatePhoneVerification');?>
 
@@ -388,11 +388,27 @@ if (!class_exists('ciam_authentication_settings')) {
               </div>
               <div>
                   <span class="ciam_property_title">
-                <?php _e('Use custom phone welcome template', 'ciam-plugin-slug'); ?>
-                <span class="ciam-tooltip" id="custom-phone-temp" data-title="<?php _e('Enter the name of the custom phone welcome template which is created in the LoginRadius Dashboard', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </span>
+                <?php _e('Use custom Phone welcome template', 'ciam-plugin-slug'); ?>
+                <span class="ciam-tooltip" id="custom-phone-temp" data-title="<?php _e('Enter the name of the custom Phone welcome template which is created in the LoginRadius Dashboard', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </span>
                 <span class="" for="custom-phone-welcome-template">
                         <?php echo $this->select_template($response['SMSTemplates']['Welcome'], $ciam_setting , 'smsTemplateWelcome');?>
 
+                </span>
+              </div>
+                  <div>
+                  <span class="ciam_property_title">
+                <?php _e('Use custom Password Reset SMS template', 'ciam-plugin-slug'); ?>
+                <span class="ciam-tooltip" id="custom-phone-temp" data-title="<?php _e('Enter the name of the custom SMS Password Reset template which is created in the LoginRadius Dashboard', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </span>
+                <span class="" for="custom-phone-reset-template">
+                        <?php echo $this->select_template($response['SMSTemplates']['ResetPassword'], $ciam_setting , 'smsTemplateReset');?>
+                </span>
+              </div>
+                  <div>
+                  <span class="ciam_property_title">
+                <?php _e('Use custom Change Phone Number template', 'ciam-plugin-slug'); ?>
+                <span class="ciam-tooltip" id="custom-phone-temp" data-title="<?php _e('Enter the name of the custom Change Phone Number template which is created in the LoginRadius Dashboard', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </span>
+                <span class="" for="custom-phone-change-template">
+                        <?php echo $this->select_template($response['SMSTemplates']['ChangePhoneNo'], $ciam_setting , 'smsTemplateChangePhoneNo');?>
                 </span>
               </div>
              </div>
@@ -521,7 +537,7 @@ if (!class_exists('ciam_authentication_settings')) {
                 <?php _e('Notification timeout settings', 'ciam-plugin-slug'); ?>
                 <span class="ciam-tooltip " id="autohidetime-temp" data-title="<?php _e('Enter the duration (in seconds) to hide response message.', 'ciam-plugin-slug'); ?>"> <span class="dashicons dashicons-editor-help"></span> </span> </h3>
               <label>
-                <input placeholder="Time In Seconds" type="number" class="ciam-row-field custom-tooltip" name="ciam_authentication_settings[autohidetime]" id="autohidetime" value="<?php echo (isset($ciam_setting['autohidetime']) && !empty($ciam_setting['autohidetime'])) ? $ciam_setting['autohidetime'] : '' ?>" />
+                <input placeholder="Time In Seconds" type="number" class="ciam-row-field custom-tooltip" name="ciam_authentication_settings[autohidetime]" id="autohidetime" value="<?php echo (isset($ciam_setting['autohidetime']) && !empty($ciam_setting['autohidetime'])) ? $ciam_setting['autohidetime'] : '' ?>" min="0"/>
               </label>
             </div>
                

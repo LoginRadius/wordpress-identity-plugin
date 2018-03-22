@@ -97,18 +97,16 @@ if (!class_exists('CIAM_Front_Sso')) {
          */
         public function load_sso_variables() {
             global $ciam_setting;
-           
             ?>
             <script>
                 jQuery(document).ready(function () {
                   
-            <?php if (!is_user_logged_in()) { 
+            <?php 
+            if (!is_user_logged_in()) {
                 $server = (isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on') ? 'https' : 'http';
                 $actual_link = "$server://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-                
-                $login_url = get_permalink($ciam_setting['login_page_id']);
-                $registration_url = get_permalink($ciam_setting['registration_page_id']); 
-              
+                $login_url = isset($ciam_setting['login_page_id']) && !empty($ciam_setting['login_page_id']) ? get_permalink($ciam_setting['login_page_id']) : '';
+                $registration_url = isset($ciam_setting['registration_page_id']) && !empty($ciam_setting['registration_page_id']) ? get_permalink($ciam_setting['registration_page_id']) : ''; 
                  if(($actual_link === $registration_url) || ($actual_link === $login_url)){
                 ?>
                         // If found activated session, goto the callback function
@@ -137,8 +135,7 @@ if (!class_exists('CIAM_Front_Sso')) {
                  <?php } } else {  ?>
                         var check_options = {};
                         check_options.onError = function (response) {
-                           
-                            if(response != ''){ 
+                            if(typeof response != 'undefined' && response != ''){
                             if("<?php echo get_user_meta(get_current_user_id(), 'accesstoken',true);?>" != response){
                                 // On Error
                             // If user is not log in then this function will execute.

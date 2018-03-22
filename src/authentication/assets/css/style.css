@@ -30,7 +30,7 @@ h2.nav-tab-wrapper, h3.nav-tab-wrapper {
 Inputs
 ===============================*/
 .ciam-row-field {
-    margin-left: 300px;
+    margin-left: 325px;
     width: 350px !important;
 }
 .ciam-row .ciam-row .ciam-row-field {
@@ -1030,6 +1030,37 @@ textarea.ciam-shortcode {
     #addemail-container .lremail-validation-message{
         color: #FF0000;
     }  
+    
+    .lr_loading_screen_spinner {
+    height: 52px;
+    width: 52px;
+    margin: 0 auto;
+    display: block;
+    animation: lr_loading_screen_animation_spinning .8s linear infinite;
+}
+
+.lr_loading_screen {
+    background: rgba(0,0,0,.5);
+    height: 100vh;
+    position: relative;
+    z-index: 10000;
+}
+
+.lr_loading_screen_center {
+    left: 50%;
+    top: 50%;
+    width: 500px;
+}
+
+@keyframes lr_loading_screen_animation_spinning {
+    0% {
+        transform: rotate(0)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
     
 /* media query start from here */
 @media (max-device-width: 320px) {

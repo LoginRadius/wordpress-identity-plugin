@@ -1,5 +1,6 @@
 /* global LRObject */
 var form_name = "";
+var phoneid = "";
 function forgotpass_hook(redirecturl) {
     var forgotpassword_options = {};
     forgotpassword_options.container = "forgotpassword-container";
@@ -11,8 +12,7 @@ function forgotpass_hook(redirecturl) {
                     clearInterval(forgot_phone_option);
                     if(typeof response.Data !== 'undefined')
         {
-            ciamfunctions.message("OTP has been sent to your Phone No.", "#forgotpasswordmessage", "success");
-              
+            ciamfunctions.message("OTP has been sent to your Phone No.", "#forgotpasswordmessage", "success");  
         }
         else if(form_name == 'resetPassword')
         {
@@ -141,6 +141,10 @@ function updatephoneonprofile() {
             jQuery('.profilephoneuupdate').show();
             jQuery('.phoneid_table').show();
           LRObject.init("updatePhone", updatephone_options);
+          if(phoneid == '--')
+            {
+                jQuery('#updatephone-container #loginradius-submit-update').val('Add');
+            }
       }
       }
        }, 1);
@@ -150,7 +154,11 @@ function login_hook(url) {
     var login_options = {};
     login_options.onSuccess = function (response) {
         if (response.IsPosted == true) {
-            ciamfunctions.message("Verification Link has been sent", "#loginmessage", "success");
+             if (jQuery('#loginradius-login-username').length !== 0) {
+                 ciamfunctions.message("An email has been sent to " + jQuery("#loginradius-login-username").val() + ".", "#loginmessage", "success");
+            } else if(jQuery('#loginradius-login-emailid').length !== 0) {
+                ciamfunctions.message("An email has been sent to " + jQuery("#loginradius-login-emailid").val() + ".", "#loginmessage", "success");
+            }
             setTimeout(function () {
                 ciamfunctions.redirect(response.access_token, 'token', url);
             }, 500);

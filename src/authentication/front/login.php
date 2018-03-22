@@ -34,6 +34,18 @@ if (!class_exists('CIAM_Authentication_Login')) {
         }
         
         /*
+         * function to generate random email id
+         */
+        public function random_id_generation($email_name)
+        {
+           $base_root = site_url();
+    $email_name = str_replace(array("+"," "), "", $email_name);
+    $email_domain = str_replace(array("http://","https://"), "", $base_root);
+    $email = $email_name . '@' . $email_domain.'.com';
+    return $email;
+        }
+        
+        /*
          * handle token when user tries to login
          */
 
@@ -105,8 +117,26 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                                 }
                                             }
                                         } else {
-                                            do_action('ciam_sso_logout');
-                                            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "Email Field is empty");
+                                            $email = $this->random_id_generation($userProfileData->PhoneId);
+                                             $user_id = wp_insert_user($loginHelper->register($email, $userProfileData));
+                                             if (isset($user_id->errors['existing_user_login'][0]) && $user_id->errors['existing_user_login'][0] == "Sorry, that username already exists!") { 
+                                                    $userarr = $loginHelper->register($email, $userProfileData);
+
+                                                    $userarr['user_login'] = $loginHelper->register($email, $userProfileData)['user_login'] . rand(10, 100);
+                                                   
+                                                    $user_id = wp_insert_user($userarr);
+                                                    
+
+                                                }
+
+                                                if (!is_wp_error($user_id)) {
+                                                    $loginHelper->linking($user_id, $userProfileData);
+                                                    //allow Login
+                                                    $loginHelper->allow_login($user_id, $userProfileData, true);
+                                                } else {
+                                                    do_action('ciam_sso_logout');
+                                                    add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
+                                                }
                                         }
                                     }
                                 }

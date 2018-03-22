@@ -2,8 +2,8 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 4.9.2
-Stable tag: 3.2.0
+Tested up to: 4.9.4
+Stable tag: 3.2.1
 License: GPLv2 or later
 
 
@@ -14,21 +14,17 @@ License: GPLv2 or later
 * Log Generation Functionality
 
 == Change Log ==
+= 3.2.1 =
+1) Added Change phone no and reset password SMS template.
+2) Auto Email Id generation on Phone registration.
+3) Unregistered user on LR allow login with default wordpress Login Form. 
+
 = 3.2.0 =
-
-1) Implemented Cloud API Functionality.
-
-2) Removed most of advanced options as now they can be configured from user dashboard.
-
-3) Added Fallback JS.
-
-4) Added Email template API.
-
-5) Removed Google captcha option from plugin settings, need to change from LoginRadius User Dashboard.
-
-
-Notes: Make sure to configure google captcha settings from user dashboard if upgrading to this plugin from previous versions.
-
+1) Implemented Cloud API Functionality
+2) Removed Advance options directly handled by Cloud API
+3) Added Fallback JS
+4) Added Email template api
+5) Removed Google captcha option from plugin settings, need to change from LoginRadius User Dashboard 
 
 = 3.1.2 =
 * Minor Bug Fix.

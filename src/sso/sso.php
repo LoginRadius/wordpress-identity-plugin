@@ -33,6 +33,10 @@ if (!class_exists('CIAM_SSO')) {
             if (isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1') {
                 if (!is_super_admin()) {
                     $is_enable = true;
+                    $accessToken = get_user_meta(get_current_user_id(), 'accesstoken', true);
+                    if (empty($accessToken)) {
+                        $is_enable = false;
+                    }
                 }
             }
             $this->load_dependencies($is_enable);

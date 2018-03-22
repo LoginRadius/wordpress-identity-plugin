@@ -200,6 +200,16 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                         commonOptions.smsTemplateWelcome = '<?php echo $ciam_setting['smsTemplateWelcome']?>';
                     <?php
                 }
+                if (isset($ciam_setting['smsTemplateReset']) && $ciam_setting['smsTemplateReset'] != '' && $ciam_setting['smsTemplateReset'] != 'default') {
+                    ?>
+                        commonOptions.smsTemplateForgot = '<?php echo $ciam_setting['smsTemplateReset']?>';
+                    <?php
+                }
+                if (isset($ciam_setting['smsTemplateChangePhoneNo']) && $ciam_setting['smsTemplateChangePhoneNo'] != '' && $ciam_setting['smsTemplateChangePhoneNo'] != 'default') {
+                    ?>
+                        commonOptions.smsTemplateUpdatePhone = '<?php echo $ciam_setting['smsTemplateChangePhoneNo']?>';
+                    <?php
+                }
                 if (isset($ciam_setting['instantLinkLoginEmailTemplate']) && $ciam_setting['instantLinkLoginEmailTemplate'] != '' && $ciam_setting['instantLinkLoginEmailTemplate'] != 'default') {
                     ?>
                         commonOptions.instantLinkLoginEmailTemplate = '<?php echo $ciam_setting['instantLinkLoginEmailTemplate']?>';
@@ -234,7 +244,14 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                 try {
                     
                     $sottApi = new \LoginRadiusSDK\Utility\SOTT($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
-                    $sott = $sottApi->encrypt(20)->Sott;
+					$sott_encrypt = $sottApi->encrypt(20);
+					if(isset($sott_encrypt->Sott) && !empty($sott_encrypt->Sott))
+					{
+						$sott = $sott_encrypt->Sott;
+					}
+					else{
+						$sott = '';
+					}
                     ?>
                         commonOptions.sott = '<?php echo $sott?>';
                 <?php } catch (\LoginRadiusSDK\LoginRadiusException $e) {
