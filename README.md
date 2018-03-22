@@ -1,7 +1,7 @@
 # LoginRadius Wordpress Identity Plugin
 
 
-![Home Image](https://d2lvlj7xfpldmj.cloudfront.net/support/github/banner-1544x500.png)
+![Home Image](https://apidocs.lrcontent.com/images/banner-772x250_135915ab36ee1abb193.32182363.png)
 
 ## Introduction ##
 
