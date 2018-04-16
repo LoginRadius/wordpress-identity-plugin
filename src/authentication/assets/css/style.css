@@ -658,9 +658,14 @@ textarea.ciam-shortcode {
     min-height: 0px !important;
 }
 /* 2014 theme css start */
-#changepassword-container .loginradius--form-element-content label {
+#changepassword-container .loginradius--form-element-content label,#setpassword-container .loginradius--form-element-content label {
     width: 100px;
     padding: 5px;
+}
+#setpassword-container .loginradius--form-element-content input {
+    width: 74%;
+    height: 30px;
+    border-radius: 5px;
 }
 #login-container .loginradius--form-element-content label {
     width: 230px;
@@ -746,9 +751,6 @@ textarea.ciam-shortcode {
     width:64px;
     float:left;  
     line-height: 40px;
-}
-#pass1-text, #pass1{
-    visibility:hidden !important;  
 }
 .popup-outer,.popup-outer-password{
     background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
@@ -1000,7 +1002,7 @@ textarea.ciam-shortcode {
     margin-bottom: 25px !important;
 }
     .remove-popup-inner input.loginradius-submit,
-    .popup-inner .lremail-submit,#changepassword-container .submit-loginradius-submit{
+    .popup-inner .lremail-submit,#changepassword-container .submit-loginradius-submit,#setpassword-container #loginradius-newpwd-submit-submit{
     vertical-align: baseline;
     background: #0085ba;
     border-color: #0073aa #006799 #006799;
@@ -1023,13 +1025,19 @@ textarea.ciam-shortcode {
     white-space: nowrap;
     box-sizing: border-box;
     }
-    #changepassword-container .submit-loginradius-submit{
+    #changepassword-container .submit-loginradius-submit,#setpassword-container #loginradius-newpwd-submit-submit{
     margin-left: 10px;
     margin-bottom: 15px;
     }
     #addemail-container .lremail-validation-message{
         color: #FF0000;
-    }  
+    } 
+    #loginradius-setpassword-newpassword{
+        margin-left: 54px;
+    }
+    #loginradius-setpassword-confirmnewpassword{
+            margin-left: 2px;
+    }
     
     .lr_loading_screen_spinner {
     height: 52px;

@@ -254,7 +254,7 @@ var lrObjectInterval8 = setInterval(function () {
                } else if (response.access_token) {
                        ciamfunctions.redirect(response.access_token, 'token', url);
                    }
-                    else if(response.IsPosted && typeof response.Data !== 'undefined')
+                    else if(response.IsPosted && typeof response.Data !== 'undefined' && typeof response.Data.AccountSid !== 'undefined')
                    {
                         jQuery('#loginradius-button-resendotp').blur();
                         ciamfunctions.message("An OTP has been sent.", "#registration_message", "success");
@@ -292,6 +292,7 @@ var lrObjectInterval8 = setInterval(function () {
                 if(typeof LRObject !== 'undefined')
                 {
                     clearInterval(lrObjectInterval9);
+
     LRObject.init("registration", registration_options);
      }
  }, 1);
@@ -341,7 +342,6 @@ function social(url) {
      
     var sl_options = {};
     sl_options.onSuccess = function (response) {
-        
          if (response.IsPosted == true && typeof response.Data.AccountSid === 'undefined') {
             ciamfunctions.message("Please verify you email", "#loginmessage", "success");
             setTimeout(function () {
@@ -412,6 +412,23 @@ function changepasswordform() {
         });
     });
 }
+ function setpasswordform()
+ {
+     jQuery(document).ready(function () {
+        jQuery("#open_password_popup").on('click', function () {
+            jQuery('.popup-outer-password').fadeIn('slow');
+        });
+
+        jQuery("#close_password_popup").on('click', function () {
+            jQuery('.popup-outer-password').fadeOut('slow');
+        });
+        /* closing the popup on send button click */
+        jQuery("#loginradius-submit-send").on('click', function () {
+            jQuery('.popup-outer-password').fadeOut('slow');
+        });
+    });
+ }
+ 
     /* end */
     jQuery(document).ready(function () {
        
@@ -620,6 +637,7 @@ function loadingimg() {
            ciamfunctions.message("An OTP has been sent.", "#loginmessage", "success");
        }
     });
+    
      
     LRObject.$hooks.register('afterFormRender', function (name) {
         if (name === "socialRegistration") {
@@ -659,6 +677,7 @@ jQuery(document).ready(function () {
             return false;
         }
     });
+    
 });
 
 /* Anonymous Function for Message in Front section */

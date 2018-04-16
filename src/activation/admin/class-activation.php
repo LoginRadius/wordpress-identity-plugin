@@ -146,43 +146,43 @@ if (!class_exists('CIAM_Activation_Admin')) {
                     if(!isset($config_api['apikey']) || !isset($config_api['secret']) || $config_api['apikey'] != $settings['apikey'] || $config_api['secret'] != $settings['secret'] || !isset($config_api['update_plugin']) || $config_api['update_plugin'] == 'false')
                     {
                     
-                    $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($settings['apikey'], $settings['secret']);
+                    $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($settings['apikey'], $settings['secret'], array('output_format' => 'json'));
                     
-                    $config = json_decode($cloudAPI->getConfigurationList(), TRUE);
+                    $config = $cloudAPI->getConfigurationList();
                     $ciam_settings = get_option('ciam_authentication_settings');
                     
                     $config_options = array();
-                    if(isset($config['AppName']))
+                    if(isset($config->AppName))
                     {
-                        $settings['sitename'] = $config['AppName'];
+                        $settings['sitename'] = $config->AppName;
                     }
-                    if(isset($config['IsUserNameLogin']) && !isset($ciam_settings['login_type']))
+                    if(isset($config->IsUserNameLogin) && !isset($ciam_settings['login_type']))
                     {
-                    $config_options['login_type'] =  $config['IsUserNameLogin'];
+                    $config_options['login_type'] =  $config->IsUserNameLogin;
                     }
-                    if(isset($config['AskEmailIdForUnverifiedUserLogin']) && !isset($ciam_settings['askEmailForUnverifiedProfileAlways']))
+                    if(isset($config->AskEmailIdForUnverifiedUserLogin) && !isset($ciam_settings['askEmailForUnverifiedProfileAlways']))
                     {
-                    $config_options['askEmailForUnverifiedProfileAlways'] =  $config['AskEmailIdForUnverifiedUserLogin'];
+                    $config_options['askEmailForUnverifiedProfileAlways'] =  $config->AskEmailIdForUnverifiedUserLogin;
                     }
-                    if(isset($config['AskRequiredFieldsOnTraditionalLogin']) && !isset($ciam_settings['AskRequiredFieldsOnTraditionalLogin']))
+                    if(isset($config->AskRequiredFieldsOnTraditionalLogin) && !isset($ciam_settings['AskRequiredFieldsOnTraditionalLogin']))
                     {
-                    $config_options['AskRequiredFieldsOnTraditionalLogin'] =  $config['AskRequiredFieldsOnTraditionalLogin'];
+                    $config_options['AskRequiredFieldsOnTraditionalLogin'] =  $config->AskRequiredFieldsOnTraditionalLogin;
                     }
-                    if(isset($config['AskPasswordOnSocialLogin']) && !isset($ciam_settings['prompt_password']))
+                    if(isset($config->AskPasswordOnSocialLogin) && !isset($ciam_settings['prompt_password']))
                     {
-                    $config_options['prompt_password'] =  $config['AskPasswordOnSocialLogin'];
+                    $config_options['prompt_password'] =  $config->AskPasswordOnSocialLogin;
                     }
-                    if(isset($config['CheckPhoneNoAvailabilityOnRegistration']) && !isset($ciam_settings['existPhoneNumber']))
+                    if(isset($config->CheckPhoneNoAvailabilityOnRegistration) && !isset($ciam_settings['existPhoneNumber']))
                     {
-                    $config_options['existPhoneNumber'] =  $config['CheckPhoneNoAvailabilityOnRegistration'];
+                    $config_options['existPhoneNumber'] =  $config->CheckPhoneNoAvailabilityOnRegistration;
                     }
-                    if(isset($config['IsInstantSignin']['EmailLink']) && !isset($ciam_settings['onclicksignin']))
+                    if(isset($config->IsInstantSignin->EmailLink) && !isset($ciam_settings['onclicksignin']))
                     {
-                    $config_options['onclicksignin'] =  $config['IsInstantSignin']['EmailLink'];
+                    $config_options['onclicksignin'] =  $config->IsInstantSignin->EmailLink;
                     }
-                    if(isset($config['IsInstantSignin']['SmsOtp']) && !isset($ciam_settings['instantotplogin']))
+                    if(isset($config->IsInstantSignin->SmsOtp) && !isset($ciam_settings['instantotplogin']))
                     {
-                    $config_options['instantotplogin'] =  $config['IsInstantSignin']['SmsOtp'];
+                    $config_options['instantotplogin'] =  $config->IsInstantSignin->SmsOtp;
                     }
                    if(get_option('ciam_authentication_settings'))
                    {

@@ -39,8 +39,14 @@ class WPHttpClient implements IHttpClient {
         if ($query_array !== false) { 
            
             $secure = "secret";
-            $query_array = (isset($options['authentication']) && ($options['authentication'] == false)) ? $query_array : Functions::authentication($query_array,$secure);
-           
+            if (isset($options['authentication']) && $options['authentication'] == 'headsecure') {
+                $options = array_merge($options, Functions::authentication(array(), $options['authentication']));
+                $query_array = isset($options['authentication']) ? $query_array : $query_array;
+            }
+            else {
+                $query_array = isset($options['authentication']) ? Functions::authentication($query_array, $options['authentication']) : $query_array;
+            }
+           // $query_array = (isset($options['authentication']) && ($options['authentication'] == false)) ? $query_array : Functions::authentication($query_array,$secure);
             if (strpos($request_url, "?") === false) {
                 $request_url .= "?";
             } else {
@@ -59,10 +65,10 @@ class WPHttpClient implements IHttpClient {
         $apikey_header_content = isset($options['X-LoginRadius-ApiKey']) ? trim($options['X-LoginRadius-ApiKey']) : '';
         $secret_header_content = isset($options['X-LoginRadius-ApiSecret']) ? trim($options['X-LoginRadius-ApiSecret']) : '';
         
-        
-        
-        
-            $argument['headers'] = array('content-type'=>'application/' . $content_type);
+            $argument['headers'] = array('content-type'=>'application/' . $content_type,
+                'X-LoginRadius-ApiKey'=>$apikey_header_content,
+                'X-LoginRadius-ApiSecret'=>$secret_header_content,
+                'X-LoginRadius-Sott'=>$sott_header_content);
             if($content_type == 'json'){
                if(!is_string($data)){
                 $data = json_encode($data);

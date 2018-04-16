@@ -2,7 +2,7 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 4.9.4
+Tested up to: 4.9.5
 Stable tag: 3.2.1
 License: GPLv2 or later
 
@@ -18,6 +18,7 @@ License: GPLv2 or later
 1) Added Change phone no and reset password SMS template.
 2) Auto Email Id generation on Phone registration.
 3) Unregistered user on LR allow login with default wordpress Login Form. 
+4) Ability to set password for Social login Users
 
 = 3.2.0 =
 1) Implemented Cloud API Functionality

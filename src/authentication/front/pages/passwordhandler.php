@@ -20,9 +20,9 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
          */
 
         public function init() {
+            global $ciam_credencials;
             add_shortcode('ciam_forgot_form', array($this, 'ciam_forgot_form'));
             add_action('wp_head', array($this, 'ciam_hook_changepassword'));
-            add_action('admin_head', array($this, 'ciam_hook_passwordform'));
             add_shortcode('ciam_password_form', array($this, 'ciam_password_form'));
             add_filter('lostpassword_url', array($this, 'custom_forgot_page'), 100);
         }
@@ -114,66 +114,7 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
          * Replace old password section in the wp admin
          */
 
-        public function ciam_hook_passwordform() {
-            $uri = $_SERVER['REQUEST_URI']; // getting the current page url
-            $pagename = explode('?', basename($uri)); // checking for the query string
-            ?>
-            <script type="text/javascript">
-                jQuery(document).ready(function(){
-            <?php
-            if ($pagename[0] != "user-new.php" && $pagename[0] != "user-edit.php") { // condition to check the default add and edit page
-                ?>
-                        var lrObjectInterval22 = setInterval(function () {
-                if(typeof LRObject !== 'undefined')
-                {
-                    clearInterval(lrObjectInterval22);
-                    setTimeout(function(){ changepasswordform(); }, 500);
-                    LRObject.$hooks.register('afterFormRender', function (name) {
-                    if (name === "changepassword") {
-                    jQuery('#changepassword-container').append('<span class="show-password"></span>');
-                    }
-                    if(name === 'otp')
-                    {
-                       
-                        jQuery("#updatephone-container").after("<span id='authdiv_success'></span>");
-                         ciamfunctions.message("An OTP has been sent.", "#authdiv_success", "success");
-                    }
-                    });
-                    }
-                    }, 1);
-                    jQuery("#password th,#password td").html('');
-                    jQuery("#password th").html('<span>Change Password</span>');
-                    var content = '<a id="open_password_popup" class="button open ciam-password-button" href="javascript:void(0);">Change Password</a>';
-                    content += '<div class="popup-outer-password" style="display:none;">';
-                    content += '<span id="close_password_popup">';
-                    content += '<img src="<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>" alt="close" />';
-                    content += '</span>';
-                    content += '<div class="popup-inner-password">';
-                    content += '<span class="popup-txt">';
-                    content += '<h1>';
-                    content += '<strong>Please Enter New Password</strong>';
-                    content += '</h1>';
-                    content += '</span>';
-                    content += '<div id="ciam_change_password_notification"></div>';
-                    content += '<div id="changepassword-container"></div>';
-                    content += '</div>';
-                    content += '</div>';
-                    content += '<span class="password-input-wrapper show-password">';
-                    content += '<input style="display:hidden;" type="password" name="pass1" id="pass1" class="regular-text strong" value="" autocomplete="off" data-pw="Z4G%PbRnMl)krYm)vrCiNV!C" aria-describedby="pass-strength-result">';
-                    content += '</span>';
-                    jQuery(".user-pass1-wrap td").append(content);
-            <?php } else {
-                ?>
-                    setTimeout(function(){ jQuery("#pass1-text,#pass1").attr('style', 'visibility:visible !important;'); }, 500);
-            <?php }
-            ?>
-                });
-            </script> 
-            <?php
-            /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
-        }
-
+       
         /*
          * Change Password handler
          */
