@@ -2,8 +2,8 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 4.9.5
-Stable tag: 3.2.1
+Tested up to: 4.9.8
+Stable tag: 3.2.2
 License: GPLv2 or later
 
 
@@ -12,6 +12,10 @@ License: GPLv2 or later
 * A clean, user friendly WP admin U/I.
 * Users can login via hosted page.
 * Log Generation Functionality
+
+== Change Log ==
+= 3.2.2 =
+1) Capitalized calling method names
 
 == Change Log ==
 = 3.2.1 =

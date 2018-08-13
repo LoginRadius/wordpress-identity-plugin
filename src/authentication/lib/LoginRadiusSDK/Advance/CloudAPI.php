@@ -50,7 +50,7 @@ class CloudAPI
     {
         $options = array('authentication' => 'key');
         $url = LR_CLOUD_ENDPOINT . "/ciam/appInfo";
-        
-        return Functions::apiClient($url, '', $options);        
-    }
+        return Functions::apiClient($url, '', $options);
+    }  
+    
 }

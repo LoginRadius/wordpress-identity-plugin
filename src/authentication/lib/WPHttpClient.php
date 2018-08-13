@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 3.2.0
+ * @version : 3.2.2
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -58,7 +58,7 @@ class WPHttpClient implements IHttpClient {
         
         
         $argument = array('timeout' => 500);
-        $argument['method'] = isset($options['method']) ? strtolower($options['method']) : 'GET';
+        $argument['method'] = isset($options['method']) ? strtoupper($options['method']) : 'GET';
         $data = isset($options['post_data']) ? $options['post_data'] : array();
         $content_type = isset($options['content_type']) ? trim($options['content_type']) : 'x-www-form-urlencoded';
          $sott_header_content = isset($options['X-LoginRadius-Sott']) ? trim($options['X-LoginRadius-Sott']) : '';
