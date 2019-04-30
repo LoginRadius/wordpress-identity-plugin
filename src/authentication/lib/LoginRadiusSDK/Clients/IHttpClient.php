@@ -5,7 +5,7 @@
  * @category : Clients
  * @package : IHttpClient
  * @author : LoginRadius Team
- * @version : 4.5.3
+ * @version : 5.0.2
  * @license : https://opensource.org/licenses/MIT
  */
 

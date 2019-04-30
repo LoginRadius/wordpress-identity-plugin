@@ -14,6 +14,11 @@ function forgotpass_hook(redirecturl) {
         {
             ciamfunctions.message("OTP has been sent to your Phone No.", "#forgotpasswordmessage", "success");  
         }
+        if(LRObject.options.otpEmailVerification==true && typeof response.Data==='undefined')
+        {
+            jQuery('#loginradius-button-resendotp').blur();
+            ciamfunctions.message("OTP has been sent to your Email.", "#forgotpasswordmessage", "success");  
+        }
         else if(form_name == 'resetPassword')
         {
             ciamfunctions.message("Password has been set successfully.", "#forgotpasswordmessage", "success");
@@ -64,8 +69,11 @@ function optionalTwoFA() {
     authentication_options.container = "authentication-container";
     authentication_options.onSuccess = function (response) {
         // On Success
-        if(response.AccountSid)
+        if(response.Sid)
         {
+           
+            jQuery('#authdiv_success').remove();                
+            jQuery('#authdiv_error').remove();
              jQuery("#authentication-container").after("<span id='authdiv_success'></span>");
               ciamfunctions.message("An OTP has been sent.", "#authdiv_success", "success");
         }
@@ -76,6 +84,7 @@ function optionalTwoFA() {
              location.reload();
              }, 2000);
         } else if(typeof response.Uid != 'undefined'){
+            jQuery('#authdiv_success').remove();   
             jQuery("#authentication-container").after("<span id='authdiv_success'>Two Factor Authenticaion is enabled</span>");
              setTimeout(function () {
              location.reload();
@@ -85,6 +94,8 @@ function optionalTwoFA() {
     };
     authentication_options.onError = function (errors) {
         // On Errors
+        jQuery('#authdiv_success').remove();                
+        jQuery('#authdiv_error').remove();
         jQuery("#authentication-container").after("<span id='authdiv_error'>" + errors[0].Message + "</span>");
         setTimeout(function () {
             location.reload();
@@ -110,12 +121,16 @@ function updatephoneonprofile() {
 // On Success
         if(typeof response.Data !== 'undefined')
         {
+                jQuery('#authphonediv_success').remove();
+                jQuery('#authdiv_success').remove();                
+                jQuery('#authdiv_error').remove();
              jQuery("#updatephone-container").after("<span id='authphonediv_success'></span>");
              ciamfunctions.message("An OTP has been sent.", "#authphonediv_success", "success");
              
         }
-        else if(response.access_token)
+        else if(response.IsPosted == true)
         {
+                jQuery('#authphonediv_success').remove();
             jQuery("#updatephone-container").after("<span id='authphonediv_success'>Phone number updated successfully</span>");
         jQuery("#loginradius-submit-update").prop('disabled', true);
         setTimeout(function () {
@@ -126,7 +141,9 @@ function updatephoneonprofile() {
     };
     updatephone_options.onError = function (response) {
 // On Error
-        jQuery("#updatephone-container").after("<span id='authdiv_error'>" + response[0].Message + "</span>");
+    jQuery('#authphonediv_success').remove();
+    jQuery('#authdiv_success').remove();
+    jQuery("#updatephone-container").after("<span id='authdiv_error'>" + response[0].Message + "</span>");
         jQuery("#loginradius-submit-update").prop('disabled', true);
         setTimeout(function () {
             location.reload();
@@ -163,7 +180,7 @@ function login_hook(url) {
                 ciamfunctions.redirect(response.access_token, 'token', url);
             }, 500);
         } 
-        else if(typeof response.AccountSid !== 'undefined')
+        else if( typeof response.Data !== 'undefined' && typeof response.Data.Sid !== 'undefined')
         {
             ciamfunctions.message("An OTP has been sent.", "#loginmessage", "success");
         }
@@ -227,6 +244,7 @@ function registration_hook(url) {
         jQuery('#loginradius-submit-register').val('Register');
         jQuery('#loginradius-submit-verify').val('Verify');
         jQuery('#loginradius-button-resendotp').val('Resend OTP');
+        jQuery('#loginradius-otp-skip').val('Skip');
         jQuery("#ciam_loading_gif").hide();
 var lrObjectInterval8 = setInterval(function () {
                 if(typeof LRObject.options !== 'undefined')
@@ -254,11 +272,15 @@ var lrObjectInterval8 = setInterval(function () {
                } else if (response.access_token) {
                        ciamfunctions.redirect(response.access_token, 'token', url);
                    }
-                    else if(response.IsPosted && typeof response.Data !== 'undefined' && typeof response.Data.AccountSid !== 'undefined')
+                    else if(response.IsPosted && typeof response.Data !== 'undefined' && response.Data!==null && typeof response.Data.Sid !== 'undefined')
                    {
                         jQuery('#loginradius-button-resendotp').blur();
                         ciamfunctions.message("An OTP has been sent.", "#registration_message", "success");
                    }
+                   else if(LRObject.options.otpEmailVerification==true && response.Data==null){
+                    jQuery('#loginradius-button-resendotp').blur();
+                    ciamfunctions.message("An OTP has been sent on email", "#registration_message", "success");
+               }
                    else{
                    ciamfunctions.message("Thanks for getting register", "#registration_message", "success");
                    setTimeout(function () {
@@ -280,6 +302,7 @@ var lrObjectInterval8 = setInterval(function () {
         jQuery('select').val('');
         jQuery('#loginradius-submit-register').val('Register');
         jQuery('#loginradius-submit-verify').val('Verify');
+        jQuery('#loginradius-otp-skip').val('Skip');
         jQuery('#loginradius-button-resendotp').val('Resend OTP');
         jQuery(window).scrollTop(0);
         console.log('errors[0].Description : ' + errors[0].Description);
@@ -352,7 +375,7 @@ function social(url) {
        {
        ciamfunctions.redirect(response.access_token, 'token', url);
    }
-        else if(typeof response.Data.AccountSid !== 'undefined')
+        else if( typeof response.Data !== 'undefined' && typeof response.Data.Sid !== 'undefined' )
        {
           ciamfunctions.message("An OTP has been sent.", "#loginmessage", "success");
        }
@@ -750,12 +773,18 @@ jQuery(document).ready(function ($) {
     hideAndShowElement($('#ciam-ciam_autopage'), '.ciam-custom-page-settings');
 });
 /* multiple email function */
-function additionalemailform(useremail, lr_profile_email, count, img) {
+function additionalemailform(useremail, lr_profile_email,lr_profile_emailverified, count, img) {
     /* condition to hide remove button if one email is exist */
     if (count == 1) {
         jQuery("#email").val(useremail);
-        var content = '<a id="open" class="open button ciam-email-button ciam-addemail-button" href="javascript:void(0);">Add Email</a><div class="popup-outer" style="display:none;"><span id="close"><img src="' + img + '" alt="close" /></span><div class="popup-inner"><span class="popup-txt"><h1><strong>Please Enter Email</strong></h1></span><div id="addemail-container"></div></div></div><div id="remove" style="display:none;"><div class="removeemail-container"></div></div><br />';
-    } else {
+        if(lr_profile_emailverified==true){
+          var content = '<a id="open" class="open button ciam-email-button ciam-addemail-button" href="javascript:void(0);">Add Email</a><div class="popup-outer" style="display:none;"><span id="close"><img src="' + img + '" alt="close" /></span><div class="popup-inner"><span class="popup-txt"><h1><strong>Please Enter Email</strong></h1></span><div id="addemail-container"></div></div></div><div id="remove" style="display:none;"><div class="removeemail-container"></div></div><br />';
+        }
+        else{
+            var content = '';
+        }
+
+        } else {
         var content = '<a class="remove-popup wp_email open button ciam-email-button ciam_email_0 ciam-removeemail-button" href="javascript:void(0);">Remove</a><div class="remove-popup-outer" style="display:none;"><span class="close-removepopup"><img src="' + img + '" alt="close" /></span><div class="remove-popup-inner"><span class="popup-txt"><h1><strong>Are you sure to remove the mail?</strong></h1></span><span id="email_msg"></span><div class="removeemail-container"></div></div></div>&nbsp;&nbsp;<a id="open" class="open button ciam-email-button ciam-addemail-button" href="javascript:void(0);">Add</a><div class="popup-outer" style="display:none;"><span id="close"><img src="' + img + '" alt="close" /></span><div class="popup-inner"><span class="popup-txt"><h1><strong>Please Enter Email</strong></h1></span><div id="addemail-container"></div></div></div></div><br />';
     }
 

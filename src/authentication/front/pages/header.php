@@ -22,17 +22,16 @@ if (!class_exists('CIAM_Authentication_Header')) {
 
         public function init() {
             global $ciam_setting,$ciam_credencials;
+
             
-            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Utility/SOTT.php');
-            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Social/ProvidersAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Social/SocialLoginAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Social/AdvanceSocialLoginAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Authentication/AuthCustomObjectAPI.php');
             require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Authentication/UserAPI.php');
-            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Management/AccountAPI.php');
-            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Management/RoleAPI.php');
-            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Management/CustomObjectAPI.php');
-            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Management/SchemaAPI.php');
+            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Account/AccountAPI.php');
+            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Account/RoleAPI.php');
+            require_once ( CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/CustomerRegistration/Account/CustomObjectAPI.php');
+      
              
             if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){
                  return;  

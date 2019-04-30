@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit();
 }
 
-use LoginRadiusSDK\CustomerRegistration\Management\AccountAPI;
+use LoginRadiusSDK\CustomerRegistration\Account\AccountAPI;
 
 if (!class_exists('CIAM_Authentication_Commonmethods')) {
 
@@ -242,9 +242,20 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
             }
            
                 try {
-                    
-                    $sottApi = new \LoginRadiusSDK\Utility\SOTT($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
-					$sott_encrypt = $sottApi->encrypt(20);
+                    //check Api Request Signing 
+                   
+            
+                    if(isset($ciam_setting['apirequestsigning']) && $ciam_setting['apirequestsigning'] != '' && $ciam_setting['apirequestsigning'] == 1)
+                    {
+                        
+                       $sottApi = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json','api_request_signing'=>'true'));
+                    }
+                    else{
+                        
+                        $sottApi = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
+                    }
+
+					$sott_encrypt = $sottApi->generateSOTT(20);
 					if(isset($sott_encrypt->Sott) && !empty($sott_encrypt->Sott))
 					{
 						$sott = $sott_encrypt->Sott;

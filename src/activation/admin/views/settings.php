@@ -25,9 +25,9 @@ if (!class_exists('CIAM_Activation_Settings')) {
             global $ciam_credencials;
             if(isset($ciam_credencials['apikey']) && !empty($ciam_credencials['apikey']) && isset($ciam_credencials['secret']) && !empty($ciam_credencials['secret']))
                 {
-            $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+            $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
             try {
-                $config = $cloudAPI->getConfigurationList();
+                $config = $configAPI->getConfigurationList();
                 if($config->IsPhoneLogin)
                 {
                      echo '<div class="notice notice-warning is-dismissible">

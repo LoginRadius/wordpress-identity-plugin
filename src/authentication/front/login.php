@@ -50,7 +50,7 @@ if (!class_exists('CIAM_Authentication_Login')) {
          */
 
         public function token_handler() {
-            global $ciam_credencials, $ciam_message;
+            global $ciam_credencials, $ciam_message, $ciam_setting;
 
             $token = isset($_REQUEST['token']) ? $_REQUEST['token'] : '';
 
@@ -61,14 +61,25 @@ if (!class_exists('CIAM_Authentication_Login')) {
                 $apikey = isset($ciam_credencials['apikey']) ? $ciam_credencials['apikey'] : '';
                 $secret = isset($ciam_credencials['secret']) ? $ciam_credencials['secret'] : '';
                 if (!empty($apikey) && !empty($secret)) {
-                    $userProfileApi = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($apikey, $secret, array('output_format' => 'json'));
+                    if(isset($ciam_setting['apirequestsigning']) && $ciam_setting['apirequestsigning'] != '' && $ciam_setting['apirequestsigning'] == 1)
+                    {
+                        
+                    $userProfileApi = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($apikey, $secret, array('output_format' => 'json','api_request_signing'=>'true'));
+                    }
+                    else{
+                        
+                        $userProfileApi = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($apikey, $secret, array('output_format' => 'json'));
+                   
+                    }
                     try {
 
                         $accesstoken = $token;
                             try {
                                 $userProfileData = $userProfileApi->getProfile($accesstoken);
-
+                                
+                                
                                 if (isset($userProfileData->Uid) && !empty($userProfileData->Uid)) {//check uid get or not 
+                                    
                                     $checkUidExists = get_users(array(
                                         "meta_key" => "ciam_uid",
                                         "meta_value" => $userProfileData->Uid,
@@ -77,6 +88,7 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                     $loginHelper = new CIAM_Authentication_Helper();
 
                                     if (isset($checkUidExists[0]) && !empty($checkUidExists[0])) {//check uid exist or not in usermeta
+                                     
                                         $loginHelper->linking($checkUidExists[0], $userProfileData, true);
                                         //allow Login
                                         $loginHelper->allow_login($checkUidExists[0], $userProfileData);
@@ -88,16 +100,19 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                             if (email_exists($email)) {
                                                 //link user in user meta
                                                 $user = get_user_by('email', $email);
+                                                
                                                 $loginHelper->linking($user->ID, $userProfileData);
                                                 //allow Login
                                                 $loginHelper->allow_login($user->ID, $userProfileData);
                                             } else {
                                                 /* Register New User */
+                                                  
 
                                                 $user_id = wp_insert_user($loginHelper->register($email, $userProfileData));
-                                                
+                                               
                                               // checking if username is exist than create dynamic username.
                                                 if (isset($user_id->errors['existing_user_login'][0]) && $user_id->errors['existing_user_login'][0] == "Sorry, that username already exists!") { 
+                                                    
                                                     $userarr = $loginHelper->register($email, $userProfileData);
 
                                                     $userarr['user_login'] = $loginHelper->register($email, $userProfileData)['user_login'] . rand(10, 100);

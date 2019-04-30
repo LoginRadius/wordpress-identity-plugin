@@ -2,8 +2,8 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 4.9.8
-Stable tag: 3.2.2
+Tested up to: 5.1.1
+Stable tag: 3.3.0
 License: GPLv2 or later
 
 
@@ -14,10 +14,23 @@ License: GPLv2 or later
 * Log Generation Functionality
 
 == Change Log ==
+= 3.3.0 =
+* Enhancements.
+1)Added API Request Signing Features
+2)Implemented SSO features on passwordless login & email verification
+
+* Bug Fixes.
+3)Fixed wordpress CMS compatibility issue
+4)Fixed add Email issue in Edit Profile
+5)Fixed short code visible when hosted page is enabled
+6)Fixed UI issue on Login Page
+7)Fixed Profile Image url issue on Social Login 
+8)Fixed OTP screen reload on registration and forgot password while otpEmailVerification is enabled
+
+
 = 3.2.2 =
 1) Capitalized calling method names
 
-== Change Log ==
 = 3.2.1 =
 1) Added Change phone no and reset password SMS template.
 2) Auto Email Id generation on Phone registration.

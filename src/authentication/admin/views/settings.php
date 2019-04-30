@@ -133,9 +133,9 @@ if (!class_exists('ciam_authentication_settings')) {
         public function render_options_page($args) {
 
             global $ciam_setting, $ciam_credencials;
-            $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+            $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
                     try{
-                    $config = $cloudAPI->getConfigurationList();
+                    $config = $configAPI->getConfigurationList();
                     }
                     catch (\LoginRadiusSDK\LoginRadiusException $e) { 
                           $currentErrorResponse = "Something went wrong: " . $e->getErrorResponse()->description;

@@ -120,6 +120,7 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
          */
 
         public function change_password_handler() {
+            
             global $ciam_credencials, $message;
             $ciam_message = false;
             $user_id = get_current_user_id();

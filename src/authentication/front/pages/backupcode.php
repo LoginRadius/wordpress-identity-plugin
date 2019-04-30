@@ -38,7 +38,7 @@ if (!class_exists('CIAM_Authentication_Backupcode')) {
                     if (!empty($accessToken)) {
                         $UserAPI = new UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
                         try {
-                            $authpermission = $UserAPI->configureTwoFAByToken($accessToken, '');
+                            $authpermission = $UserAPI->mfaValidateAccessToken($accessToken, '');
                             if ((isset($authpermission->IsGoogleAuthenticatorVerified) && $authpermission->IsGoogleAuthenticatorVerified) || (isset($authpermission->IsOTPAuthenticatorVerified) && $authpermission->IsOTPAuthenticatorVerified)) {
                                 ?>
                                 <script type="text/javascript">

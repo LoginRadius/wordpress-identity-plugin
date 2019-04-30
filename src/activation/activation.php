@@ -152,7 +152,7 @@ if (!class_exists('CIAM_Activation')) {
             require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/LoginRadiusException.php';
 
             require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Utility/Functions.php';
-            require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Advance/CloudAPI.php';
+            require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Advance/ConfigAPI.php';
 
 
 

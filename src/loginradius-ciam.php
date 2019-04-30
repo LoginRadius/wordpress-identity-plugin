@@ -4,7 +4,7 @@
  * Plugin Name: LoginRadius CIAM
  * Plugin URI: http://www.loginradius.com
  * Description: LoginRadius Customer Identity and Access Management
- * Version: 3.2.2
+ * Version: 3.3.0
  * Author: LoginRadius Team
  * Created by LoginRadius Development Team on 26/05/2017
  * Copyright: 2017 LoginRadius Inc. All rights reserved
@@ -17,7 +17,7 @@ defined('ABSPATH') or die();
 define('CIAM_PLUGIN_PATH', __FILE__);
 define('CIAM_PLUGIN_DIR', plugin_dir_path(CIAM_PLUGIN_PATH));
 define('CIAM_PLUGIN_URL', plugin_dir_url(CIAM_PLUGIN_PATH));
-define('CIAM_PLUGIN_VERSION', '3.2.2');
+define('CIAM_PLUGIN_VERSION', '3.3.0');
 define('CIAM_SETTING_LINK', plugin_basename(__FILE__));
 
 // Initialize Modules in specific order
@@ -55,9 +55,9 @@ function loginradius_ciam_activate(){
                 require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/LoginRadiusException.php';
 
                 require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Utility/Functions.php';
-                require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Advance/CloudAPI.php';
-                $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($ciam_api_setting['apikey'], $ciam_api_setting['secret']);
-                $config = json_decode($cloudAPI->getConfigurationList(), TRUE);
+                require_once CIAM_PLUGIN_DIR . 'authentication/lib/LoginRadiusSDK/Advance/ConfigAPI.php';
+                $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($ciam_api_setting['apikey'], $ciam_api_setting['secret']);
+                $config = json_decode($configAPI->getConfigurationList(), TRUE);
                 if(isset($config['AppName']))
                 {
                 $api_setting['sitename'] = $config['AppName'];

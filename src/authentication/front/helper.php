@@ -125,7 +125,13 @@ if (!class_exists('CIAM_Authentication_Helper')) {
             $firstName = isset($usernameFirstnameLastname[1]) && !empty($usernameFirstnameLastname[1]) ? trim($usernameFirstnameLastname[1]) : '';
             $lastName = isset($usernameFirstnameLastname[2]) && !empty($usernameFirstnameLastname[2]) ? trim($usernameFirstnameLastname[2]) : '';
             $profileImageUrl = isset($userProfileData->Identities[0]->ImageUrl) && !empty($userProfileData->Identities[0]->ImageUrl) ? trim($userProfileData->Identities[0]->ImageUrl) : ' ';
-
+            
+            if(strlen($profileImageUrl)>=99){
+                $profileImageUrl=null;  
+            }
+            else{  
+               $this->$profileImageUrl=$profileImageUrl; 
+            }
             $output = array(
                 'user_login' => $userName,
                 'user_pass' => wp_generate_password(12, true),
@@ -205,15 +211,19 @@ if (!class_exists('CIAM_Authentication_Helper')) {
          */
 
         public function linking($user_id, $userProfileData, $isUpdate = false) {
+            
             $profileImageUrl = isset($userProfileData->Identities[0]->ImageUrl) && !empty($userProfileData->Identities[0]->ImageUrl) ? trim($userProfileData->Identities[0]->ImageUrl) : '';
             if ($isUpdate) {
+            
                 update_user_meta($user_id, 'user_avatar_image', $profileImageUrl);
                 update_user_meta($user_id, 'ciam_id', $userProfileData->ID);
                 update_user_meta($user_id, 'ciam_uid', $userProfileData->Uid);
             } else {
+                
                 add_user_meta($user_id, 'user_avatar_image', $profileImageUrl);
                 add_user_meta($user_id, 'ciam_id', $userProfileData->ID);
                 add_user_meta($user_id, 'ciam_uid', $userProfileData->Uid);
+                
             }
 
             /* action for debug mode */
@@ -228,8 +238,6 @@ if (!class_exists('CIAM_Authentication_Helper')) {
         public function allow_login($user_id, $userProfileData, $register = false) {
             // saving data for hosted page login case....
             if (isset($_REQUEST['token']) && !empty($_REQUEST['token'])) {
-                
-
                 add_user_meta($user_id, 'accesstoken', $_REQUEST['token']);
             }
 

@@ -136,6 +136,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
                 //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return $settings;
             }
+           
 
             if (isset($settings['apikey']) && isset($settings['secret'])) {
                 $encodeString = 'settings';
@@ -146,9 +147,10 @@ if (!class_exists('CIAM_Activation_Admin')) {
                     if(!isset($config_api['apikey']) || !isset($config_api['secret']) || $config_api['apikey'] != $settings['apikey'] || $config_api['secret'] != $settings['secret'] || !isset($config_api['update_plugin']) || $config_api['update_plugin'] == 'false')
                     {
                     
-                    $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($settings['apikey'], $settings['secret'], array('output_format' => 'json'));
+                    $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($settings['apikey'], $settings['secret'], array('output_format' => 'json'));
                     
-                    $config = $cloudAPI->getConfigurationList();
+                    $config = $configAPI->getConfigurationList();
+              
                     $ciam_settings = get_option('ciam_authentication_settings');
                     
                     $config_options = array();
@@ -184,11 +186,21 @@ if (!class_exists('CIAM_Activation_Admin')) {
                     {
                     $config_options['instantotplogin'] =  $config->IsInstantSignin->SmsOtp;
                     }
+                    if(isset($ciam_settings['apirequestsigning']))
+                    {
+                        $config_options['apirequestsigning'] =  $config->ApiRequestSigningConfig->IsEnabled;
+                    }
+                    if(isset($config->ApiRequestSigningConfig->IsEnabled) && !isset($ciam_settings['apirequestsigning']))
+                    {
+                       
+                    $config_options['apirequestsigning'] =  $config->ApiRequestSigningConfig->IsEnabled;
+                    }
                    if(get_option('ciam_authentication_settings'))
                    {
                     $config_options = array_merge(get_option('ciam_authentication_settings') , $config_options);
                      update_option('ciam_authentication_settings' , $config_options);
                    }
+                   
                    else
                    {
                        add_option('ciam_authentication_settings' , $config_options);

@@ -26,9 +26,9 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
 
             if (!empty($accesstoken)) {
-                $cloudAPI = new \LoginRadiusSDK\Advance\CloudAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
                 try {
-                    $config = $cloudAPI->getConfigurationList();
+                    $config = $configAPI->getConfigurationList();
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     error_log($e->getErrorResponse()->Description);
                 }
@@ -212,7 +212,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                    global $ciam_credencials, $pagenow;
                    $user_id = get_current_user_id();
                    if ($pagenow === "profile.php") {
-                       $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                       $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
                        $current_user = wp_get_current_user(); // getting the current user info....
                        $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
 
@@ -259,7 +259,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                                    ?>
                                             <script type="text/javascript">
                                             jQuery(document).ready(function () {
-                                                        additionalemailform('<?php echo $current_user->user_email ?>',<?php echo json_encode($lr_profile->Email) ?>, '<?php echo count($lr_profile->Email) ?>', '<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>');
+                                                        additionalemailform('<?php echo $current_user->user_email ?>',<?php echo json_encode($lr_profile->Email) ?>, <?php echo json_encode($lr_profile->EmailVerified) ?>,'<?php echo count($lr_profile->Email) ?>', '<?php echo CIAM_PLUGIN_URL . 'authentication/assets/images/fancy_close.png'; ?>');
                                     });
                                     </script>
                                    <?php
@@ -275,7 +275,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             $pagename = explode('?', basename($uri)); // checking for the query string
             $user_id = get_current_user_id();
             $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
-            $accountobj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+            $accountobj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
             if(isset($_POST) && isset($_POST['loginradius-setnewpassword-hidden']) && $_POST['loginradius-setnewpassword-hidden'] == 'setpassword' && isset($_POST['setnewpassword']) && isset($_POST['setconfirmpassword']) && $_POST['setnewpassword'] == $_POST['setconfirmpassword'])
             {
                 try {
@@ -345,7 +345,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             <?php }
             else{ //in case of social login and password set to null
                 ?>
-                console.log('set password called');
+               
                     setTimeout(function(){ setpasswordform();jQuery('#pass1-text').css('visibility','hidden'); }, 500);
                     jQuery("#password th,#password td").html('');
                     jQuery("#password th").html('<span>Set Password</span>');

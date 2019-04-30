@@ -63,7 +63,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * 
          * @global type $ciam_credencials
          * @global type $ciamUserProfile
-         * @global \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI $accoutObj
+         * @global \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI $accoutObj
          * @param type $errors
          * @param type $update
          * @param type $user
@@ -71,8 +71,15 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          */
         public function add_profile($errors, $update, $user) {
             global $ciam_credencials, $ciamUserProfile, $accoutObj;
-            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
-
+            if(isset($ciam_setting['apirequestsigning']) && $ciam_setting['apirequestsigning'] != '' && $ciam_setting['apirequestsigning'] == 1)
+            {
+            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json','api_request_signing'=>'true'));
+            }
+            else
+            {
+                $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+           
+            }
             $params = array(
                 'UserName' => isset($user->user_login) ? $user->user_login : '',
                 'FirstName' => isset($user->first_name) ? $user->first_name : '',
@@ -104,7 +111,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          * @global type $pagenow
          * @global type $ciam_credencials
          * @global type $ciamUserProfile
-         * @global \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI $accoutObj
+         * @global \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI $accoutObj
          * @param type $user_id
          * @return boolean
          */
@@ -113,7 +120,14 @@ if (!class_exists('CIAM_Authentication_Admin')) {
             if (!current_user_can('edit_user', $user_id)) {
                 return false;
             }
-            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+            if(isset($ciam_setting['apirequestsigning']) && $ciam_setting['apirequestsigning'] != '' && $ciam_setting['apirequestsigning'] == 1)
+            {
+            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json','api_request_signing'=>'true'));
+            }
+            else{
+                $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+           
+            }
             $user = get_userdata($user_id);
             $params = array(
                 'FirstName' => isset($_POST['first_name']) && !empty($_POST['first_name']) ? $_POST['first_name'] : $user->first_name,
@@ -169,7 +183,7 @@ if (!class_exists('CIAM_Authentication_Admin')) {
          */
         public function delete_user($user_id) {
             global $ciam_credencials, $accoutObj;
-            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Management\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+            $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
 
             $uid = get_user_meta($user_id, 'ciam_uid', true);
             if (!empty($uid)) {

@@ -710,7 +710,7 @@ textarea.ciam-shortcode {
     padding: 5px;
 }
 #forgotpassword-container .loginradius--form-element-content label {
-    width:136px;
+
     padding :10px;
     float:left;    
 }
@@ -891,6 +891,12 @@ textarea.ciam-shortcode {
 .loginradius-linksignin{
     padding:18px !important;
     margin-left:10px;
+    margin-top:10px
+}
+.loginradius-otpsignin{
+    padding:18px !important;
+    margin-left:10px;
+    margin-top:10px
 }
 .content-loginradius-stayLogin{
     padding-bottom:20px;
@@ -950,7 +956,8 @@ textarea.ciam-shortcode {
     color: #008000;
 }
 #loginradius-submit-login,.linksignin-loginradius-Instant{
-    height:50px !important;
+    padding:18px !important;
+    margin-left:10px;
 }
 .hostedpage-tooltip[data-title]:hover::after,
 .authenticationtype-tooltip[data-title]:hover::after,
@@ -996,6 +1003,7 @@ textarea.ciam-shortcode {
 .loginradius--form-element-content {
     width: 100%;
     clear: both;
+    min-height: 66.81px;
 }
 .popup-inner .lremail-submit{
     margin-left: 25px !important;

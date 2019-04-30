@@ -53,18 +53,18 @@ if (!class_exists('ciam_hostedpage_settings')) {
                 jQuery(document).ready(function () {
                     if (jQuery("#ciam_enable_hostedPage").prop("checked") == true) {
                         jQuery("#autopage-generate,#ciam-shortcodes").hide();
-                        jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"]').hide();
+                        jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"],[data-tab="ciam_options_tab-9"]').hide();
                     } else {
                         jQuery("#autopage-generate,#ciam-shortcodes").show();
-                        jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"]').show();
+                        jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"],[data-tab="ciam_options_tab-9"]').show();
                     }
                     jQuery("#ciam_enable_hostedPage").on('change', function () {
                         if (jQuery(this).prop("checked") == true) {
                             jQuery("#autopage-generate,#ciam-shortcodes").hide();
-                            jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"]').hide();
+                            jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"],[data-tab="ciam_options_tab-9"]').hide();
                         } else {
                             jQuery("#autopage-generate,#ciam-shortcodes").show();
-                            jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"]').show();
+                            jQuery('[data-tab="ciam_options_tab-2"],[data-tab="ciam_options_tab-3"],[data-tab="ciam_options_tab-4"],[data-tab="ciam_options_tab-5"],[data-tab="ciam_options_tab-6"],[data-tab="ciam_options_tab-7"],[data-tab="ciam_options_tab-9"]').show();
                         }
                     });
                 });
