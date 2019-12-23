@@ -16,9 +16,9 @@ if (!class_exists('CIAM_SSO')) {
          * Constructor
          */
         public function __construct() {
-            global $ciam_credencials;
+            global $ciam_credentials;
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
-            if (!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])) {
+            if (!isset($ciam_credentials['apikey']) || empty($ciam_credentials['apikey']) || !isset($ciam_credentials['secret']) || empty($ciam_credentials['secret'])) {
                 return;
             }
 
@@ -51,9 +51,9 @@ if (!class_exists('CIAM_SSO')) {
          */
 
         public function menu() {
-            global $ciam_credencials;
+            global $ciam_credentials;
 
-            if (!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) && empty($ciam_credencials['secret'])) {
+            if (!isset($ciam_credentials['apikey']) && empty($ciam_credentials['apikey']) || !isset($ciam_credentials['secret']) && empty($ciam_credentials['secret'])) {
                 return;
             }
             add_submenu_page('ciam-activation', 'SSO Page Settings', 'SSO', 'manage_options', 'ciam-sso', array('Sso_Admin', 'options_page'));

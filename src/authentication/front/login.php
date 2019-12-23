@@ -22,11 +22,12 @@ if (!class_exists('CIAM_Authentication_Login')) {
         /*
          * Mange site home redirection
          */
-        public function home_redirection() {
-            $user_id = get_current_user_id();
+        public function home_redirection() {         
+
+            $user_id = get_current_user_id();        
             delete_user_meta($user_id, 'accesstoken'); // deleting the logged out user access token from db.
             delete_user_meta($user_id, 'ciam_current_user_uid'); // deleting the current user uid.
-             wp_redirect( home_url() );
+            wp_redirect( home_url() );
 
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
@@ -36,48 +37,60 @@ if (!class_exists('CIAM_Authentication_Login')) {
         /*
          * function to generate random email id
          */
-        public function random_id_generation($email_name)
+        public function random_id_generation()
         {
+           $randomNo = $this->getRandomNumber(4);
            $base_root = site_url();
-    $email_name = str_replace(array("+"," "), "", $email_name);
-    $email_domain = str_replace(array("http://","https://"), "", $base_root);
-    $email = $email_name . '@' . $email_domain.'.com';
-    return $email;
+           $site_domain = str_replace(array("http://","https://"), "", $base_root);
+           $email = $randomNo . '@' . $site_domain.'.com';
+           $variable = substr($email, 0, strpos($email, ".com"));
+           $result = explode('.com', $variable);
+           $email = $result[0].'.com';
+           return $email;
         }
+
+         /*
+         * function to generate a random string
+         */
+        function getRandomNumber($n) {            
+            $characters = 'abcdefghijklmnopqrstuvwxyz'.time(); 
+            $randomString = ''; 
+        
+            for ($i = 0; $i < $n; $i++) { 
+                $index = rand(0, strlen($characters) - 1); 
+                $randomString .= $characters[$index]; 
+            }         
+            return $randomString. time(); 
+        } 
+
         
         /*
          * handle token when user tries to login
          */
 
         public function token_handler() {
-            global $ciam_credencials, $ciam_message, $ciam_setting;
+            global $ciam_credentials, $ciam_message, $ciam_setting;
 
             $token = isset($_REQUEST['token']) ? $_REQUEST['token'] : '';
+           
 
-            if (!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])) {
+            if (!isset($ciam_credentials['apikey']) || empty($ciam_credentials['apikey']) || !isset($ciam_credentials['secret']) || empty($ciam_credentials['secret'])) {
                 return;
             }
             if (!empty($token)) {
-                $apikey = isset($ciam_credencials['apikey']) ? $ciam_credencials['apikey'] : '';
-                $secret = isset($ciam_credencials['secret']) ? $ciam_credencials['secret'] : '';
+            
+                $apikey = isset($ciam_credentials['apikey']) ? $ciam_credentials['apikey'] : '';
+                $secret = isset($ciam_credentials['secret']) ? $ciam_credentials['secret'] : '';
                 if (!empty($apikey) && !empty($secret)) {
-                    if(isset($ciam_setting['apirequestsigning']) && $ciam_setting['apirequestsigning'] != '' && $ciam_setting['apirequestsigning'] == 1)
-                    {
-                        
-                    $userProfileApi = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($apikey, $secret, array('output_format' => 'json','api_request_signing'=>'true'));
-                    }
-                    else{
-                        
-                        $userProfileApi = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($apikey, $secret, array('output_format' => 'json'));
-                   
-                    }
-                    try {
-
+               
+                    $authAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI();
+            
+                    try {                  
                         $accesstoken = $token;
-                            try {
-                                $userProfileData = $userProfileApi->getProfile($accesstoken);
-                                
-                                
+                            try {                             
+                   
+                                $userProfileData = $authAPI->getProfileByAccessToken($token);
+                          
                                 if (isset($userProfileData->Uid) && !empty($userProfileData->Uid)) {//check uid get or not 
                                     
                                     $checkUidExists = get_users(array(
@@ -132,15 +145,14 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                                 }
                                             }
                                         } else {
-                                            $email = $this->random_id_generation($userProfileData->PhoneId);
+                                             $email = $this->random_id_generation();
                                              $user_id = wp_insert_user($loginHelper->register($email, $userProfileData));
                                              if (isset($user_id->errors['existing_user_login'][0]) && $user_id->errors['existing_user_login'][0] == "Sorry, that username already exists!") { 
                                                     $userarr = $loginHelper->register($email, $userProfileData);
 
                                                     $userarr['user_login'] = $loginHelper->register($email, $userProfileData)['user_login'] . rand(10, 100);
                                                    
-                                                    $user_id = wp_insert_user($userarr);
-                                                    
+                                                    $user_id = wp_insert_user($userarr);                                                   
 
                                                 }
 
@@ -156,19 +168,18 @@ if (!class_exists('CIAM_Authentication_Login')) {
                                     }
                                 }
                             } catch (\LoginRadiusSDK\LoginRadiusException $e) {
-                                //User Profile not fetch
+                                //User Profile not fetch                              
                                 $ciam_message = $e->getMessage();
                                 do_action('ciam_sso_logout');
                                 add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
                             }
                        
                     } catch (\LoginRadiusSDK\LoginRadiusException $e) {
-                        //access Token is invalid
+                        //access Token is invalid                       
                         $ciam_message = $e->getMessage();
                         do_action('ciam_sso_logout');
                         add_action('wp_footer', array('CIAM_Authentication_Helper', 'ciam_error_msg'));
-                    }
-
+                    }       
                     do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
                     return;
                 }

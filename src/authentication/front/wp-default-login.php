@@ -16,7 +16,7 @@ if ( ! class_exists( 'CIAM_WP_Default_Login' ) ) {
          * Constructor
          */
         public function __construct() {
-            global $ciam_credencials;
+            global $ciam_credentials;
             
             add_shortcode( 'ciam_wp_default_login', array( $this, 'ciam_wp_default_login' ) );
         	// Allows the use of email logins

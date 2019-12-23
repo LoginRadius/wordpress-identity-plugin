@@ -2,10 +2,9 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 5.1.1
-Stable tag: 3.3.0
+Tested up to: 5.3
+Stable tag: 4.0.0
 License: GPLv2 or later
-
 
 
 = Features of this Plugin =
@@ -14,6 +13,16 @@ License: GPLv2 or later
 * Log Generation Functionality
 
 == Change Log ==
+
+=  4.0.0 =
+*  Enhancements
+1) Compatible with our latest PHP SDK 10.0.0.
+2) Added custom domain option for the IEF page.
+3) Added registration form schema option.
+4) Standardize the naming convention of labels and text of the plugin.
+5) Separate file for all notification messages for easy maintenance. 
+6) Standardize the debug log logging method.
+
 = 3.3.0 =
 * Enhancements.
 1)Added API Request Signing Features
@@ -83,10 +92,7 @@ We offer 24/7 support, feel free to browse our knowledge base <a href="http://su
 = What is LoginRadius? =
 LoginRadius is a Canadian Startup that offers Customer Identity Management to websites through its Software as a Service (SaaS). We are Canada's Top 50 Startups and our service is being used by over 150,000 customers around the world. We are also partner with internet giants such as Amazon.com, Mozilla, Microsoft, DynDNS, etc.
 
-= What about Social Commenting & Social Sharing? =
-Social commenting means users can post their comments via their social networks and user avatar, name & link to his/her profile will appear with the comment, while social sharing allows users to share your web content on his/her social networks i.e. amongst his/her friends resulting in increased referral traffic!
-
-= Can you help me set up User Registration, Social Login and Sharing on my website? =
+= Can you help me set up User Registration, Social Login on my website? =
 Yes, the LoginRadius Team can assist you with implementing these social features. Please contact us <a href="http://social.loginradius.com/contact-us" target="_blank">here</a> and one of our experts will get back to you.
 
 == Upgrade Notice ==

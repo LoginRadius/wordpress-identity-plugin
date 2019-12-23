@@ -49,9 +49,8 @@ if (!class_exists('CIAM_Hosted_Page')) {
 
                         exit();
                     } elseif ($actual_link == get_permalink($ciam_setting['lost_password_page_id'])) {
-                        do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), wp_registration_url());
+                        do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), wp_lostpassword_url());
                         wp_redirect(wp_lostpassword_url());
-
                         exit();
                     }
                 }
@@ -117,9 +116,10 @@ if (!class_exists('CIAM_Hosted_Page')) {
          */
 
         private function hosted_page_urls($action, $redirect = '') {
-            global $ciam_credencials, $ciam_setting;
+            global $ciam_credentials, $ciam_setting;
 
             $redirect = empty($redirect) ? home_url('/') : $redirect;
+        
             if (!isset($_GET['redirect_to'])) {
                 if (is_single() || is_page()) {
                     if (get_permalink()) {
@@ -133,14 +133,13 @@ if (!class_exists('CIAM_Hosted_Page')) {
                 }
             }
 
-            $appName = isset($ciam_credencials['sitename']) ? $ciam_credencials['sitename'] : '';
-            if (!empty($appName)) {
-                if (isset($_SERVER["QUERY_STRING"]) && !empty($_SERVER["QUERY_STRING"])) {
-                    /* action for debug mode */
-                    $url = 'https://' . $appName . '.hub.loginradius.com/auth.aspx?action=' . $action . '&return_url=' . urlencode($redirect . '?' . $_SERVER["QUERY_STRING"]);
-                } else {
-                    $url = 'https://' . $appName . '.hub.loginradius.com/auth.aspx?action=' . $action . '&return_url=' . urlencode($redirect);
-                }
+            $appName = isset($ciam_credentials['sitename']) ? $ciam_credentials['sitename'] : '';
+            if (!empty($appName)) {    
+                    if(isset($ciam_setting['custom_hub_domain']) && $ciam_setting['custom_hub_domain'] !== '') {
+                        $url = $ciam_setting['custom_hub_domain'].'/auth.aspx?action=' . $action . '&return_url=' . urlencode($redirect);
+                    } else {
+                        $url = 'https://' . $appName . '.hub.loginradius.com/auth.aspx?action=' . $action . '&return_url=' . urlencode($redirect);
+                    }         
                 do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $url);
                 return $url;
             }
@@ -154,9 +153,9 @@ if (!class_exists('CIAM_Hosted_Page')) {
 
         public function ciam_page_notice() {
             $message = $output = '';
-            if (isset($_GET['action_completed']) && $_GET['action_completed'] == "forgotpassword") {
+            if (isset($_GET['action_completed']) && $_GET['action_completed'] == "forgotpassword") {     
                 $message = 'Email has been sent successfully.';
-            } elseif (isset($_GET['action_completed']) && $_GET['action_completed'] == "register") {
+            } elseif (isset($_GET['action_completed']) && $_GET['action_completed'] == "register") {     
                 $message = 'Account created successfully. Please verify your email.';
             }
             if (!empty($message)) {
@@ -207,6 +206,7 @@ if (!class_exists('CIAM_Hosted_Page')) {
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $this->hosted_page_urls('login'));
 
             return $this->hosted_page_urls('login');
+            
         }
 
         /*
@@ -232,11 +232,15 @@ if (!class_exists('CIAM_Hosted_Page')) {
          */
 
         public function profile_url() {
-            global $ciam_credencials, $ciam_setting;
+            global $ciam_credentials, $ciam_setting;
 
-            $appName = isset($ciam_credencials['sitename']) ? $ciam_credencials['sitename'] : '';
+            $appName = isset($ciam_credentials['sitename']) ? $ciam_credentials['sitename'] : '';
             if (!empty($appName)) {
-                $url = 'https://' . $appName . '.hub.loginradius.com/profile.aspx?action=profile';
+                if(isset($ciam_setting['custom_hub_domain']) && $ciam_setting['custom_hub_domain'] !== '') {
+                    $url = $ciam_setting['custom_hub_domain'].'/profile.aspx?action=profile';
+                } else {
+                    $url = 'https://' . $appName . '.hub.loginradius.com/profile.aspx?action=profile';
+                }         
                 do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $url);
                 return $url;
             }

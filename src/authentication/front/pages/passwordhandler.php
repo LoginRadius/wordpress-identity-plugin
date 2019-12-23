@@ -20,7 +20,7 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
          */
 
         public function init() {
-            global $ciam_credencials;
+            global $ciam_credentials;
             add_shortcode('ciam_forgot_form', array($this, 'ciam_forgot_form'));
             add_action('wp_head', array($this, 'ciam_hook_changepassword'));
             add_shortcode('ciam_password_form', array($this, 'ciam_password_form'));
@@ -32,7 +32,8 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
          */
 
         public function ciam_forgot_form() {
-            global $ciam_setting;
+            global $ciam_setting;           
+     
             if (!empty($ciam_setting['lost_password_page_id'])) {
                 $redirect_url = get_permalink($ciam_setting['login_page_id']);
                 if (!is_user_logged_in()) {
@@ -64,14 +65,14 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
                 ?>
                 <script type="text/javascript">
                     jQuery(document).ready(function () {
-                    changepassword('<?php echo $redirect_url ?>');
+                    resetPassword('<?php echo $redirect_url ?>');
                     });</script>
 
                 <?php
             }
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
-        }
+        }      
 
         /*
          * Reset password form
@@ -121,10 +122,10 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
 
         public function change_password_handler() {
             
-            global $ciam_credencials, $message;
+            global $ciam_credentials, $message;
             $ciam_message = false;
             $user_id = get_current_user_id();
-            $UserAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret']);
+            $authAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI();
             $passform = isset($_POST['passform']) ? $_POST['passform'] : '';
             $oldpassword = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : '';
             $newpassword = isset($_POST['newpassword']) ? $_POST['newpassword'] : '';
@@ -132,7 +133,7 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
             if (($passform == 1) && !empty($oldpassword) && !empty($newpassword)) {
                     $accessToken = get_user_meta($user_id, 'accesstoken', true);
                     try {
-                        $UserAPI->changeAccountPassword($accessToken, $_POST['oldpassword'], $_POST['newpassword']);
+                        $authAPI->changePassword($accessToken, $_POST['newpassword'], $_POST['oldpassword']);
                     } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                         $message = isset($e->getErrorResponse()->Description) ? $e->getErrorResponse()->Description : _e("Opps Something Went Wrong !");
                         add_user_meta($user_id, 'ciam_pass_error', sanitize_text_field($message));
@@ -161,7 +162,12 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
 
         public function custom_forgot_page() {
             global $ciam_setting;
-            $forgot_page = get_permalink($ciam_setting['lost_password_page_id']);
+            if (!empty($ciam_setting['lost_password_page_id'])) {
+                $forgot_page = get_permalink($ciam_setting['lost_password_page_id']);
+            } else {
+                $forgot_page = site_url('wp-login.php?action=lostpassword');
+            }
+         
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $forgot_page);
             return $forgot_page;

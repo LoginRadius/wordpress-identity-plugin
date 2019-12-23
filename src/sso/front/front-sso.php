@@ -14,35 +14,34 @@ if (!class_exists('CIAM_Front_Sso')) {
          */
         function __construct() {
             global $ciam_sso_page_settings, $ciam_setting;
-            
             if (isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1') {
+         
                 add_action('wp_head', array($this, 'load_sso_variables'));
-                add_action('in_admin_footer', array($this, 'load_sso_variables'));
+                add_action('admin_head', array($this, 'load_sso_variables'));
                 add_action('ciam_sso_logout', array($this, 'ciam_sso_force_logout'));
                 if (isset($ciam_setting['enable_hostedpage']) && $ciam_setting['enable_hostedpage'] == 1) {
                     add_action('wp_head', array($this, 'ciam_sso_commonoptions'));
                 }
-            }
-            
+            }         
         }
 
         /*
          * Adding commom option for Loginradius js
          */
           public function ciam_sso_commonoptions() { 
-              global $ciam_credencials, $ciam_setting;
-              if(!empty($ciam_credencials['apikey'])){ // checking for the api key and site name is not blank.
+              global $ciam_credentials, $ciam_setting;
+              if(!empty($ciam_credentials['apikey'])){ // checking for the api key and site name is not blank.
               ?>
              <script type="text/javascript">
              var commonOptions = {};
-             commonOptions.apiKey = '<?php echo $ciam_credencials['apikey']; ?>';
-             commonOptions.appName = '<?php echo $ciam_credencials['sitename']; ?>';
+             commonOptions.apiKey = '<?php echo $ciam_credentials['apikey']; ?>';
+             commonOptions.appName = '<?php echo $ciam_credentials['sitename']; ?>';
              var lrObjectInterval27 = setInterval(function () {
                 if(typeof LRObject !== 'undefined')
                 {
                     clearInterval(lrObjectInterval27);
-             var LRObject = new LoginRadiusV2(commonOptions);
-         }
+                     var LRObject = new LoginRadiusV2(commonOptions);
+                }
              }, 1);
              </script>
               <?php 
@@ -65,8 +64,8 @@ if (!class_exists('CIAM_Front_Sso')) {
          */
         
          public function ciam_sso_force_logout_head() { 
-              global $ciam_api_settings;
-            $ciam_api_settings = get_option('Ciam_API_settings');
+            global $ciam_api_settings;
+            $ciam_api_settings = get_option('ciam_api_settings');
              ?>
              <script>
                 jQuery(document).ready(function () {
@@ -78,11 +77,11 @@ if (!class_exists('CIAM_Front_Sso')) {
                         window.location.href = '<?php echo (site_url('/')) ?>';
                     };
                    var lrObjectInterval28 = setInterval(function () {
-                if(typeof LRObject !== 'undefined')
-                {
-                    clearInterval(lrObjectInterval28);
-                    LRObject.init("logout", logout_options);
-                }
+                    if(typeof LRObject !== 'undefined')
+                    {
+                        clearInterval(lrObjectInterval28);
+                        LRObject.init("logout", logout_options);
+                    }
                    }, 1);
                 })
             </script>
@@ -102,6 +101,7 @@ if (!class_exists('CIAM_Front_Sso')) {
                 jQuery(document).ready(function () {
                   
             <?php 
+
             if (!is_user_logged_in()) {
                 $server = (isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on') ? 'https' : 'http';
                 $actual_link = "$server://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -126,26 +126,26 @@ if (!class_exists('CIAM_Front_Sso')) {
                             form.submit();
                         };
                         var lrObjectInterval29 = setInterval(function () {
-                if(typeof LRObject !== 'undefined')
-                {
-                    clearInterval(lrObjectInterval29);
-                            LRObject.init("ssoLogin", ssologin_options);
-                    }
+                        if(typeof LRObject !== 'undefined')
+                        {
+                            clearInterval(lrObjectInterval29);
+                                    LRObject.init("ssoLogin", ssologin_options);
+                        }
                         }, 1);
-                 <?php } } else {  ?>
+                 <?php }} else {
+                     ?>
                         var check_options = {};
                         check_options.onError = function (response) {
                             if(typeof response != 'undefined' && response != ''){
-                            if("<?php echo get_user_meta(get_current_user_id(), 'accesstoken',true);?>" != response){
-                                // On Error
-                            // If user is not log in then this function will execute.
-                            window.location.href = "<?php echo html_entity_decode(wp_logout_url(''));?>";
-                            }
-                        }else{ 
-                        logout("<?php echo html_entity_decode(wp_logout_url(''));?>");
-                        }
-                            
-                            
+                                if("<?php echo get_user_meta(get_current_user_id(), 'accesstoken',true);?>" != response){
+                                    // On Error
+                                // If user is not log in then this function will execute.
+                                localStorage.clear();
+                                window.location.href = "<?php echo html_entity_decode(wp_logout_url(''));?>";
+                                }
+                            }else{                                
+                                logout("<?php echo html_entity_decode(wp_logout_url(''));?>");
+                            }   
                         };
                         check_options.onSuccess = function (response) {
                          
@@ -153,12 +153,13 @@ if (!class_exists('CIAM_Front_Sso')) {
                             // If user is log in then this function will execute.
                         };
                         var lrObjectInterval31 = setInterval(function () {
-                       if(typeof LRObject !== 'undefined')
-                       {
+                        if(typeof LRObject !== 'undefined')
+                        {
                         clearInterval(lrObjectInterval31);  
                             LRObject.init("ssoNotLoginThenLogout", check_options);
-                    }
+                        }
                         }, 1);
+
                         var href = jQuery('#wp-admin-bar-logout a').attr('href');
                         jQuery('#wp-admin-bar-logout a').css({"cursor": "pointer"});
                         jQuery('#wp-admin-bar-logout a').removeAttr('href');
@@ -176,19 +177,21 @@ if (!class_exists('CIAM_Front_Sso')) {
                                 logout(href);
                             });
                         }
+
                         function logout(href) {
                             var logout_options = {};
                             logout_options.onSuccess = function () {
+                                localStorage.clear();
                                 window.location.href = href;
                                 // On Success
                                 //Write your custom code here
                             };
                             var lrObjectInterval30 = setInterval(function () {
-                if(typeof LRObject !== 'undefined')
-                {
-                    clearInterval(lrObjectInterval30);
-                            LRObject.init("logout", logout_options);
-                        }
+                            if(typeof LRObject !== 'undefined')
+                            {
+                                clearInterval(lrObjectInterval30);
+                                    LRObject.init("logout", logout_options);
+                            }
                             }, 1);
                         }
             <?php } ?>

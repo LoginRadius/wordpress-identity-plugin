@@ -42,18 +42,17 @@ if (!class_exists('CIAM_Authentication_Loginfunction')) {
          */
 
         public function custom_login_page() {
-            global $ciam_setting;
+            global $ciam_setting;           
             if (!empty($ciam_setting['login_page_id'])) {
                 $login_page = $this->get_redirect_to_params(get_permalink($ciam_setting['login_page_id']));
             } else {
                 $login_page = site_url('wp-login.php');
             }
-
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $login_page);
             return $login_page;
         }
-
+        
         /*
          * default registration link.
          */
@@ -65,10 +64,10 @@ if (!class_exists('CIAM_Authentication_Loginfunction')) {
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $register_page);
             return $register_page;
         }
-/*
+        /*
          * Add datepicker
          */
-        public function datepickerscript(){ 
+        public function datepickerscript(){
             
             wp_enqueue_style('ciam-style-datepicker', '//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css');
             wp_enqueue_script('ciam-js-datepicker', '//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js', array('jquery'), CIAM_PLUGIN_VERSION, false);
@@ -150,9 +149,11 @@ if (!class_exists('CIAM_Authentication_Loginfunction')) {
 
         //[ciam_login_form]
         public function ciam_login_form() {
-           
+
             global $ciam_setting,$ciam_sso_page_settings;
-            $ciam_sso_page_settings = get_option('Ciam_Sso_Page_settings');;
+           
+            $ciam_sso_page_settings = get_option('Ciam_Sso_Page_settings');
+            
             if (!empty($ciam_setting['login_page_id'])) {
                 $url = get_permalink($ciam_setting['login_page_id']);
                 //checking for hosted page....
@@ -170,7 +171,7 @@ if (!class_exists('CIAM_Authentication_Loginfunction')) {
                     <script type="text/javascript">
                         jQuery(document).ready(function () { 
                           <?php
-                            if(isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1')   {?>
+                            if(isset($ciam_sso_page_settings['sso_enable']) && $ciam_sso_page_settings['sso_enable'] == '1') {?>
                                 <?php if (!empty($_GET['vtype']) && !empty($_GET['vtoken'])) { ?>
                                         <?php
                                         if ($_GET['vtype'] === 'oneclicksignin' || $_GET['vtype'] === 'emailverification') {

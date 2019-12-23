@@ -856,7 +856,7 @@ textarea.ciam-shortcode {
 #showcaptcha{
     display:none;
 }
-#custom_field_obj,#terms_conditions{
+#custom_field_obj,#terms_conditions, #registation_form_schema{
     width:50%;
     overflow-y:scroll;
     border-radius:5px;
@@ -1067,6 +1067,9 @@ textarea.ciam-shortcode {
     top: 50%;
     width: 500px;
 }
+#wp-terms_and_conditions-wrap{
+    width: 55% !important;
+}
 
 @keyframes lr_loading_screen_animation_spinning {
     0% {
@@ -1096,4 +1099,25 @@ textarea.ciam-shortcode {
         margin-top:5px;
     
     }
+}
+body.mce-fullscreen div.mce-fullscreen {
+    top: 32px;
+}
+body.mce-fullscreen #adminmenuwrap{
+    display: none;
+}
+tbody .user-admin-color-wrap,
+tbody .user-admin-bar-front-wrap,
+tbody .user-user-login-wrap,
+tbody .user-first-name-wrap,
+tbody .user-last-name-wrap,
+tbody .user-nickname-wrap,
+tbody .user-display-name-wrap,
+tbody .user-url-wrap,
+tbody .user-description-wrap, 
+tbody .user-profile-picture, 
+tbody .user-sessions-wrap,
+#your-profile h2,
+#your-profile .button-primary{
+    display: none;
 }

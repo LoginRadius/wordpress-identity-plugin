@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 3.3.0
+ * @version : 4.0.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -13,6 +13,7 @@ namespace LoginRadiusSDK\Clients;
 
 use LoginRadiusSDK\Utility\Functions;
 use LoginRadiusSDK\LoginRadiusException;
+use LoginRadiusSDK\Clients\IHttpClientInterface;
 
 /**
  * Class DefaultHttpClient
@@ -21,62 +22,64 @@ use LoginRadiusSDK\LoginRadiusException;
  *
  * @package LoginRadiusSDK\Clients
  */
-class WPHttpClient implements IHttpClient {
-
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array()) { 
-        new Functions($apikey, $apisecret, $customize_options);
-    }
-
-    public function request($path, $query_array = array(), $options = array()) {
-       
-        $parse_url = parse_url($path);
-        $request_url = '';
-        if (!isset($parse_url['scheme']) || empty($parse_url['scheme'])) {
-            $request_url .= API_DOMAIN;
+class WPHttpClient implements IHttpClientInterface 
+{
+    /**
+     * @param $path
+     * @param array $queryArray
+     * @param array $options
+     * @return type
+     * @throws \LoginRadiusSDK\LoginRadiusException
+     */
+    public function request($path, $queryArray = array(), $options = array())
+    {      
+        $parseUrl = parse_url($path);
+        $requestUrl = '';
+        $endpoint = '';
+        if (!isset($parseUrl['scheme']) || empty($parseUrl['scheme'])) {
+            $requestUrl .= API_DOMAIN;
         }
 
-        $request_url .= $path;
-        if (isset($options['api_region']) && !empty($options['api_region'])) {
-            $query_array['region'] = $options['api_region'];
+        $requestUrl .= $path;
+        $endpoint .= $path;
+        
+        if (defined('API_REGION') && API_REGION != "") {
+            $queryArray['region'] = API_REGION;
         }
-        if (!isset($options['api_request_signing']) || empty($options['api_request_signing'])) {
+        if (defined('API_REQUEST_SIGNING') && API_REQUEST_SIGNING != "") {
+            $options['api_request_signing'] = API_REQUEST_SIGNING;
+        } else {
             $options['api_request_signing'] = false;
         }
-        if ($query_array !== false) {
+        if ($queryArray !== false) {
             if (isset($options['authentication']) && $options['authentication'] == 'secret') {
                 if (($options['api_request_signing'] === false) || ($options['api_request_signing'] === 'false')) {
                     $options = array_merge($options, Functions::authentication(array(), $options['authentication']));
                 }
-                $query_array = isset($options['authentication']) ? Functions::authentication($query_array) : $query_array;
+                $queryArray = isset($options['authentication']) ? Functions::authentication($queryArray) : $queryArray;
             } else {
-                $query_array = isset($options['authentication']) ? Functions::authentication($query_array, $options['authentication']) : $query_array;
+                $queryArray = isset($options['authentication']) ? Functions::authentication($queryArray, $options['authentication']) : $queryArray;
             }
-            $request_url .= (strpos($request_url, "?") === false) ? "?" : "&";
-            $request_url .= Functions::queryBuild($query_array);
+            $requestUrl .= (strpos($requestUrl, "?") === false) ? "?" : "&";
+            $requestUrl .= Functions::queryBuild($queryArray);
 
             if (isset($options['authentication']) && $options['authentication'] == 'secret') {
                 if (($options['api_request_signing'] === true) || ($options['api_request_signing'] === 'true')) {
-                    $options = array_merge($options, Functions::authentication($options, 'hashsecret', $request_url));
+                    $options = array_merge($options, Functions::authentication($options, 'hashsecret', $requestUrl));
                 }
             }
         }
-
-        
         
         $argument = array('timeout' => 500);
         $argument['method'] = isset($options['method']) ? strtoupper($options['method']) : 'GET';
         $data = isset($options['post_data']) ? $options['post_data'] : array();
         $content_type = isset($options['content_type']) ? trim($options['content_type']) : 'x-www-form-urlencoded';
         $auth_access_token = isset($options['access-token']) ? trim($options['access-token']) : '';
-         $sott_header_content = isset($options['X-LoginRadius-Sott']) ? trim($options['X-LoginRadius-Sott']) : '';
-        $apikey_header_content = isset($options['X-LoginRadius-ApiKey']) ? trim($options['X-LoginRadius-ApiKey']) : '';
+        $sott_header_content = isset($options['X-LoginRadius-Sott']) ? trim($options['X-LoginRadius-Sott']) : '';
         $secret_header_content = isset($options['X-LoginRadius-ApiSecret']) ? trim($options['X-LoginRadius-ApiSecret']) : '';
         $expiry_time = isset($options['X-Request-Expires']) ? trim($options['X-Request-Expires']) : '';
         $digest = isset($options['digest']) ? trim($options['digest']) : '';
-        $api_request_signing = isset($options['api_request_signing']) ? trim($options['api_request_signing']) : '';
-        $authentication = isset($options['authentication']) ? trim($options['authentication']) : '';
 
-           
 
             if ($auth_access_token != '') {
                 $argument['headers']['Authorization'] = $auth_access_token;
@@ -85,13 +88,7 @@ class WPHttpClient implements IHttpClient {
             }
             if ($sott_header_content != '') {
                 $argument['headers']['X-LoginRadius-Sott'] = $sott_header_content;
-            }
-            if ($api_request_signing != '') {
-                $argument['headers']['api_request_signing'] = $api_request_signing;
-            }
-            if ($authentication != '') {
-                $argument['headers']['authentication'] = $authentication;
-            }
+            }   
             if ($secret_header_content != '') {
                 $argument['headers']['X-LoginRadius-ApiSecret'] = $secret_header_content;
             }
@@ -100,33 +97,54 @@ class WPHttpClient implements IHttpClient {
             }
             if ($digest != '') {
                 $argument['headers']['digest'] = $digest;
+            }               
+            if (!empty($data)) {
+                if (($contentType == 'json') && (is_array($data) || is_object($data))) {
+                    $data = json_encode($data);
+                }
             }
-               
-            if($content_type == 'json'){
-               if(!is_string($data)){
-                $data = json_encode($data);
-               }
-            }
-            
-            if($data !== true){
+            if($data !== true) {
                 $argument['body'] = $data;
             }
-        $response = wp_remote_request($request_url, $argument);
+            $response = wp_remote_request($requestUrl, $argument);
+
+        $requestedData = [
+            'GET' => $queryArray,
+            'POST' => (isset($options['post_data']) ? $options['post_data'] : []),
+          ];
+        if (defined('WP_DEBUG') && true === WP_DEBUG) {
+            $responseType = 'error';
+            if (!empty($response)) {
+              $res = $response['body'] != "" ? json_decode($response['body']) : "";        
+              if (!isset($res->errorCode)) {
+                $responseType = 'success';
+              }
+            }
+            if (array_key_exists("apiSecret",$requestedData['GET'])) {
+                unset($requestedData['GET']['apiSecret']);      
+            }
+            $logData['endpoint'] = $endpoint;
+            $logData['method'] = $argument['method'];
+            $logData['data'] = !empty($requestedData) ? json_encode($requestedData) : '';
+            $logData['response'] = json_encode($response);
+            $logData['response_type'] = ucfirst($responseType);
+
+            $log_message = '[==================================================== '."\r\n".' LoginRadius Log'."\r\n" . date("F j, Y, g:i a e O") . ']' . "API Endoint :" . "\r\n" . $logData['endpoint'] . "\r\n" . "Method :" . "\r\n" . $logData['method'] . "\r\n" . "Data :" . "\r\n" . $logData['data'] . "\r\n" . "Function Output :" . "\r\n" . $logData['response'] . "\r\n". "Response Type :" . "\r\n" . $logData['response_type'] . "\r\n".'====================================================]'."\r\n";
+            error_log($log_message, 3, CIAM_PLUGIN_DIR . 'ciam_debug.log');
+        }
 
         if (!empty($response)) {
-            if(isset($response->errors)){
-                
+            if(isset($response->errors)) {
                 $error = isset($response->errors['http_request_failed'][0])?$response->errors['http_request_failed'][0]:'An error occurred';
                 throw new LoginRadiusException($error, $response);
             }
-            elseif(isset($response['body'])){
+            elseif(isset($response['body'])) {
                 $result = json_decode($response['body']);
                 if (isset($result->errorCode) && !empty($result->errorCode)) {
                     throw new LoginRadiusException($result->description, $result);
                 }
             }
         }
-       
         
         return $response['body'];
     }

@@ -17,7 +17,7 @@ class CIAM_Plugin_Auto_Loader {
      * Including modules files
      */
     function include_submodule() {
-        $dirs = glob(CIAM_PLUGIN_DIR. '*', GLOB_ONLYDIR );
+        $dirs = glob(CIAM_PLUGIN_DIR. '*', GLOB_ONLYDIR );     
         $loadModules = array();
         foreach ($dirs as $dir) {
             $loadModules[] = json_decode($this->get_config_file($dir));

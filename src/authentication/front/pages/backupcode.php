@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit();
 }
 
-use LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
+use LoginRadiusSDK\CustomerRegistration\Advanced\MultiFactorAuthenticationAPI;
 
 if (!class_exists('CIAM_Authentication_Backupcode')) {
 
@@ -31,14 +31,14 @@ if (!class_exists('CIAM_Authentication_Backupcode')) {
 
         public function ciam_backupcode() {
             
-            global $ciam_setting, $ciam_credencials;
+            global $ciam_setting, $ciam_credentials;
                 $user_id = get_current_user_id();
                 if ($user_id > 0) {
                     $accessToken = get_user_meta($user_id, 'accesstoken', true);
                     if (!empty($accessToken)) {
-                        $UserAPI = new UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
+                        $mfaObject = new MultiFactorAuthenticationAPI();
                         try {
-                            $authpermission = $UserAPI->mfaValidateAccessToken($accessToken, '');
+                            $authpermission = $mfaObject->mfaConfigureByAccessToken($accessToken);
                             if ((isset($authpermission->IsGoogleAuthenticatorVerified) && $authpermission->IsGoogleAuthenticatorVerified) || (isset($authpermission->IsOTPAuthenticatorVerified) && $authpermission->IsOTPAuthenticatorVerified)) {
                                 ?>
                                 <script type="text/javascript">

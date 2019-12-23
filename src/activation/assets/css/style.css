@@ -48,6 +48,12 @@ h2.nav-tab-wrapper, h3.nav-tab-wrapper {
 	position: relative;
 	z-index: 0
 }
+p#savebtn {
+	clear: both;
+    margin: 30px 0;
+    padding: 0;
+    text-align: right;
+}
 .active-row-field {
 	margin-left: 280px;
 	width: 350px!important
@@ -107,7 +113,7 @@ h2.nav-tab-wrapper, h3.nav-tab-wrapper {
 .ciam-row-field.custom-tooltip {
 	margin-left: 253px;
 }
-#custom_field_obj, #terms_conditions {
+#custom_field_obj, #terms_conditions, #registation_form_schema {
 	width: 55%;
 	overflow: auto;
 	border-radius: 0;
@@ -542,12 +548,14 @@ label.active-show-toggle, label.active-toggle {
 	-ms-user-select: none;
 	user-select: none
 }
-.loginoptions.Notification-timeout-settings-field h3.ciam_property_title {
+.loginoptions.Notification-timeout-settings-field h3.ciam_property_title,
+.loginoptions.custom-hub-domain-settings-field h3.ciam_property_title {
 	position: relative;
 	width: 100%;
 	float: left;
 }
-.loginoptions.Notification-timeout-settings-field input.ciam-row-field.custom-tooltip {
+.loginoptions.Notification-timeout-settings-field input.ciam-row-field.custom-tooltip,
+.loginoptions.custom-hub-domain-settings-field input.ciam-row-field.custom-tooltip {
 	margin-left: 0;
 	width: 55% !important;
 }
@@ -928,6 +936,10 @@ span.ciam_property_title.custom_ciam_property_title.requires {
 	position: relative;
 	font-size: 13px !important;
 }
+span.ciam_property_title.custom_ciam_property_title {
+	position: relative;
+	font-size: 13px !important;
+}
 input.active-row-field.custom_active-row-field {
     margin: 0;
 }
@@ -945,7 +957,7 @@ span.ciam_property_title.custom_ciam_property_title.requires::before {
 }
 .ciam_show_button
 {
-	padding: 4px 8px;
+	padding: 5px 8px;
     background: #29d;
     width: 40px;
     color: #fff;

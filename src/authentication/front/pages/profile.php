@@ -21,14 +21,14 @@ if (!class_exists('CIAM_Authentication_Profile')) {
          */
 
         public function init() {
-            global $ciam_setting,$ciam_credencials;
+            global $ciam_setting,$ciam_credentials;
             $user_id = get_current_user_id();
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
-
+     
             if (!empty($accesstoken)) {
-                $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                $configAPI = new \LoginRadiusSDK\CustomerRegistration\Advanced\ConfigurationAPI();
                 try {
-                    $config = $configAPI->getConfigurationList();
+                    $config = $configAPI->getConfigurations();
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     error_log($e->getErrorResponse()->Description);
                 }
@@ -45,29 +45,33 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 add_action('admin_head', array($this, 'TwoFAonprofile'));
 
                 add_action('admin_head', array($this, 'profilephonedisplay'));
-                add_action('admin_head', array($this, 'profilephoneupdatejs'));
-
-                add_action('admin_head', array($this, 'extra_email_fields'));
+                add_action('admin_head', array($this, 'profilephoneupdatejs')); 
                 add_action('show_user_profile', array($this, 'profilephoneuupdate'));
+
+                add_action('admin_head', array($this, 'userProfileUpdateJS'));
+                add_action('show_user_profile', array($this, 'userProfileUpdate'));
+
+                add_action('admin_head', array($this, 'extra_email_fields'));        
                 add_action('admin_head', array($this, 'profile_password'));
             }
         }
 
         public function profilephonedisplay() {
             $user_id = get_current_user_id();
-            global $ciam_credencials, $pagenow;
+            global $ciam_credentials, $pagenow;
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
 
             if (!empty($accesstoken && $pagenow === "profile.php")) {
                 $phoneid = '--';
-                $userAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                $authAPI = new \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI();
                 try {
-                    $userpro = $userAPI->getProfile($accesstoken);
+                    $userpro = $authAPI->getProfileByAccessToken($accesstoken);
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     error_log($e->getErrorResponse()->Description);
                 }
                 if (isset($userpro)) {
-                    $phoneid = isset($userpro->PhoneId) && $userpro->PhoneId != '' ? $userpro->PhoneId : '--';
+                    $phoneid = isset($userpro->PhoneId) && $userpro->PhoneId != '' ? $userpro->PhoneId : '';
+                    if($phoneid != ''){
                     $phone_html = '<tr class="phoneid_table" style="display: none"><th>Phone Number</th><td>' . $phoneid . '</td></tr>';
                     ?>
                     <script>
@@ -77,7 +81,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                         jQuery(field).insertBefore('.user-url-wrap');
                         });</script>
                     <?php
-                }
+                }}
             }
         }
 
@@ -88,16 +92,11 @@ if (!class_exists('CIAM_Authentication_Profile')) {
         public function ciam_hook_accountLinking() {
             $user_id = get_current_user_id();
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
-            ?><script type='text/javascript'><?php
-            if (!empty($accesstoken)) {
-                ?>
-                    // to set localstorage for token to show linking interface in case of hosted page enable .....
-                    localStorage.setItem('LRTokenKey', "<?php echo $accesstoken; ?>");
-            <?php } ?>
+            ?><script type='text/javascript'>
                 jQuery(document).ready(function () {
                 var lrObjectInterval23 = setInterval(function () {
                 if (typeof LRObject !== 'undefined')
-                {
+                {                 
                 clearInterval(lrObjectInterval23);
                 accountlinking();
                 }
@@ -136,19 +135,20 @@ if (!class_exists('CIAM_Authentication_Profile')) {
 
         public function profiletwofactorauthentication() {
             $user_id = get_current_user_id();
-            global $ciam_credencials;
+            global $ciam_credentials;
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
-
+    
             if (!empty($accesstoken)) {
-                $socialAPI = new \LoginRadiusSDK\CustomerRegistration\Social\SocialLoginAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                $socialAPI = new \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI();
                 try {
-                    $socialpro = $socialAPI->getUserProfiledata($accesstoken);
+                    $socialpro = $socialAPI->getSocialUserProfile($accesstoken);
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     error_log($e->error_response->description);
                 }
-                if (isset($socialpro) && $socialpro->Provider == 'RAAS') {
+          
+                if (isset($socialpro->Provider) && $socialpro->Provider == 'RAAS') {
                     ?>
-                    <div style="clear:both;"><h2 class="profiletwofactorauthentication" style="display: none">Two Factor Authentication</h2><div id="authentication-container"></div></div>   
+                    <div style="clear:both;"><h3 class="profiletwofactorauthentication" style="display: none;">Two Factor Authentication</h3><div id="authentication-container"></div></div>   
 
                     <?php
                 }
@@ -161,7 +161,17 @@ if (!class_exists('CIAM_Authentication_Profile')) {
 
         public function profilephoneuupdate() {
             ?>
-            <div style="clear:both;"><h2 class="profilephoneuupdate" style="display: none">Update Phone Number</h2><div id="updatephone-container"></div> </div>
+            <div style="clear:both;"><h3 class="profilephoneuupdate" style="display: none">Update Phone Number</h3><div id="updatephone-container"></div> </div>
+            <?php
+        }
+
+         /*
+         * update user profile 
+         */
+
+        public function userProfileUpdate() {
+            ?>
+            <div style="clear:both;"><h3 class="userProfileUpdate" style="display: none">Update User Profile</h3><div id="profileeditor-container"></div> </div>
             <?php
         }
 
@@ -209,16 +219,16 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                 */
 
                public function extra_email_fields() {
-                   global $ciam_credencials, $pagenow;
+                   global $ciam_credentials, $pagenow;
                    $user_id = get_current_user_id();
                    if ($pagenow === "profile.php") {
-                       $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+                       $accoutObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI();
                        $current_user = wp_get_current_user(); // getting the current user info....
                        $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
 
                        if (empty($ciam_uid)) {
                            try {
-                               $lr_profile = $accoutObj->getProfileByEmail($current_user->user_email);
+                               $lr_profile = $accoutObj->getAccountProfileByEmail($current_user->user_email);
                                if (isset($lr_profile->Description)) {
                                    error_log($lr_profile->Description);
                                } else {
@@ -230,7 +240,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                        } else {
                            $lr_array = array();
                            try {
-                               $lr_profile = $accoutObj->getProfileByUid($ciam_uid);
+                               $lr_profile = $accoutObj->getAccountProfileByUid($ciam_uid);
                                if (!empty($lr_profile->Email)) {
                                    foreach ($lr_profile->Email as $key => $value) {
                                        $lr_array[$key] = $value->Value;
@@ -270,16 +280,16 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                        }
                        
             public function profile_password(){
-            global $ciam_credencials;
+            global $ciam_credentials;
             $uri = $_SERVER['REQUEST_URI']; // getting the current page url
             $pagename = explode('?', basename($uri)); // checking for the query string
             $user_id = get_current_user_id();
             $ciam_uid = get_user_meta($user_id, 'ciam_current_user_uid', true);
-            $accountobj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'], array('output_format' => 'json'));
+            $accountObj = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI();
             if(isset($_POST) && isset($_POST['loginradius-setnewpassword-hidden']) && $_POST['loginradius-setnewpassword-hidden'] == 'setpassword' && isset($_POST['setnewpassword']) && isset($_POST['setconfirmpassword']) && $_POST['setnewpassword'] == $_POST['setconfirmpassword'])
             {
                 try {
-                        $result = $accountobj->setPassword($ciam_uid, $_POST['setnewpassword']);
+                        $result = $accountObj->setAccountPasswordByUid($_POST['setnewpassword'], $ciam_uid);
                         if (isset($result) && $result) {
                         add_action( 'admin_notices', array($this, 'admin_notice__success' ));
                         }
@@ -292,7 +302,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
            
             if ($pagename[0] != "user-new.php" && $pagename[0] != "user-edit.php") { // condition to check the default add and edit page
                  try{
-            $userprofile = $accountobj->getProfileByUid($ciam_uid);
+            $userprofile = $accountObj->getAccountProfileByUid($ciam_uid);
         } catch (\LoginRadiusSDK\LoginRadiusException $e) {
            
         }
@@ -317,8 +327,7 @@ if (!class_exists('CIAM_Authentication_Profile')) {
                     {
                         jQuery("#updatephone-container").after("<span id='authdiv_success'></span>");
                          ciamfunctions.message("An OTP has been sent.", "#authdiv_success", "success");
-                    }
-                    });
+                    }});
                     }
                     }, 1);
                     jQuery("#password th,#password td").html('');
@@ -431,14 +440,33 @@ if (!class_exists('CIAM_Authentication_Profile')) {
 
                            public function profilephoneupdatejs() {
                                ?>
+                               <script type="text/javascript">
+                                jQuery(document).ready(function(){ // it will call the optional 2 fa function
+                                                        var lrObjectInterval26 = setInterval(function () {
+                                                        if (typeof LRObject !== 'undefined')
+                                                        {
+                                clearInterval(lrObjectInterval26);                    
+                                updatephoneonprofile();
+                                }
+                                }, 1);
+                                });
+                                </script>
+                            <?php
+                            }
+
+                            /*
+                            * Update user profile section. 
+                            */
+
+                           public function userProfileUpdateJS() {
+                               ?>
                             <script type="text/javascript">
                                 jQuery(document).ready(function(){ // it will call the optional 2 fa function
                                                         var lrObjectInterval26 = setInterval(function () {
                                                         if (typeof LRObject !== 'undefined')
                                                         {
-                                clearInterval(lrObjectInterval26);
-                    
-                                updatephoneonprofile();
+                                clearInterval(lrObjectInterval26);                    
+                                profileUpdateContainer();
                            }
                            }, 1);
                            });

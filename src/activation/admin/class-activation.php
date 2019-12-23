@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) {
     exit();
 }
 
+use LoginRadiusSDK\CustomerRegistration\Advanced\ConfigurationAPI;
+use LoginRadiusSDK\Utility\Functions;
 /**
  * The main class and initialization point of the plugin admin.
  */
@@ -15,7 +17,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
          * Constructor for class CIAM_Social_Login_Admin
          */
 
-        public function __construct() {
+        public function __construct() {        
 
             add_action('init', array($this, 'init'), 101);
            
@@ -51,7 +53,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
          * Register CIAM_settings and its sanitization callback. Add Login Radius meta box to pages and posts.
          */
         public function admin_init() {
-            register_setting('Ciam_API_settings', 'Ciam_API_settings', array($this, 'ciam_activation_validation'));
+            register_setting('ciam_api_settings', 'ciam_api_settings', array($this, 'ciam_activation_validation'));
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
@@ -59,47 +61,53 @@ if (!class_exists('CIAM_Activation_Admin')) {
         /**
          * Get response from LoginRadius api
          */
-        public function api_validation_response($apiKey, $apiSecret) { 
+        public function api_validation_response($apiKey, $apiSecret, $apiCustomDomain='') {
             global $currentErrorCode, $currentErrorResponse;
 
-            $options['method'] = 'get';
-            try{
-            $wpclient = new \LoginRadiusSDK\Clients\WPHttpClient($apiKey, $apiSecret);
-            
-            try {
-                $query_array = array('apikey' => $apiKey, 'apisecret' => $apiSecret);
+            $data = [];
+            try {        
+                $queryParam = [
+                  'apikey' => $apiKey,
+                  'apisecret' => $apiSecret,
+                ];
 
-                $response = json_decode($wpclient->request("https://api.loginradius.com/api/v2/app/validate", $query_array, $options));
-
-                if (isset($response->Status) && $response->Status) {
+                if(isset($apiCustomDomain) && $apiCustomDomain != '') {                    
+                    $resourcePath = $apiCustomDomain.'/api/v2/app/validate';
+                } else {                  
+                    $resourcePath = 'https://api.loginradius.com/api/v2/app/validate';
+                }
+                
+                $response = Functions::_apiClientHandler('GET', $resourcePath, $queryParam);       
+                  
+                if (isset($response->Status) && $response->Status) {              
                     /* action for debug mode */
-                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');          
                     return true;
                 } else {
-
-                    $currentErrorCode = '0';
-                    $currentErrorResponse = "Details Entered are wrong!";
                     /* action for debug mode */
-                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
-                    return false;
-                }
-            } catch (\LoginRadiusSDK\LoginRadiusException $e) { 
+                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');            
 
+                  $errorMessage = array(
+                    "API_KEY_NOT_VALID" => "LoginRadius API key is invalid. Get your LoginRadius API key from LoginRadius account",
+                    "API_SECRET_NOT_VALID" => "LoginRadius API Secret is invalid. Get your LoginRadius API Secret from LoginRadius account",
+                    "API_KEY_NOT_FORMATED" => "LoginRadius API Key is not formatted correctly",
+                    "API_SECRET_NOT_FORMATED" => "LoginRadius API Secret is not formatted correctly",
+                );
+            
+                foreach ($response->Messages as $value) {
+                    $data['message'] = $errorMessage["$value"];
+                    $data['status'] = 'error';
+                    break;
+                  }                  
+                  $currentErrorResponse = $data['message'];
+                  return false;
+                }                
+              }
+              catch (LoginRadiusException $e) {
                 $currentErrorCode = '0';
-                $currentErrorResponse = "Something went wrong: " . $e->getErrorResponse()->description;
-
-                /* action for debug mode */
-                //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
+                $currentErrorResponse = "Something went wrong1: " . $e->getErrorResponse()->description;
                 return false;
-            }
-            }catch(\LoginRadiusSDK\LoginRadiusException $e){
-                $currentErrorCode = '0';
-                $currentErrorResponse = "Please recheck your LoginRadius details";
-
-                /* action for debug mode */
-                //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
-                return false;
-            }
+              }  
         }
         
 
@@ -108,21 +116,24 @@ if (!class_exists('CIAM_Activation_Admin')) {
          */
 
         function ciam_activation_validation($settings) {
+               
             $settings['apikey'] = sanitize_text_field($settings['apikey']);
-            $settings['secret'] = sanitize_text_field($settings['secret']);
+            $settings['secret'] = sanitize_text_field($settings['secret']);     
+            $settings['custom_domain'] = sanitize_text_field($settings['custom_domain']);
+
 
             if (empty($settings['apikey']) && empty($settings['secret'])) {
                 $message = 'LoginRadius API Key and API Secret are blank. Get your LoginRadius API Key and API Secret from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>';
-                add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
+                add_settings_error('ciam_api_settings', esc_attr('settings_updated'), $message, 'error');
 
                 /* action for debug mode */
                // do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return $settings;
             }
 
-            if (empty($settings['apikey'])) {
+            if (empty($settings['apikey'])) {                
                 $message = 'LoginRadius API Key is blank. Get your LoginRadius API Key from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>';
-                add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
+                add_settings_error('ciam_api_settings', esc_attr('settings_updated'), $message, 'error');
 
                 /* action for debug mode */
                 //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
@@ -131,7 +142,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
 
             if (empty($settings['secret'])) {
                 $message = 'LoginRadius API Secret is blank. Get your LoginRadius API Secret from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>';
-                add_settings_error('Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
+                add_settings_error('ciam_api_settings', esc_attr('settings_updated'), $message, 'error');
                 /* action for debug mode */
                 //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
                 return $settings;
@@ -139,103 +150,85 @@ if (!class_exists('CIAM_Activation_Admin')) {
            
 
             if (isset($settings['apikey']) && isset($settings['secret'])) {
-                $encodeString = 'settings';
 
-                if ($this->api_validation_response($settings['apikey'], $settings['secret'], $encodeString)) { 
-                    $config_api = get_option('Ciam_API_settings') ? get_option('Ciam_API_settings') : '';
-               
-                    if(!isset($config_api['apikey']) || !isset($config_api['secret']) || $config_api['apikey'] != $settings['apikey'] || $config_api['secret'] != $settings['secret'] || !isset($config_api['update_plugin']) || $config_api['update_plugin'] == 'false')
-                    {
-                    
-                    $configAPI = new \LoginRadiusSDK\Advance\ConfigAPI($settings['apikey'], $settings['secret'], array('output_format' => 'json'));
-                    
-                    $config = $configAPI->getConfigurationList();
-              
-                    $ciam_settings = get_option('ciam_authentication_settings');
-                    
+                $encodeString = 'settings';
+                $config_api = get_option('ciam_api_settings') ? get_option('ciam_api_settings') : '';  
+                
+                    if((!empty($config_api) && isset($config_api['secret']) && $config_api['secret'] != '') && ($config_api['secret'] == $settings['secret'])){             
+                        $secret_key = $this->encrypt_and_decrypt( $settings['secret'], $settings['apikey'], $settings['apikey'], 'd' );
+                    }else{
+                        $secret_key = $settings['secret'];
+                    }
+
+                if ($this->api_validation_response($settings['apikey'], $secret_key, $settings['custom_domain'])) {          
+
+                    $encrypted_key = $this->encrypt_and_decrypt( $secret_key, $settings['apikey'], $settings['apikey'], 'e' );                  
+                    $decrypted_key = $this->encrypt_and_decrypt( $encrypted_key, $settings['apikey'], $settings['apikey'], 'd' );  
+                                 
+                    Functions::setDefaultApplication($settings['apikey'], $decrypted_key); 
+                    $configObject = new ConfigurationAPI();
+                    $config = $configObject->getConfigurations();          
+                    $ciam_settings = get_option('ciam_authentication_settings');        
+                
                     $config_options = array();
                     if(isset($config->AppName))
                     {
-                        $settings['sitename'] = $config->AppName;
+                        $settings['sitename'] = $config->AppName;           
+                        $settings['secret'] = $encrypted_key;             
                     }
-                    if(isset($config->IsUserNameLogin) && !isset($ciam_settings['login_type']))
-                    {
+                    if(isset($config->IsUserNameLogin) && !isset($ciam_settings['login_type'])) {
                     $config_options['login_type'] =  $config->IsUserNameLogin;
                     }
-                    if(isset($config->AskEmailIdForUnverifiedUserLogin) && !isset($ciam_settings['askEmailForUnverifiedProfileAlways']))
-                    {
+                    if(isset($config->IsUserNameLogin) && !isset($ciam_settings['login_type'])) {
+                        $config_options['login_type'] =  $config->IsUserNameLogin;
+                    }
+                      
+                    $config_options['custom_hub_domain'] =  (isset($config->CustomDomain) && $config->CustomDomain!='') ? $config->CustomDomain:'';
+               
+                    if(isset($config->AskEmailIdForUnverifiedUserLogin) && !isset($ciam_settings['askEmailForUnverifiedProfileAlways'])){
                     $config_options['askEmailForUnverifiedProfileAlways'] =  $config->AskEmailIdForUnverifiedUserLogin;
                     }
-                    if(isset($config->AskRequiredFieldsOnTraditionalLogin) && !isset($ciam_settings['AskRequiredFieldsOnTraditionalLogin']))
-                    {
+                    if(isset($config->AskRequiredFieldsOnTraditionalLogin) && !isset($ciam_settings['AskRequiredFieldsOnTraditionalLogin'])){
                     $config_options['AskRequiredFieldsOnTraditionalLogin'] =  $config->AskRequiredFieldsOnTraditionalLogin;
                     }
-                    if(isset($config->AskPasswordOnSocialLogin) && !isset($ciam_settings['prompt_password']))
-                    {
+                    if(isset($config->AskPasswordOnSocialLogin) && !isset($ciam_settings['prompt_password'])){
                     $config_options['prompt_password'] =  $config->AskPasswordOnSocialLogin;
                     }
-                    if(isset($config->CheckPhoneNoAvailabilityOnRegistration) && !isset($ciam_settings['existPhoneNumber']))
-                    {
+                    if(isset($config->CheckPhoneNoAvailabilityOnRegistration) && !isset($ciam_settings['existPhoneNumber'])){
                     $config_options['existPhoneNumber'] =  $config->CheckPhoneNoAvailabilityOnRegistration;
                     }
-                    if(isset($config->IsInstantSignin->EmailLink) && !isset($ciam_settings['onclicksignin']))
-                    {
+                    if(isset($config->IsInstantSignin->EmailLink) && !isset($ciam_settings['onclicksignin'])){
                     $config_options['onclicksignin'] =  $config->IsInstantSignin->EmailLink;
                     }
-                    if(isset($config->IsInstantSignin->SmsOtp) && !isset($ciam_settings['instantotplogin']))
-                    {
+                    if(isset($config->IsInstantSignin->SmsOtp) && !isset($ciam_settings['instantotplogin'])){
                     $config_options['instantotplogin'] =  $config->IsInstantSignin->SmsOtp;
                     }
-                    if(isset($ciam_settings['apirequestsigning']))
-                    {
+                    if(isset($ciam_settings['apirequestsigning'])){
                         $config_options['apirequestsigning'] =  $config->ApiRequestSigningConfig->IsEnabled;
                     }
-                    if(isset($config->ApiRequestSigningConfig->IsEnabled) && !isset($ciam_settings['apirequestsigning']))
-                    {
-                       
+                    if(isset($config->ApiRequestSigningConfig->IsEnabled) && !isset($ciam_settings['apirequestsigning'])){                       
                     $config_options['apirequestsigning'] =  $config->ApiRequestSigningConfig->IsEnabled;
                     }
-                   if(get_option('ciam_authentication_settings'))
-                   {
+                    if(get_option('ciam_authentication_settings')){
                     $config_options = array_merge(get_option('ciam_authentication_settings') , $config_options);
                      update_option('ciam_authentication_settings' , $config_options);
-                   }
-                   
-                   else
-                   {
-                       add_option('ciam_authentication_settings' , $config_options);
-                   }
                     }
+                    else{
+                       add_option('ciam_authentication_settings' , $config_options);
+                    }  
+                    
                     /* action for debug mode */
-                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
-
+                    //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');                    
+                   
                     return $settings;
                 } else {
-
+                  
                     // Api or Secret is not valid or something wrong happened while getting response from LoginRadius api
                     $message = 'Please recheck your LoginRadius details';
                     global $currentErrorCode, $currentErrorResponse;
-
-                    $errorMessage = array(
-                        "API_KEY_NOT_VALID" => 'LoginRadius API key is invalid. Get your LoginRadius API Key from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>',
-                        'API_SECRET_NOT_VALID' => 'LoginRadius API Secret is invalid. Get your LoginRadius API Secret from <a href="http://www.loginradius.com" target="_blank">LoginRadius</a>',
-                        'API_KEY_NOT_FORMATED' => 'LoginRadius API Key is not formatted correctly.',
-                        'API_SECRET_NOT_FORMATED' => 'LoginRadius API Secret is not formatted correctly.',
-                    );
-
-                    if ($currentErrorCode[0] == '0') {
-                        $message = $currentErrorResponse;
-                    } else {
-                        if (count($currentErrorCode) > 1) {
-
-                            add_settings_error('LR_Ciam_API_settings', esc_attr('settings_updated'), $errorMessage[$currentErrorCode[0]], 'error');
-                            add_settings_error('LR_Ciam_API_settings', esc_attr('settings_updated'), $errorMessage[$currentErrorCode[1]], 'error');
-                        } else {
-                            $message = $errorMessage[$currentErrorCode[0]];
-                        }
-                    }
-
-                    add_settings_error('LR_Ciam_API_settings', esc_attr('settings_updated'), $message, 'error');
+                  
+                    add_settings_error('LR_Ciam_API_settings', esc_attr('settings_updated'), $currentErrorResponse, 'error');
+                
                 }
             } else {
 
@@ -250,6 +243,30 @@ if (!class_exists('CIAM_Activation_Admin')) {
             //do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), '');
         }
 
+        /**
+        * Encrypt and decrypt
+        *
+        * @param string $string string to be encrypted/decrypted
+        * @param string $action what to do with this? e for encrypt, d for decrypt
+        */
+     
+        public function encrypt_and_decrypt( $string, $secretKey, $secretIv, $action) {
+            // you may change these values to your own
+            $secret_key = $secretKey;
+            $secret_iv = $secretIv;
+            $output = false;
+            $encrypt_method = "AES-256-CBC";
+            $key = hash( 'sha256', $secret_key );
+            $iv = substr( hash( 'sha256', $secret_iv ), 0, 16 );
+            if( $action == 'e' ) {
+            $output = base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
+            }
+            else if( $action == 'd' ){           
+            $output = openssl_decrypt( base64_decode( $string ), $encrypt_method, $key, 0, $iv );
+            }
+            return $output;
+            }
+
         /*
          * Adding Javascript/Jquery for admin settings page
          */
@@ -258,15 +275,7 @@ if (!class_exists('CIAM_Activation_Admin')) {
             global $ciam_js_in_footer, $ciam_setting;
 
             wp_enqueue_script('ciam_activation_options', CIAM_PLUGIN_URL . 'activation/assets/js/script.js', array('jquery'), CIAM_PLUGIN_VERSION, $ciam_js_in_footer);
-
-            // switching the minified version of js and css file 
-            if (!isset($ciam_setting['disable_minified_version'])) {
-
-                wp_register_style('ciam-admin-style', CIAM_PLUGIN_URL . 'activation/assets/css/style.min.css', array(), CIAM_PLUGIN_VERSION);
-            } else {
-                wp_register_style('ciam-admin-style', CIAM_PLUGIN_URL . 'activation/assets/css/style.css', array(), CIAM_PLUGIN_VERSION);
-            }
-
+            wp_register_style('ciam-admin-style', CIAM_PLUGIN_URL . 'activation/assets/css/style.min.css', array(), CIAM_PLUGIN_VERSION);
             wp_enqueue_style('ciam-admin-style');
             
             /* action for debug mode */

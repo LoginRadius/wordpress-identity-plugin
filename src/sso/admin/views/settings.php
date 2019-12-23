@@ -61,7 +61,7 @@ if (!class_exists('CIAM_Sso_Settings')) {
 
                                     <span class="active-toggle-name">
 
-            <?php _e('Do you want to enable sso?', 'CIAM'); ?>
+            <?php _e('Do you want to enable Single Sign On (SSO)', 'CIAM'); ?>
                                         <span class="ciam-tooltip" data-title="<?php _e('This feature allows Single Sign On to be enabled on different sites with common LoginRadius app.', 'ciam-plugin-slug'); ?>"> 
                                             <span class="dashicons dashicons-editor-help"></span>
                                         </span>

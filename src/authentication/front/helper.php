@@ -129,7 +129,7 @@ if (!class_exists('CIAM_Authentication_Helper')) {
             if(strlen($profileImageUrl)>=99){
                 $profileImageUrl=null;  
             }
-            else{  
+            else{ 
                $this->$profileImageUrl=$profileImageUrl; 
             }
             $output = array(
@@ -182,7 +182,10 @@ if (!class_exists('CIAM_Authentication_Helper')) {
                 $user_name = explode('@', $profileData->Email[0]->Value);
                 $username = $user_name[0];
                 $firstName = str_replace('_', ' ', $user_name[0]);
-            } else {
+            } elseif (isset($profileData->PhoneId) && !empty($profileData->PhoneId)) {        
+                $username = $profileData->PhoneId;
+                $firstName = $profileData->PhoneId;
+            }else {
                 $username = $profileData->ID;
                 $firstName = $profileData->ID;
             }
@@ -218,12 +221,10 @@ if (!class_exists('CIAM_Authentication_Helper')) {
                 update_user_meta($user_id, 'user_avatar_image', $profileImageUrl);
                 update_user_meta($user_id, 'ciam_id', $userProfileData->ID);
                 update_user_meta($user_id, 'ciam_uid', $userProfileData->Uid);
-            } else {
-                
+            } else {      
                 add_user_meta($user_id, 'user_avatar_image', $profileImageUrl);
                 add_user_meta($user_id, 'ciam_id', $userProfileData->ID);
-                add_user_meta($user_id, 'ciam_uid', $userProfileData->Uid);
-                
+                add_user_meta($user_id, 'ciam_uid', $userProfileData->Uid);                
             }
 
             /* action for debug mode */
@@ -237,20 +238,21 @@ if (!class_exists('CIAM_Authentication_Helper')) {
          */
         public function allow_login($user_id, $userProfileData, $register = false) {
             // saving data for hosted page login case....
+       
             if (isset($_REQUEST['token']) && !empty($_REQUEST['token'])) {
+                delete_user_meta($user_id, 'accesstoken'); 
+                delete_user_meta($user_id, 'ciam_current_user_uid');
                 add_user_meta($user_id, 'accesstoken', $_REQUEST['token']);
             }
 
             // inserting the current social media connected provider to db
 
             if (isset($userProfileData->Identities) && !empty($userProfileData->Identities)) {
-
                 add_user_meta($user_id, 'ciam_current_account_linked', $userProfileData->Identities[0]->Provider);
             }
 
-
             // saving lr data to wordpress on login....
-            $userdata = array(
+            $userdata = array (
                 'ID' => $user_id,
                 'user_nicename' => isset($userProfileData->FirstName) ? $userProfileData->FirstName : '',
                 'user_url' => isset($userProfileData->ImageUrl) ? $userProfileData->ImageUrl : '',
@@ -263,7 +265,6 @@ if (!class_exists('CIAM_Authentication_Helper')) {
                 'first_name' => isset($userProfileData->FirstName) ? $userProfileData->FirstName : '',
                 'last_name' => isset($userProfileData->LastName) ? $userProfileData->LastName : '',
             );
-
 
             // checking and saving only those values which are not empty.....            
             foreach ($metas as $key => $value) { // updating data to user meta table....
@@ -289,31 +290,32 @@ if (!class_exists('CIAM_Authentication_Helper')) {
             global $ciam_setting;
 
             $loginRedirect = '';
-            if (isset($ciam_setting['after_login_redirect']) && $ciam_setting['after_login_redirect'] == "samepage") {  
-                if (isset($_GET['redirect_to']) && !empty($_GET['redirect_to']) && !isset($_GET['referral'])) { 
-                    $loginRedirect = $_GET['redirect_to'];
-                    /* action for debug mode */
-                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $loginRedirect);
+            if (isset($ciam_setting['after_login_redirect']) && $ciam_setting['after_login_redirect'] == "samepage") {
+    
+                if (isset($_GET['redirect_to']) && !empty($_GET['redirect_to']) && !isset($_GET['referral'])) {
+                    $loginRedirect = $_GET['redirect_to'];                  
+                    /* action for debug mode */        
+                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $loginRedirect);   
                     return $loginRedirect;
                 } elseif (isset($_GET['redirect_to']) && !empty($_GET['redirect_to']) && isset($_GET['referral']) && $_GET['referral'] == 'true') {
                     $loginRedirect = $_GET['redirect_to'];
-                    /* action for debug mode */
-                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $loginRedirect);
+                    /* action for debug mode */                          
+                    do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $loginRedirect);                             
                     return $loginRedirect;
                 }
-            } else {               
-                $loginRedirect = isset($ciam_setting['after_login_redirect']) ? $ciam_setting['after_login_redirect'] : '';
+            } else {                           
+                $loginRedirect = isset($ciam_setting['after_login_redirect']) ? $ciam_setting['after_login_redirect'] : '';    
             }
             $redirectionUrl = site_url();
             if (isset($loginRedirect)) { 
                 switch (strtolower($loginRedirect)) {
-                    case 'homepage':
+                    case 'homepage':            
                         $redirectionUrl = site_url() . '/';
                         break;
-                    case 'dashboard':
+                    case 'dashboard':                   
                         $redirectionUrl = admin_url();
                         break;
-                    case 'custom':
+                    case 'custom':              
                         $customRedirectUrlOther = isset($ciam_setting['custom_redirect_other']) ? trim($ciam_setting['custom_redirect_other']) : '';
                         if (isset($loginRedirect) && strlen($customRedirectUrlOther) > 0) {
                             $redirectionUrl = trim($customRedirectUrlOther);
@@ -334,16 +336,20 @@ if (!class_exists('CIAM_Authentication_Helper')) {
                         }
                         $string = http_build_query($params);
                         if (strpos($redirectionUrl, 'vtype') !== false) { // condition to check the vtype = oneclick signin.
-                            $str1 = explode('vtype',$redirectionUrl);
+                            $str1 = explode('vtype',$redirectionUrl);                          
                             $redirectionUrl = substr($str1[0],0,-1);
-                        }else{                           
-                            $redirectionUrl = $this->get_protocol() .'://'. $_SERVER['HTTP_HOST'] . $parsed['path'] . $string;
+                        }else{
+                           if(isset($string) && $string != ''){        
+                            $redirectionUrl = $this->get_protocol() .'://'. $_SERVER['HTTP_HOST'] . $parsed['path'] . '?'. $string;
+                           }else{
+                            $redirectionUrl = $this->get_protocol() .'://'. $_SERVER['HTTP_HOST'] . $parsed['path'];
                         }
+                    }
                 }
             }
 
             /* action for debug mode */
-            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $redirectionUrl);             
+            do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $redirectionUrl);                    
             return $redirectionUrl;
         }
 
@@ -351,13 +357,13 @@ if (!class_exists('CIAM_Authentication_Helper')) {
          * Redirect users after login and register according to plugin settings.
          */
         public function redirect($user_id, $register, $userProfileData) {
+           
             $redirectionUrl = $this->get_redirect_url($user_id, $register, $userProfileData);
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");
             wp_redirect($redirectionUrl);
             exit();
         }
-
     }
 
     new CIAM_Authentication_Helper();

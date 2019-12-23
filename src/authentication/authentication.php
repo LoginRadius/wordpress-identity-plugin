@@ -40,11 +40,11 @@ if (!class_exists('CIAM_Authentication')) {
 
 
 
-            global $ciam_credencials;
+            global $ciam_credentials;
 
             
 
-            if(!isset($ciam_credencials['apikey']) || empty($ciam_credencials['apikey']) || !isset($ciam_credencials['secret']) || empty($ciam_credencials['secret'])){ 
+            if(!isset($ciam_credentials['apikey']) || empty($ciam_credentials['apikey']) || !isset($ciam_credentials['secret']) || empty($ciam_credentials['secret'])){ 
 
                  return;   
 

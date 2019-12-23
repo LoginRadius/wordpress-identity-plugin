@@ -37,8 +37,8 @@ if (!class_exists('CIAM_Authentication_Register')) {
          */
        
         public function ciam_registration_form() {
-            global $ciam_setting;
-           if(!empty($ciam_setting['registration_page_id'])){
+            global $ciam_setting;  
+            if(!empty($ciam_setting['registration_page_id'])){
             $url = get_permalink($ciam_setting['login_page_id']);
             if (!is_user_logged_in()) {
                 ?>

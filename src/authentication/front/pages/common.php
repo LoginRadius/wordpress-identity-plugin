@@ -4,7 +4,10 @@ if (!defined('ABSPATH')) {
     exit();
 }
 
-use LoginRadiusSDK\CustomerRegistration\Account\AccountAPI;
+// Initialize Modules in specific order
+include_once CIAM_PLUGIN_DIR . 'ciam-lang.php';
+
+use LoginRadiusSDK\CustomerRegistration\Account\SottAPI;
 
 if (!class_exists('CIAM_Authentication_Commonmethods')) {
 
@@ -81,18 +84,18 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
          */
 
         public function ciam_hook_commonoptions() {
-            global $ciam_credencials, $ciam_setting;
+            global $ciam_credentials, $ciam_setting;
 
             $verificationurl = (isset($ciam_setting['login_page_id'])) ? get_permalink($ciam_setting['login_page_id']) : '';
             $forgoturl = (isset($ciam_setting['change_password_page_id'])) ? get_permalink($ciam_setting['change_password_page_id']) : '';
-            if ((!isset($ciam_credencials['apikey']) && empty($ciam_credencials['apikey'])) || (!isset($ciam_credencials['secret']) && empty($ciam_credencials['secret']))) {
+            if ((!isset($ciam_credentials['apikey']) && empty($ciam_credentials['apikey'])) || (!isset($ciam_credentials['secret']) && empty($ciam_credentials['secret']))) {
                 return;
             }
             ?>
             <script>
                 var commonOptions = {};
-                commonOptions.apiKey = "<?php echo $ciam_credencials['apikey']; ?>";
-                commonOptions.appName = '<?php echo $ciam_credencials['sitename']; ?>';
+                commonOptions.apiKey = '<?php echo $ciam_credentials['apikey']; ?>';
+                commonOptions.appName = '<?php echo $ciam_credentials['sitename']; ?>';
                 commonOptions.formValidationMessage = true;
                 commonOptions.hashTemplate = true;
                 commonOptions.forgotPasswordUrl = '<?php echo $forgoturl; ?>';
@@ -220,7 +223,7 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                         commonOptions.smsTemplate2FA = '<?php echo $ciam_setting['smsTemplate2FA']?>';
                     <?php
                 }
-            if (isset($ciam_setting['debug_enable']) && $ciam_setting['debug_enable'] == 1) {
+                if (defined('WP_DEBUG') && true === WP_DEBUG) {         
                 ?>
                     commonOptions.debugMode = true;
                 <?php
@@ -237,30 +240,21 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                 $string = trim(str_replace('"', "'", $string));
                 $terms = str_replace(array("\r\n", "\r", "\n"), " ", $string);
                 ?>
-                    commonOptions.termsAndConditionHtml = '<?php echo $terms ?>';
+                    commonOptions.termsAndConditionHtml = "<?php echo trim($terms) ?>";
                 <?php
             }
            
                 try {
-                    //check Api Request Signing 
-                   
-            
-                    if(isset($ciam_setting['apirequestsigning']) && $ciam_setting['apirequestsigning'] != '' && $ciam_setting['apirequestsigning'] == 1)
-                    {
-                        
-                       $sottApi = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json','api_request_signing'=>'true'));
-                    }
-                    else{
-                        
-                        $sottApi = new \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI($ciam_credencials['apikey'], $ciam_credencials['secret'],array('output_format' => 'json'));
-                    }
-
-					$sott_encrypt = $sottApi->generateSOTT(20);
+                    //getting sott                  
+                                       
+                    $sottObj = new \LoginRadiusSDK\CustomerRegistration\Account\SottAPI();      
+                    $sott_encrypt = $sottObj->generateSott('20');
+                  
 					if(isset($sott_encrypt->Sott) && !empty($sott_encrypt->Sott))
 					{
 						$sott = $sott_encrypt->Sott;
 					}
-					else{
+					else {
 						$sott = '';
 					}
                     ?>
@@ -272,10 +266,52 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                 }
             
             ?>
-                commonOptions.verificationUrl = '<?php echo $verificationurl; ?>';
+                commonOptions.verificationUrl = '<?php echo $verificationurl; ?>';    
+                commonOptions.messageList =  {    
+                       'SOCIAL_LOGIN_MSG' : '<?php echo SOCIAL_LOGIN_MSG; ?>',                
+                       'LOGIN_BY_EMAIL_MSG' : '<?php echo LOGIN_BY_EMAIL_MSG; ?>',
+                       'LOGIN_BY_USERNAME_MSG' : '<?php echo LOGIN_BY_USERNAME_MSG; ?>',
+                       'LOGIN_BY_PHONE_MSG' : '<?php echo LOGIN_BY_PHONE_MSG; ?>',
+                       'REGISTRATION_VERIFICATION_MSG' : '<?php echo REGISTRATION_VERIFICATION_MSG; ?>',
+                       'REGISTRATION_OTP_VERIFICATION_MSG' : '<?php echo REGISTRATION_OTP_VERIFICATION_MSG; ?>',
+                       'REGISTRATION_OTP_MSG' : '<?php echo REGISTRATION_OTP_MSG; ?>',
+                       'REGISTRATION_SUCCESS_MSG' : '<?php echo REGISTRATION_SUCCESS_MSG; ?>',
+                       'FORGOT_PASSWORD_MSG' : '<?php echo FORGOT_PASSWORD_MSG; ?>',
+                       'FORGOT_PASSWORD_PHONE_MSG' : '<?php echo FORGOT_PASSWORD_PHONE_MSG; ?>',
+                       'FORGOT_PHONE_OTP_VERIFICATION_MSG' : '<?php echo FORGOT_PHONE_OTP_VERIFICATION_MSG; ?>',
+                       'FORGOT_PASSWORD_SUCCESS_MSG' : '<?php echo FORGOT_PASSWORD_SUCCESS_MSG; ?>',
+                       'RESET_PASSWORD_MSG' : '<?php echo RESET_PASSWORD_MSG; ?>',
+                       'TWO_FA_MSG' : '<?php echo TWO_FA_MSG; ?>',
+                       'TWO_FA_ENABLED_MSG' : '<?php echo TWO_FA_ENABLED_MSG; ?>',
+                       'TWO_FA_DISABLED_MSG' : '<?php echo TWO_FA_DISABLED_MSG; ?>',
+                       'UPDATE_PHONE_MSG' : '<?php echo UPDATE_PHONE_MSG; ?>',
+                       'UPDATE_PHONE_SUCCESS_MSG' : '<?php echo UPDATE_PHONE_SUCCESS_MSG; ?>',
+                       'EMAIL_VERIFICATION_SUCCESS_MSG' : '<?php echo EMAIL_VERIFICATION_SUCCESS_MSG; ?>',
+                       'CHANGE_PASSWORD_SUCCESS_MSG' : '<?php echo CHANGE_PASSWORD_SUCCESS_MSG; ?>',
+                       'ACCOUNT_LINKING_MSG' : '<?php echo ACCOUNT_LINKING_MSG; ?>',
+                       'ACCOUNT_UNLINKING_MSG' : '<?php echo ACCOUNT_UNLINKING_MSG; ?>',
+                       'ADD_EMAIL_MSG' : '<?php echo ADD_EMAIL_MSG; ?>',
+                       'ADD_OTP_MSG' : '<?php echo ADD_OTP_MSG; ?>',
+                       'UPDATE_USER_PROFILE' : '<?php echo UPDATE_USER_PROFILE; ?>'
+                };                
+
+                var tabValue = '';
+                <?php              
+            if (isset($ciam_setting['tab_value']) && !empty($ciam_setting['tab_value'])) {
+                ?>
+                    var tabValue = '<?php echo $ciam_setting['tab_value'];?>';
                 <?php
-              
-            if (isset($ciam_setting['autohidetime']) && !empty($ciam_setting['autohidetime'])) {
+            }?>
+                var registrationSchema = "";
+                <?php              
+            if (isset($ciam_setting['registation_form_schema']) && !empty($ciam_setting['registation_form_schema'])) {
+                $registrationJsonSchema = json_decode($ciam_setting['registation_form_schema'], true);   
+                if (is_array($registrationJsonSchema)) {?>
+                    var registrationSchema = <?php echo $ciam_setting['registation_form_schema'];?>;
+                <?php }}?>
+
+                <?php              
+            if (isset($ciam_setting['autohidetime']) && !empty($ciam_setting['autohidetime'])) { 
                 ?>
                     var ciamautohidetime = <?php echo (int)$ciam_setting['autohidetime'];?>;
                 <?php
@@ -284,26 +320,23 @@ if (!class_exists('CIAM_Authentication_Commonmethods')) {
                     var ciamautohidetime = 0;
                 <?php
             }
-            $customString = isset($ciam_setting['custom_field_obj']) ? $ciam_setting['custom_field_obj'] : '';
-
-
-            if (!empty($customString)) {
-                $ciamCustomOption = json_decode($customString, true);
-                if (!is_array($ciamCustomOption)) {
-                    echo htmlentities($customString);
-                } else {
+      
+            if (isset($ciam_setting['custom_field_obj']) && !empty($ciam_setting['custom_field_obj'])) {
+                $customString = isset($ciam_setting['custom_field_obj']) ? $ciam_setting['custom_field_obj'] : '';
+                $ciamCustomOption = json_decode($customString, true);        
+                if (is_array($ciamCustomOption)) {
                     foreach ($ciamCustomOption as $key => $value) {
                         echo 'commonOptions.' . $key . ' = ' . (is_array($value) ? json_encode($value) : "'" . $value . "'") . ';';
                     }
                 }
-            }
-            ?>
-                 if (typeof LoginRadiusV2 === 'undefined') {
+            }?>
+               
+            if (typeof LoginRadiusV2 === 'undefined') {
     	         var e = document.createElement('script');
     	         e.src = '//auth.lrcontent2.com/v2/js/LoginRadiusV2.js';
     	         e.type = 'text/javascript';
                  document.getElementsByTagName("head")[0].appendChild(e);
-	         }
+	        }
 	        var lrloadInterval = setInterval(function () {
     	        if (typeof LoginRadiusV2 != 'undefined') {
         	clearInterval(lrloadInterval);
