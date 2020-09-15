@@ -112,19 +112,20 @@ If you found a bug, please create an issue on [Github](https://github.com/LoginR
 
 
 ##### User Registration Settings
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-1_55315f6059e4c7dd09.57077481.png "enter image title here")<br><br>
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-1.png)<br><br>
 ##### Authentication Settings
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-2_58145f6059fcde0903.63615775.png "enter image title here")<br><br>
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-2.png)<br><br>
 ##### Advanced Settings
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-3_269915f605a73285b38.75623315.png "enter image title here")<br><br>
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-3.png)<br><br>
 ##### ShortCodes
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-4_12385f605b240504f1.19963957.png "enter image title here")<br><br>
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-4.png)<br><br>
 ##### Registration
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-5_304255f605b4f707050.76624784.png "enter image title here")<br><br>
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-5.png)<br><br>
 ##### Login
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-6_59795f605b6c3ee7b7.75803258.png "enter image title here")<br><br>
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-6.png)<br><br>
 ##### Forgot Password
-![enter image description here](https://apidocs.lrcontent.com/images/screenshot-7_185975f605b91537589.91560580.png "enter image title here")
+![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-7.png)
+
 
 
 ## FAQ
