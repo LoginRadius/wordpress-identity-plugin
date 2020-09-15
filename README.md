@@ -1,6 +1,6 @@
 # Authentication and SSO by LoginRadius
 
-![Home Image](https://apidocs.lrcontent.com/images/banner-1544x500_16035f60565a1a4707.85073463.png)
+![Home Image](https://docs.lrcontent.com/resources/github/banner-1544x500.png)
 
 
 ## Description
@@ -147,3 +147,4 @@ Yes, we can migrate your existing user data into LoginRadius Admin Console. Sinc
 *   Where can I access the Plugin documentation?
     *   **Enterprise Account:** Browse our [support documents](https://www.loginradius.com/docs/libraries/turn-key-plugins/wordpress-2-x-plugin/#wordpress-customer-identity-and-access-management-plugin).
     *   **Developer or Free Account:** Browse our [support documents](https://www.loginradius.com/docs/developer/).
+
