@@ -49,9 +49,9 @@ In addition to the above, the plugin offers the following additional features:
 *   Top-notch support (24x7) and integration help.
 
 
-```
+
 The plugin has simple shortcodes that let you add registration, login, forgot password, and reset password interfaces anywhere to your application. Or you can create these authentication interfaces from the plugin.
-```
+
 
 ## Shortcodes
 
