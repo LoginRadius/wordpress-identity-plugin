@@ -133,17 +133,17 @@ If you found a bug, please create an issue on [Github](https://github.com/LoginR
 *   **<span style="text-decoration:underline;">Can you help me set up User Registration, Social Login on my website? 
 </span>**<br>
 Yes, contact our experts or read out our support documents:  
-  **Enterprise Account: **Reach us out [here](https://adminconsole.loginradius.com/support/tickets/open-a-new-ticket) or browse our [support documents](https://www.loginradius.com/docs/). <br>
-  **Developer or Free Account: **Reach us out [here](https://loginradiusassist.freshdesk.com/support/home) or browse our [support documents](https://www.loginradius.com/docs/developer/).
+  **Enterprise Account:** Reach us out [here](https://adminconsole.loginradius.com/support/tickets/open-a-new-ticket) or browse our [support documents](https://www.loginradius.com/docs/). <br>
+  **Developer or Free Account:** Reach us out [here](https://loginradiusassist.freshdesk.com/support/home) or browse our [support documents](https://www.loginradius.com/docs/developer/).
 
-*   **Where can I get the User Data? <br>
-**User data is available in** **the WordPress Admin Panel** **and as well as LoginRadius Admin Console. Also, LoginRadius Admin Console** **lets you perform all user management activities. 
+*   **Where can I get the User Data?**  <br>
+**User data is available in** **the WordPress Admin Panel** **and as well as LoginRadius Admin Console. Also, LoginRadius Admin Console** lets you perform all user management activities. 
 
-*   **Can you help me migrate the existing user data from another application?** 
+*   **Can you help me migrate the existing user data from another application?** <br>
 Yes, we can migrate your existing user data into LoginRadius Admin Console. Since LoginRadius manages the authentication process via this plugin, those existing users will be able to log in to your WordPress application (where this plugin is being used). 
  
     For more details, reach us out to our support. 
 
 *   Where can I access the Plugin documentation?
-    *   **Enterprise Account: **Browse our [support documents](https://www.loginradius.com/docs/libraries/turn-key-plugins/wordpress-2-x-plugin/#wordpress-customer-identity-and-access-management-plugin).
-    *   **Developer or Free Account: **Browse our [support documents](https://www.loginradius.com/docs/developer/).
+    *   **Enterprise Account:** Browse our [support documents](https://www.loginradius.com/docs/libraries/turn-key-plugins/wordpress-2-x-plugin/#wordpress-customer-identity-and-access-management-plugin).
+    *   **Developer or Free Account:** Browse our [support documents](https://www.loginradius.com/docs/developer/).
