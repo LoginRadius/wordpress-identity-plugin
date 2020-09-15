@@ -1,6 +1,6 @@
 # Authentication and SSO by LoginRadius
 
-![Home Image](https://docs.lrcontent.com/resources/github/banner-1544x500.png)
+![Home Image](https://docs.lrcontent.com/resources/github/banner-wp-1544x500.png)
 
 
 ## Description
