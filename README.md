@@ -102,8 +102,8 @@ This plugin is being developed on GitHub. If you want to collaborate, please loo
 We offer 24/7 support, reach out to our support team, or refer our product documents: 
 
 
-*   **Enterprise Account: **Reach us out [here](https://adminconsole.loginradius.com/support/tickets/open-a-new-ticket) or browse our [support documents](https://www.loginradius.com/docs/libraries/turn-key-plugins/wordpress-2-x-plugin/#wordpress-customer-identity-and-access-management-plugin).
-*   **Developer or Free Account: **Reach us out [here](https://loginradiusassist.freshdesk.com/support/home) or browse our [support documents](https://www.loginradius.com/docs/developer/).
+*   **Enterprise Account:** Reach us out [here](https://adminconsole.loginradius.com/support/tickets/open-a-new-ticket) or browse our [support documents](https://www.loginradius.com/docs/libraries/turn-key-plugins/wordpress-2-x-plugin/#wordpress-customer-identity-and-access-management-plugin).
+*   **Developer or Free Account:** Reach us out [here](https://loginradiusassist.freshdesk.com/support/home) or browse our [support documents](https://www.loginradius.com/docs/developer/).
 
 If you found a bug, please create an issue on [Github](https://github.com/LoginRadius/wordpress-identity-plugin/) where we can act upon them more efficiently.
 
