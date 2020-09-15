@@ -60,8 +60,8 @@ Following are the shortcodes to add the authentication interfaces:
 
 *   Login - **[ciam_login_form]**
 *   Registration - **[ciam_registration_form]**
-*   Forgot password -** [ciam_forgot_form]**
-*   Reset Password** **- **[ciam_password_form**]
+*   Forgot password - **[ciam_forgot_form]**
+*   Reset Password - **[ciam_password_form]**
 
 
 ## Free Plan Features
