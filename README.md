@@ -5,7 +5,7 @@
 
 ## Description
 
-The Authentication and SSO by LoginRadius WordPress plugin allow you to replace the default WordPress Authentication feature with diverse authentication methods, including standard login (email login), social login, phone login, and passwordless login. This plugin also provides the forgot password and reset password features.
+The Authentication and SSO by LoginRadius WordPress plugin allows you to replace the default WordPress Authentication feature with diverse authentication methods, including standard login (email login), social login, phone login, and passwordless login. This plugin also provides the forgot password and reset password features.
 
 The other benefits you get from using this plugin are enhanced security via multi-factor authentication, frictionless user experience via single sign-on, and effective user management features. Let’s have a more in-depth look into the plugin features:
 
