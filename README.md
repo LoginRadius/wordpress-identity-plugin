@@ -26,7 +26,7 @@ The other benefits you get from using this plugin are enhanced security via mult
  
 **Frictionless Authentication via SSO:** It also lets you implement SSO (single sign-on) across your or third party applications. SSO omits the requirement of your consumer registering or repeatedly logging on the authorized applications and enables them to have a frictionless authentication experience. It enables consumers to access multiple applications with a single set of login credentials and an active login session.
 
-**Enhanced Security via MFA: **For enhanced security, you can enable a multi-factor authentication feature and request your consumers to authenticate themself with OTP or Google Authenticator (as an added authentication factor to initial login). This process acts as an additional security layer to the standard authentication process. 
+**Enhanced Security via MFA:** For enhanced security, you can enable a multi-factor authentication feature and request your consumers to authenticate themself with OTP or Google Authenticator (as an added authentication factor to initial login). This process acts as an additional security layer to the standard authentication process. 
 
 **Effective User Management:** The consumers’ data remains available in the WordPress Admin Panel and the LoginRadius Admin Console. And you can efficiently perform all user management actions in the LoginRadius Admin Console, permitting the necessary support to your consumers in managing their accounts.
 
@@ -50,7 +50,7 @@ In addition to the above, the plugin offers the following additional features:
 
 
 
-The plugin has simple shortcodes that let you add registration, login, forgot password, and reset password interfaces anywhere to your application. Or you can create these authentication interfaces from the plugin.
+The plugin has simple shortcodes that let you add registration, login, forgot password, and reset password interfaces anywhere to your application Or you can create these authentication interfaces from the plugin.
 
 
 ## Shortcodes
@@ -111,19 +111,19 @@ If you found a bug, please create an issue on [Github](https://github.com/LoginR
 ## Screenshots
 
 
-##### User Registration Settings
+#### User Registration Settings
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-1.png)<br><br>
-##### Authentication Settings
+#### Authentication Settings
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-2.png)<br><br>
-##### Advanced Settings
+#### Advanced Settings
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-3.png)<br><br>
-##### ShortCodes
+#### ShortCodes
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-4.png)<br><br>
-##### Registration
+#### Registration
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-5.png)<br><br>
-##### Login
+#### Login
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-6.png)<br><br>
-##### Forgot Password
+#### Forgot Password
 ![enter image description here](https://docs.lrcontent.com/resources/github/screenshot-7.png)
 
 
