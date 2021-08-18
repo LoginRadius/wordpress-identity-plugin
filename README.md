@@ -148,4 +148,3 @@ Yes, we can migrate your existing user data into LoginRadius Admin Console. Sinc
 *   Where can I access the Plugin documentation?
     *   **Enterprise Account:** Browse our [support documents](https://www.loginradius.com/docs/libraries/turn-key-plugins/wordpress-2-x-plugin/#wordpress-customer-identity-and-access-management-plugin).
     *   **Developer or Free Account:** Browse our [support documents](https://www.loginradius.com/docs/developer/).
-
