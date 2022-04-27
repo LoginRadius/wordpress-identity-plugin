@@ -154,14 +154,14 @@ if (!class_exists('CIAM_Authentication_Profile')) {
             $accesstoken = get_user_meta($user_id, 'accesstoken', true);
     
             if (!empty($accesstoken)) {
-                $socialAPI = new \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI();
+                $authObject = new \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI();
                 try {
-                    $socialpro = $socialAPI->getSocialUserProfile($accesstoken);
+                    $userprofile = $authObject->getProfileByAccessToken($accesstoken);
                 } catch (\LoginRadiusSDK\LoginRadiusException $e) {
                     error_log($e->error_response->description);
                 }
           
-                if (isset($socialpro->Provider) && $socialpro->Provider == 'RAAS') {
+                if (isset($userprofile->Provider) && $userprofile->Provider == 'Email') {
                     ?>
                     <div style="clear:both;"><h3 class="profiletwofactorauthentication" style="display: none;">Two Factor Authentication</h3><div id="authentication-container"></div></div>   
 
