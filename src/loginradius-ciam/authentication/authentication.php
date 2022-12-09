@@ -95,7 +95,6 @@ if (!class_exists('CIAM_Authentication')) {
         public function load_dependencies() { 
 
 
-
             // Load required files.
 
             

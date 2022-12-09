@@ -41,6 +41,8 @@ if (!class_exists('CIAM_Authentication_Register')) {
             if(!empty($ciam_setting['registration_page_id'])){
             $url = get_permalink($ciam_setting['login_page_id']);
             if (!is_user_logged_in()) {
+                $message = '<div id="messageinfo" class="messageinfo"></div>';
+                ob_start();
                 ?>
 
                 <script type="text/javascript">
@@ -51,10 +53,8 @@ if (!class_exists('CIAM_Authentication_Register')) {
                 </script> 
                 
                 <?php
-                $message = '<div id="messageinfo" class="messageinfo"></div>';
-                ob_start();
                 $html = '<div class="ciam-user-reg-container">' . $message;
-                $html .= '<span id="registration_message"></span><span id="loginmessage"></span><div id="sociallogin-container"></div><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div><div id="registration-container" class="ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="lr_loading_screen"><div class="lr_loading_screen_center" style="position: fixed;"><img class="loading_circle ciam_loading_gif_align lr_loading_screen_spinner" src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading-white.png' . '" alt="loding image" /></div></div></div>';
+                $html .= '<span id="registration_message"></span><span id="loginmessage"></span><div id="sociallogin-container"></div><div style="display: flow-root ;"><div id="interfacecontainerdiv" class="interfacecontainerdiv"></div><div id="registration-container" class="ciam-input-style"></div></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="lr_loading_screen"><div class="lr_loading_screen_center" style="position: fixed;"><img class="loading_circle ciam_loading_gif_align lr_loading_screen_spinner" src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading-white.png' . '" alt="loding image" /></div></div></div>';
                 $html .= '<span class="ciam-link"><a href="' . wp_login_url(). '">Login</a></span>';
                 $html .= '<span class="ciam-link btn"><a href="' . wp_lostpassword_url() . '">Forgot Password</a></span></div>';
                 add_action('wp_footer', array($this,'datepickerscript'));

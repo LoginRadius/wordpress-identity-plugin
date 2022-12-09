@@ -37,14 +37,14 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
             if (!empty($ciam_setting['lost_password_page_id'])) {
                 $redirect_url = get_permalink($ciam_setting['login_page_id']);
                 if (!is_user_logged_in()) {
+                    $message = '<div  class="messageinfo"></div>';
+                    ob_start();
                     ?>
                     <script>
                         jQuery(document).ready(function () {
                         forgotpass_hook('<?php echo $redirect_url ?>');
                         });</script>
                     <?php
-                    $message = '<div  class="messageinfo"></div>';
-                    ob_start();
                     $html = '<div class="ciam-user-reg-container">' . $message . '<span id="forgotpasswordmessage"></span><div id="forgotpassword-container" class="forgotpassword-container ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="lr_loading_screen"><div class="lr_loading_screen_center" style="position: fixed;"><img class="loading_circle ciam_loading_gif_align ciam_forgot lr_loading_screen_spinner"  src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading-white.png' . '" alt="loding image" /></div></div></div><span class="ciam-link"><a href = "' . wp_login_url() . '">Login</a></span><span class="ciam-link btn"><a href = "' . wp_registration_url() . '">Register</a></span></div>';
                     do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $html);
                     return $html . ob_get_clean();
@@ -93,7 +93,7 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
                 if (isset($_GET['vtype']) && !empty($_GET['vtype'])) { // condition to check if vtype and vtoken is present or not....
                     $html = '<div class="ciam-user-reg-container">' . $message . '<div id="resetpassword-container" class="ciam-input-style"></div><div id="ciam_loading_gif" class="overlay" style="display:none;"><div class="lr_loading_screen"><div class="lr_loading_screen_center" style="position: fixed;"><img class="loading_circle ciam_loading_gif_align ciam_forgot lr_loading_screen_spinner" src="' . CIAM_PLUGIN_URL . 'authentication/assets/images/loading-white.png' . '" alt="loding image" /></div></div></div><span class="ciam-link"><a href = "' . wp_login_url() . '">Login</a></span><span class="ciam-link btn"><a href = "' . wp_registration_url() . '">Register</a></span></div>';
                     do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), $html);
-                    return $html . ob_get_clean();
+                    return $html.ob_get_clean();
                 } else {
                     ?>
                     <div id="error" ></div>
@@ -106,6 +106,7 @@ if (!class_exists('CIAM_Authentication_Passwordhandler')) {
                         });</script>
                     <?php
                 }
+                return ob_get_clean();
             }
             /* action for debug mode */
             do_action("ciam_debug", __FUNCTION__, func_get_args(), get_class(), "");

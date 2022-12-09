@@ -350,6 +350,7 @@ input[type=text], input[type=search], input[type=radio], input[type=tel], input[
 }
 input[type=text] {
 	height: 28px;
+	width: 350px !important;
 }
 .ciam_options_container {
 	position: relative;

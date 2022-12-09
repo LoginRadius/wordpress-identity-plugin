@@ -5,7 +5,6 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 11.3.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -23,7 +22,7 @@ use LoginRadiusSDK\LoginRadiusException;
 class Functions
 {
 
-    const VERSION = '11.3.0';
+    const VERSION = '11.4.2';
 
     private static $_apikey;
     private static $_apisecret;
@@ -51,6 +50,10 @@ class Functions
             }
             if (!defined('API_CONFIG_DOMAIN')) {
                 define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
+            }
+
+            if (!defined('REFERER')) {
+                define('REFERER', 'API');
             }
         self::$_options = array_merge(self::$_options, $customizeOptions);
     }

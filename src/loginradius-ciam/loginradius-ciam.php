@@ -4,7 +4,7 @@
  * Plugin Name: LoginRadius CIAM
  * Plugin URI: http://www.loginradius.com
  * Description: LoginRadius Customer Identity and Access Management
- * Version: 4.3.0
+ * Version: 4.4.0
  * Author: LoginRadius Team
  * Created by LoginRadius Development Team on 26/05/2017
  * Copyright: 2017 LoginRadius Inc. All rights reserved
@@ -17,7 +17,7 @@ defined('ABSPATH') or die();
 define('CIAM_PLUGIN_PATH', __FILE__);
 define('CIAM_PLUGIN_DIR', plugin_dir_path(CIAM_PLUGIN_PATH));
 define('CIAM_PLUGIN_URL', plugin_dir_url(CIAM_PLUGIN_PATH));
-define('CIAM_PLUGIN_VERSION', '4.3.0');
+define('CIAM_PLUGIN_VERSION', '4.4.0');
 define('CIAM_SETTING_LINK', plugin_basename(__FILE__));
 
 // Initialize Modules in specific order

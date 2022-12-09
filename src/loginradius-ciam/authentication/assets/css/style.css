@@ -435,6 +435,9 @@ span[class*="lr-img-icon-"].user-reg:after {
     margin-left: 10px;
 }
 
+#login-container form :first-child, #registration-container form :first-child {
+    padding-top: 10px;
+}
 
 /* add custom css for social login */
 .interfacecontainerdiv .ciam-provider-label {
@@ -670,7 +673,6 @@ textarea.ciam-shortcode {
 #login-container .loginradius--form-element-content label {
     width: 230px;
     float: left;
-    padding: 8px;
 }
 #login-container #loginradius-button-sendotp {
     padding: 14px;
@@ -707,15 +709,12 @@ textarea.ciam-shortcode {
 #registration-container .loginradius--form-element-content label {
     width: 274px;
     float: left;
-    padding: 5px;
 }
 #forgotpassword-container .loginradius--form-element-content label {
 
-    padding :10px;
     float:left;    
 }
 #resetpassword-container .loginradius--form-element-content label {
-    padding :10px;
     float:left;   
 } 
 
@@ -889,13 +888,11 @@ textarea.ciam-shortcode {
     margin-top:10px;
 }
 .loginradius-linksignin{
-    padding:18px !important;
-    margin-left:10px;
+    margin-left:5px;
     margin-top:10px
 }
 .loginradius-otpsignin{
-    padding:18px !important;
-    margin-left:10px;
+    margin-left:5px;
     margin-top:10px
 }
 .content-loginradius-stayLogin{
@@ -903,7 +900,7 @@ textarea.ciam-shortcode {
 }
 .loginradius-stayLogin {
     float: left;
-    margin: 16px 0px;
+    margin: 7.5px 5px;
 }
 .close-removepopup{
     position: absolute !important;
@@ -955,14 +952,13 @@ textarea.ciam-shortcode {
 #authphonediv_success{
     color: #008000;
 }
-#loginradius-submit-login,.linksignin-loginradius-Instant{
-    padding:18px !important;
-    margin-left:10px;
-}
 .hostedpage-tooltip[data-title]:hover::after,
 .authenticationtype-tooltip[data-title]:hover::after,
 .oneclick-signin-tooltip[data-title]:hover::after{
     min-width: 368px !important;
+}
+#loginradius-submit-login{
+    margin:5px 5px 5px 0px !important;
 }
 .customtemplate-tooltip[data-title]:hover::after{
     min-width: 268px !important;
@@ -992,18 +988,21 @@ textarea.ciam-shortcode {
 
 .loginradius--form-element-content input[type=text],
 .loginradius--form-element-content input[type=password],
+.loginradius--form-element-content input[type=email],
+.loginradius--form-element-content select,
 .loginradius--form-element-content textarea{
-    min-width: 350px;
+    min-width: 330px;
     margin: 5px 0px;
+    width: 100%;
 }
 .lremail--form-element-content input[type=text]{
-    min-width: 350px;
+    min-width: 330px;
     margin: 5px 0px;
 }
 .loginradius--form-element-content {
     width: 100%;
     clear: both;
-    min-height: 66.81px;
+    min-height: 50px;
 }
 .popup-inner .lremail-submit{
     margin-left: 25px !important;
