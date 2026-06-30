@@ -2,8 +2,8 @@
 Contributors: LoginRadius
 Tags: Hosted Registration, CIAM, Authentication, User Registration, Cloud Authentication, Single Sign-On (SSO)
 Requires at least: 3.5
-Tested up to: 6.0.2
-Stable tag: 4.4.0
+Tested up to: 7.0
+Stable tag: 4.4.1
 License: GPLv2 or later
 
 
@@ -14,9 +14,9 @@ License: GPLv2 or later
 
 == Change Log ==
 
-=  4.4.0 =
+=  4.4.1 =
 1) Compatible with our latest PHP SDK 11.4.2
-2) Tested Up to 6.0.2
+2) Tested Up to 7.0
 3) Fixed minor bugs
 
 

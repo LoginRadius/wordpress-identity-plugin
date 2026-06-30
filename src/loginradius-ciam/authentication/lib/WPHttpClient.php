@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 4.4.0
+ * @version : 4.4.1
  * @license : https://opensource.org/licenses/MIT
  */
 
