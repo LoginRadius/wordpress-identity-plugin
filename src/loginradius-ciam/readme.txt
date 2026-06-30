@@ -15,8 +15,12 @@ License: GPLv2 or later
 == Change Log ==
 
 =  4.4.1 =
+1) Tested Up to 7.0
+2) Fixed small bugs
+
+=  4.4.0 =
 1) Compatible with our latest PHP SDK 11.4.2
-2) Tested Up to 7.0
+2) Tested Up to 6.0.2
 3) Fixed minor bugs
 
 
