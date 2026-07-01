@@ -114,7 +114,7 @@ class NativeSocialAPI extends Functions
 
     /**
      * This API is used to Get LoginRadius Access Token using google jwt id token for google native mobile login/registration.
-     * @param idToken Google JWT id_token
+     * @param idToken Custom JWT Token
      * @return Response containing Definition of Complete Token data
      * 20.6
     */
@@ -226,27 +226,6 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Vkontakte's access token. It will be valid for the specific duration of time specified in the response.
-     * @param vkAccessToken Vkontakte Access Token
-     * @return Response containing Definition of Complete Token data
-     * 20.15
-    */
-
-    public function getAccessTokenByVkontakteAccessToken($vkAccessToken)
-    {
-        $resourcePath = "/api/v2/access_token/vkontakte";
-        $queryParam = [];
-        $queryParam['key'] = Functions::getApiKey();
-        if ($vkAccessToken === '' || ctype_space($vkAccessToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('vkAccessToken'));
-        }
-        $queryParam['vk_access_token'] = $vkAccessToken;
-        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
-    }
-       
-
-
-    /**
      * The API is used to get LoginRadius access token by sending Google's AuthCode. It will be valid for the specific duration of time specified in the response.
      * @param googleAuthcode Google AuthCode
      * @param socialAppName Name of Social provider APP
@@ -266,6 +245,32 @@ class NativeSocialAPI extends Functions
             $queryParam['socialAppName'] = $socialAppName;
         }
         $queryParam['google_authcode'] = $googleAuthcode;
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to retrieve a LoginRadius access token by passing in a valid custom JWT token.
+     * @param idToken Custom JWT Token
+     * @param providername JWT Provider Name
+     * @return Response containing Definition of Complete Token data
+     * 44.3
+    */
+
+    public function accessTokenViaCustomJWTToken($idToken, $providername)
+    {
+        $resourcePath = "/api/v2/access_token/jwt";
+        $queryParam = [];
+        if ($idToken === '' || ctype_space($idToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('idToken'));
+        }
+        $queryParam['key'] = Functions::getApiKey();
+        if ($providername === '' || ctype_space($providername)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('providername'));
+        }
+        $queryParam['id_Token'] = $idToken;
+        $queryParam['providername'] = $providername;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
 
