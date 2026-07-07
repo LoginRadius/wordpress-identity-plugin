@@ -145,7 +145,8 @@ if (!class_exists('ciam_authentication_settings')) {
             }
 
             $pages = get_pages($args);
-            $ciam_setting = get_option('Ciam_Authentication_settings'); ?>
+            $ciam_setting = get_option('ciam_authentication_settings'); ?>
+            <!-- Changed  Ciam_Authentication_settings to ciam_authentication_settings -->
 
 <div class="wrap active-wrap cf">
   <header>
