@@ -15,9 +15,9 @@ Please visit [here](http://www.loginradius.com/) for more information.
 
 
 ## Documentation
-* [User Registration](http://apidocs.loginradius.com/docs/user-registration) - Everything you need to implement the full LoginRadius User Registration system including Social Login.
-* [Plugin Installation](https://support.loginradius.com/hc/en-us/articles/204473559-Wordpress-Plugin-Advanced-Modules) - Everything you need to implement with wordpress.
+* [User Registration](https://www.loginradius.com/docs/overview/) - Everything you need to implement the full LoginRadius User Registration system including Social Login.
+* [Plugin Installation](https://www.loginradius.com/docs/sdk/turnkey-plugins/wordpress-2.x-plugin/) - Everything you need to implement with wordpress.
 
 
 
-General documentation regarding the LoginRadius REST API and related flows can be found on the [LoginRadius API Documentations](http://apidocs.loginradius.com/) site. 
+General documentation regarding the LoginRadius REST API and related flows can be found on the [LoginRadius API Documentations](https://www.loginradius.com/docs/api/openapi/customer-identity-api) site. 
